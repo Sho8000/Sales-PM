@@ -2,8 +2,11 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
+const random = (min: number, max: number) =>
+  Math.floor(Math.random() * (max - min + 1)) + min
+
 async function main() {
-  // Create User
+  // 1. Create User
   const user = await prisma.user.create({
     data: {
       username: 'test_user',
@@ -12,85 +15,89 @@ async function main() {
     },
   })
 
-  // Create Status Settings
-  const statusSettings = await Promise.all([
-    { statusName: 'New', statusColor: '#FF0000' },
-    { statusName: 'Contacted', statusColor: '#00FF00' },
-    { statusName: 'Interested', statusColor: '#0000FF' },
-    { statusName: 'Closed', statusColor: '#AAAAAA' },
-  ].map((status, index) =>
-    prisma.statusSetting.create({
-      data: {
-        ...status,
-        statusOrder: index + 1,
-        user: { connect: { id: user.id } },
-      },
-    })
-  ))
+  // 2. Create 5 Status Settings
+  const statusNames = ['New', 'Contacted', 'Interested', 'Negotiating', 'Closed']
+  await Promise.all(
+    statusNames.map((name, index) =>
+      prisma.statusSetting.create({
+        data: {
+          statusName: name,
+          statusColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+          statusOrder: index + 1,
+          userId: user.id,
+        },
+      })
+    )
+  )
 
-  // Create Content Settings
-  await Promise.all([
-    'Email',
-    'Call',
-    'Meeting'
-  ].map((contentName) =>
-    prisma.contentsSetting.create({
-      data: {
-        contentName,
-        user: { connect: { id: user.id } },
-      },
-    })
-  ))
+  // 3. Create 3 Content Settings
+  const contentTypes = ['Email', 'Call', 'Meeting']
+  await Promise.all(
+    contentTypes.map((contentName) =>
+      prisma.contentsSetting.create({
+        data: {
+          contentName,
+          userId: user.id,
+        },
+      })
+    )
+  )
 
-  // Create Prospect List
+  // 4. Create ProspectList
   const prospectList = await prisma.prospectList.create({
     data: {
-      user: { connect: { id: user.id } },
+      userId: user.id,
     },
   })
 
-  // Create a Prospect
-  const prospect = await prisma.prospects.create({
-    data: {
-      prospectName: 'Jane Doe',
-      prospectSex: 'Female',
-      prospectAge: 32,
-      prospectMarital: 'Married',
-      children: 2,
-      prospectBusiness: 'Marketing',
-      prospectLocation: 'Osaka',
-      prospectPhone: '080-1234-5678',
-      prospectEmail: 'jane.doe@example.com',
-      prospectHidden: false,
-      prospectList: { connect: { id: prospectList.id } },
-    },
-  })
+  // 5. Create 4 Prospects (each with 1–3 Notes, and each Note with 1–3 Memos)
+  for (let i = 1; i <= 4; i++) {
+    const prospect = await prisma.prospects.create({
+      data: {
+        prospectName: `Prospect ${i}`,
+        prospectSex: i % 2 === 0 ? 'Male' : 'Female',
+        prospectAge: random(25, 55),
+        prospectMarital: i % 2 === 0 ? 'Single' : 'Married',
+        children: random(0, 3),
+        prospectBusiness: 'Industry ' + i,
+        prospectLocation: 'City ' + i,
+        prospectPhone: `080-1234-567${i}`,
+        prospectEmail: `prospect${i}@example.com`,
+        prospectHidden: false,
+        prospectListId: prospectList.id,
+      },
+    })
 
-  // Create Note
-  const note = await prisma.notes.create({
-    data: {
-      noteTitle: 'First Meeting',
-      content: 'Met with Jane to discuss business needs.',
-      status: 'Interested',
-      prospect: { connect: { id: prospect.id } },
-    },
-  })
+    const noteCount = random(1, 3)
+    for (let j = 1; j <= noteCount; j++) {
+      const note = await prisma.notes.create({
+        data: {
+          noteTitle: `Note ${j} for Prospect ${i}`,
+          content: `Details about contact ${j} with Prospect ${i}`,
+          status: statusNames[random(0, statusNames.length - 1)],
+          prospectId: prospect.id,
+        },
+      })
 
-  // Create Memo
-  await prisma.memos.create({
-    data: {
-      memoSubject: 'Follow-up Plan',
-      memoDetail: 'Send proposal by next Monday.',
-      note: { connect: { id: note.id } },
-    },
-  })
+      const memoCount = random(1, 3)
+      for (let k = 1; k <= memoCount; k++) {
+        await prisma.memos.create({
+          data: {
+            memoSubject: `Memo ${k} of Note ${j} (Prospect ${i})`,
+            memoDetail: `Additional details ${k} for note ${j}`,
+            noteId: note.id,
+          },
+        })
+      }
+    }
+  }
 
-  console.log('🌱 Seed completed successfully.')
+  console.log('✅ Seed completed successfully.')
 }
 
 main()
   .catch((e) => {
-    console.error(e)
+    console.error('❌ Error seeding database:', e)
     process.exit(1)
   })
   .finally(async () => {

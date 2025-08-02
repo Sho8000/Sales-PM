@@ -1,6 +1,7 @@
 "use client"
 
 import CloseBtn from "./(components)/Btn/CloseBtn";
+import HbgBtn from "./(components)/Btn/HbgBtn";
 import LoginLogoutBtn from "./(components)/Btn/LoginLogoutBtn";
 import NormalBtn from "./(components)/Btn/NormalBtn";
 import SettingBtn from "./(components)/Btn/SettingBtn";
@@ -32,6 +33,10 @@ export default function Home() {
     console.log("Pass")
   }
 
+  const hbgTest = () => {
+    console.log("Hbg")
+  }
+
   return (
     <>
       <section className="bg-pink-400">
@@ -52,6 +57,9 @@ export default function Home() {
         <SettingBtn text="Contents" clickFunction={settingContentBtnTest}/>
         <SettingBtn text="Hidden List" clickFunction={settingHiddenBtnTest}/>
         <SettingBtn text="Password" clickFunction={settingPassBtnTest}/>
+      </section>
+      <section className="bg-black p-[3rem]">
+        <HbgBtn clickFunction={hbgTest}/>
       </section>
     </>
   );

@@ -1,0 +1,65 @@
+/* Font / icon */
+@media only screen and (min-width:1441px){
+  .navTitleFont{
+    font-size: 64px;
+  }
+  .NavIconSize{
+    width: 80px;
+    height: 80px;
+  }
+}
+
+@media only screen and (max-width:1440px){
+  .navTitleFont{
+    font-size: 48px;
+  }
+  .NavIconSize{
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media only screen and (max-width:430px){
+  .navTitleFont{
+    font-size: 32px;
+  }
+  .NavIconSize{
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Layout */
+@media only screen and (min-width:1441px){
+  .navArea{
+    height: 150px;
+    padding: 0 2rem;
+  }
+}
+
+@media only screen and (max-width:1440px){
+  .navArea{
+    height: 100px;
+    padding: 0 1.5rem;
+  }
+}
+
+@media only screen and (max-width:430px){
+  .navArea{
+    height: 50px;
+    padding: 0 1rem;
+  }
+}
+
+/* PC or Phone*/
+@media only screen and (min-width:701px){
+  .forPhone{
+    display: none;    
+  }
+}
+
+@media only screen and (max-width:700px){
+  .forPC{
+    display: none;
+  }
+}

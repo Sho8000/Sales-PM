@@ -1,6 +1,6 @@
 "use client"
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Styles from "./Nav.module.css"
 import HbgBtn from "../Btn/HbgBtn";
 import LoginLogoutBtn from "../Btn/LoginLogoutBtn";
@@ -9,17 +9,20 @@ import Image from "next/image";
 
 import settingIcon from "@/../public/Nav/settings.svg"
 import homeIcon from "@/../public/Nav/homeIcon_80_80.png"
+import { signOut, useSession } from "next-auth/react";
 
 export default function Navbar() {
+  const router = useRouter(); 
+  const { data: session } = useSession()
   const pathName = usePathname();
   const [isHbgBtnClicked, setIsHbgBtnClicked] = useState(false);
 
   const loginHandler = () => {
-    console.log("Login clicked!!")
+    router.push("/auth");
   }
 
   const logoutHandler = () => {
-    console.log("Logout clicked!!")
+    signOut();
   }
 
   const homeIconHandler = () => {
@@ -39,34 +42,41 @@ export default function Navbar() {
       <nav className={`flex justify-between items-center w-full bg-black text-white ${Styles.navArea} ${Styles.navTitleFont}`}>
         {/* Nav Left */}
         <div>
-          <h1 className="font-bold">Sales-PM</h1>
+          {(pathName==="/" || pathName==="/auth")?
+            <h1 className="font-bold">Sales-PM</h1>
+            :<h1>Hi, <span className="font-bold">{session?.user?.username}</span></h1>
+          }
         </div>
         {/* Nav Right */}
-        {pathName==="/"?
-          <LoginLogoutBtn text="Login" clickFunction={loginHandler}/>
-          :<>
-            <div className={`flex gap-[2rem] items-center ${Styles.forPC}`}>
-              <Image
-                className={`${Styles.NavIconSize}`}
-                onClick={homeIconHandler}
-                src={homeIcon}
-                alt="home"
-                width={80}
-                height={80}
-              />
-              <Image
-                className={`${Styles.NavIconSize}`}
-                onClick={SettingIconHandler}
-                src={settingIcon}
-                alt="setting"
-                width={80}
-                height={80}
-              />
-              <LoginLogoutBtn text="Logout" clickFunction={logoutHandler}/>
-            </div>
-            <div className={`${Styles.forPhone}`}>
-              <HbgBtn clickFunction={hbgBtnHandler} clicked={isHbgBtnClicked}/>
-            </div>
+        {pathName!=="/auth" &&
+          <>
+            {pathName==="/"?
+              <LoginLogoutBtn text="Login" clickFunction={loginHandler}/>
+              :<>
+                <div className={`flex gap-[2rem] items-center ${Styles.forPC}`}>
+                  <Image
+                    className={`${Styles.NavIconSize}`}
+                    onClick={homeIconHandler}
+                    src={homeIcon}
+                    alt="home"
+                    width={80}
+                    height={80}
+                  />
+                  <Image
+                    className={`${Styles.NavIconSize}`}
+                    onClick={SettingIconHandler}
+                    src={settingIcon}
+                    alt="setting"
+                    width={80}
+                    height={80}
+                  />
+                  <LoginLogoutBtn text="Logout" clickFunction={logoutHandler}/>
+                </div>
+                <div className={`${Styles.forPhone}`}>
+                  <HbgBtn clickFunction={hbgBtnHandler} clicked={isHbgBtnClicked}/>
+                </div>
+              </>
+            }
           </>
         }
       </nav>

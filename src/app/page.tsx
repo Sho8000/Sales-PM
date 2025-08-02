@@ -1,8 +1,6 @@
 "use client"
 
 import CloseBtn from "./(components)/Btn/CloseBtn";
-import HbgBtn from "./(components)/Btn/HbgBtn";
-import LoginLogoutBtn from "./(components)/Btn/LoginLogoutBtn";
 import NormalBtn from "./(components)/Btn/NormalBtn";
 import SettingBtn from "./(components)/Btn/SettingBtn";
 
@@ -10,10 +8,6 @@ export default function Home() {
 
   const test = () => {
     console.log("Test")
-  }
-
-  const LoginLogout = () => {
-    console.log("Login/Logout")
   }
 
   const normalBtntest = () => {
@@ -33,16 +27,10 @@ export default function Home() {
     console.log("Pass")
   }
 
-  const hbgTest = () => {
-    console.log("Hbg")
-  }
-
   return (
     <>
       <section className="bg-pink-400">
         <CloseBtn clickFunction={test}/>
-        <LoginLogoutBtn text="Login" clickFunction={LoginLogout}/>
-        <LoginLogoutBtn text="Logout" clickFunction={LoginLogout}/>
         <NormalBtn text="+Add New" clickFunction={normalBtntest}/>
         <NormalBtn text="+Add Note" clickFunction={normalBtntest}/>
         <NormalBtn text="Save" clickFunction={normalBtntest}/>
@@ -57,9 +45,6 @@ export default function Home() {
         <SettingBtn text="Contents" clickFunction={settingContentBtnTest}/>
         <SettingBtn text="Hidden List" clickFunction={settingHiddenBtnTest}/>
         <SettingBtn text="Password" clickFunction={settingPassBtnTest}/>
-      </section>
-      <section className="bg-black p-[3rem]">
-        <HbgBtn clickFunction={hbgTest}/>
       </section>
     </>
   );

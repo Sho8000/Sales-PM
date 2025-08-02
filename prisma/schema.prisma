@@ -1,0 +1,106 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  username         String @map("username")
+  useremail        String @unique @map("useremail")
+  password      String @map("userpassword")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  prospectList ProspectList?
+  statusSetting StatusSetting[]
+  contentsSetting ContentsSetting[]
+
+  @@map("user")
+}
+
+model StatusSetting {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  statusName  String @map("statusname")
+  statusColor String @map("statuscolor")
+  statusOrder  Int   @map("statusorder")
+
+  userId    String @db.ObjectId
+  user      User @relation(fields: [userId], references: [id])
+}
+
+model ContentsSetting {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  contentName  String @map("contentname")
+
+  userId    String @db.ObjectId
+  user      User @relation(fields: [userId], references: [id])
+}
+
+model ProspectList {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @unique @db.ObjectId
+  createdAt DateTime @default(now())
+
+  // Relation
+  user User @relation(fields: [userId], references: [id])
+  prospects  Prospects[]
+
+  @@map("prospectlist")
+}
+
+model Prospects {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  prospectName      String   @map("name")
+  prospectSex       String   @map("sex")
+  prospectAge       Int      @map("age")
+  prospectMarital   String   @map("martial")
+  children          Int      @map("children")
+  prospectBusiness  String   @map("business")
+  prospectLocation  String   @map("location")
+  prospectPhone     String   @map("phone")
+  prospectEmail     String   @map("email")
+  prospectHidden    Boolean  @map("hidden")
+  prospectFirstcontact DateTime @default(now())
+  createdAt         DateTime @default(now())
+
+  prospectListId    String @db.ObjectId
+  prospectList      ProspectList @relation(fields: [prospectListId], references: [id])
+
+  notes Notes[]
+
+  @@map("prospects")
+}
+
+model Notes {
+  id    String   @id @default(auto()) @map("_id") @db.ObjectId
+  noteTitle String   @map("notetitle")
+  content String   @map("notecontent")
+  status  String   @map("notestatus")
+  appointmentDate DateTime @default(now())
+  createdAt         DateTime @default(now())
+
+  prospectId    String @db.ObjectId
+  prospect      Prospects @relation(fields: [prospectId], references: [id])
+
+  memos Memos[]  
+}
+
+model Memos {
+  id    String   @id @default(auto()) @map("_id") @db.ObjectId
+  memoSubject String  @map("memosubject")
+  memoDetail  String  @map("memodetail")
+  createdAt   DateTime @default(now())
+
+  noteId    String @db.ObjectId
+  note      Notes @relation(fields: [noteId], references: [id])
+}

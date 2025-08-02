@@ -1,0 +1,46 @@
+/* Text responsive */
+@media only screen and (min-width:1441px){
+  .textFont{
+    font-size: 40px;
+  }
+}
+
+@media only screen and (max-width:1440px){
+  .textFont{
+    font-size: 30px;
+  }
+}
+
+@media only screen and (max-width:430px){
+  .textFont{
+    font-size: 20px;
+  }
+}
+
+/* Card Style */
+@media only screen and (min-width:1441px){
+  .alartCardConponent{
+    border: 3px solid black;
+    border-radius: 10px;
+    padding: 2rem;
+    row-gap: 2rem;
+  }
+}
+
+@media only screen and (max-width:1440px){
+  .alartCardConponent{
+    border: 2px solid black;
+    border-radius: 7px;
+    padding: 1.5rem;
+    row-gap: 1.5rem;
+  }
+}
+
+@media only screen and (max-width:430px){
+  .alartCardConponent{
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 1rem;
+    row-gap: 1rem;
+  }
+}

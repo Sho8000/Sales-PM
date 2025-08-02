@@ -1,5 +1,6 @@
 "use client"
 
+import AlertBtn from "./(components)/Btn/AlartBtn";
 import CloseBtn from "./(components)/Btn/CloseBtn";
 import NormalBtn from "./(components)/Btn/NormalBtn";
 import SettingBtn from "./(components)/Btn/SettingBtn";
@@ -26,6 +27,9 @@ export default function Home() {
   const settingPassBtnTest = () => {
     console.log("Pass")
   }
+  const alertBtnTest = () => {
+    console.log("Alert")
+  }
 
   return (
     <>
@@ -40,11 +44,15 @@ export default function Home() {
           <NormalBtn text="Save" clickFunction={normalBtntest} changeToPlus={true}/>
         </div>
       </section>
-      <section className="bg-yellow-200 flex flex-col gap-[2rem] justify-center items-center">
+      <section className="relative bg-yellow-200 flex flex-col gap-[2rem] justify-center items-center">
         <SettingBtn text="Status & Color" clickFunction={settingStatusBtnTest}/>
         <SettingBtn text="Contents" clickFunction={settingContentBtnTest}/>
         <SettingBtn text="Hidden List" clickFunction={settingHiddenBtnTest}/>
         <SettingBtn text="Password" clickFunction={settingPassBtnTest}/>
+      </section>
+      <section>
+        <AlertBtn text="OK" clickFunction={alertBtnTest}/>
+        <AlertBtn text="Cancel" clickFunction={alertBtnTest}/>
       </section>
     </>
   );

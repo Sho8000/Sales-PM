@@ -1,0 +1,55 @@
+/* Text responsive */
+@media only screen and (min-width:1441px){
+  .titleFont{
+    font-size: 64px;
+    padding: 2rem;
+  }
+  .textFont{
+    font-size: 48px;
+  }
+}
+
+@media only screen and (max-width:1440px){
+  .titleFont{
+    font-size: 42px;
+    padding: 1.5rem;
+  }
+  .textFont{
+    font-size: 36px;
+  }
+}
+
+@media only screen and (max-width:430px){
+  .titleFont{
+    font-size: 32px;
+    padding: 1rem;
+  }
+  .textFont{
+    font-size: 24px;
+  }
+}
+
+/* PC or Phone or others*/
+@media only screen and (min-width:1001px){
+  .forPhone{
+    display: none;    
+  }
+}
+
+@media only screen and (max-width:1000px){
+  .forPC{
+    display: none;
+  }
+}
+
+@media only screen and (min-width:701px){
+  .btnLayoutForSmall{
+    display: none;    
+  }
+}
+
+@media only screen and (max-width:700px){
+  .btnLayoutForBig{
+    display: none;
+  }
+}

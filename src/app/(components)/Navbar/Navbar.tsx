@@ -26,7 +26,11 @@ export default function Navbar() {
   }
 
   const homeIconHandler = () => {
-    console.log("Home clicked!!")
+    if(pathName==="/auth"){
+      router.push("/");
+    } else{
+      router.push("/prospectslist")
+    }
   }
 
   const SettingIconHandler = () => {
@@ -48,7 +52,7 @@ export default function Navbar() {
           }
         </div>
         {/* Nav Right */}
-        {pathName!=="/auth" &&
+        {pathName!=="/auth" ?
           <>
             {pathName==="/"?
               <LoginLogoutBtn text="Login" clickFunction={loginHandler}/>
@@ -78,6 +82,15 @@ export default function Navbar() {
               </>
             }
           </>
+          :<Image
+            className={`${Styles.NavIconSize}`}
+            onClick={homeIconHandler}
+            src={homeIcon}
+            alt="home"
+            width={80}
+            height={80}
+          />
+
         }
       </nav>
       {isHbgBtnClicked &&

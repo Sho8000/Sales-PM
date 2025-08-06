@@ -8,19 +8,21 @@ import { getStatusColorFromProspect } from "@/lib/findStatusColor";
 import SimpleCard from "../Card/SimpleSmallCard";
 
 import Styles from "./prospectsList.module.css"
+import { useState } from "react";
+import SimpleMediumCard from "../Card/SimpleMediumCard";
 
 export default function FilterAndDisplayArea() {
-//  const setUser = useUserInfoStore((state)=>state.setUser);
+  const [displayStyle,setDisplayStyle] = useState<"listLayout"|"blockLayout">("listLayout")
   const userData = useUserInfoStore((state) => state.user); //use user's all Information
 
   const colorPalletClickHandler = () => {
     console.log("ColorPallet")
   }
   const listLayoutClickHandler = () => {
-    console.log("ListLayout")
+    setDisplayStyle("listLayout")
   }
   const blockLayoutClickHandler = () => {
-    console.log("BlockLayout")
+    setDisplayStyle("blockLayout")
   }
 
   return (
@@ -59,18 +61,26 @@ export default function FilterAndDisplayArea() {
         </div>
       </div>
 
-      {/* Gap Bar */}
-      <div className={`h-[2px] bg-gray-300 ${Styles.filterDisplayLayout} m-auto`}></div>
+      {/* Display Card*/}
+      <div className={`max-h-[70vh] overflow-y-scroll flex m-auto bg-yellow-50 border-2 border-gray-300 rounded-md
+        ${Styles.displayPadding}
+        ${Styles.filterDisplayLayout}
+        ${displayStyle==="listLayout"?Styles.listCardLayout:Styles.blockCardLayout}  
+      `}>
+        {userData?.prospectList?.prospects && userData?.prospectList?.prospects.length <=0 ? <h2 className={`${Styles.textFont} text-center`}>No Data,,,</h2>
+        :<>
+          {userData?.prospectList?.prospects.map((prospectData,index)=>{
+            const color = getStatusColorFromProspect(prospectData,userData.statusSetting);
 
-      {/* Display ListStyle*/}
-      <div className="max-h-[70vh] overflow-y-scroll flex flex-col gap-[1rem]">
-        {userData?.prospectList?.prospects.map((prospectData,index)=>{
-          const color = getStatusColorFromProspect(prospectData,userData.statusSetting);
-
-          return <SimpleCard key={index} prospectData={prospectData} color={color}/>
-        })}
+            if(displayStyle==="blockLayout"){
+              return <SimpleMediumCard key={index} prospectData={prospectData} color={color}/>
+            }else{
+              return <SimpleCard key={index} prospectData={prospectData} color={color}/>
+            }
+          })}
+        </>
+        }
       </div>
-
     </>
   );
 }

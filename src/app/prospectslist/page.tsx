@@ -6,13 +6,11 @@ import UpComing from "../(components)/CommonParts/UpComing";
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useUserInfoStore } from "@/store/userInfoStore";
-import SimpleCard from "../(components)/Card/SimpleSmallCard";
-import { getStatusColorFromNote, getStatusColorFromProspect } from "@/lib/findStatusColor";
+import FilterAndDisplayArea from "../(components)/ProspectsList/Fliter_DisplayArea";
 
 export default function ProspectsList() {
   const {data: session, status} = useSession();
   const setUser = useUserInfoStore((state)=>state.setUser);
-  const userData = useUserInfoStore((state) => state.user); //use user's all Information
 
   useEffect(()=>{
     if(status==="authenticated" && session?.user?.id){
@@ -49,25 +47,24 @@ export default function ProspectsList() {
         button={<NormalBtn text="+Add New" clickFunction={clickAddNewHandler} changeToPlus={true}/>}
       />
       <UpComing text="Upcoming" clickFunction={clickUpcoming}/>
+      <FilterAndDisplayArea/>
+
+
+
+
+
 
       {/* test simple card for prospect */}
-      <div className="flex flex-col gap-[1rem]">
-        {userData?.prospectList?.prospects.map((prospectData,index)=>{
-          const color = getStatusColorFromProspect(prospectData,userData.statusSetting);
-
-          return <SimpleCard key={index} prospectData={prospectData} color={color}/>
-        })}
-      </div>
 
       {/* test simple card for notes */}
-      <div className="flex flex-col gap-[1rem]">
+{/*       <div className="flex flex-col gap-[1rem]">
         {userData?.prospectList?.prospects[0].notes.map((noteData,index)=>{
           const color = getStatusColorFromNote(noteData,userData.statusSetting);
 
           return <SimpleCard key={index} noteData={noteData} color={color}/>
         })}
       </div>
-
+ */}
     </>
   );
 }

@@ -1,0 +1,56 @@
+/* Image responsive */
+@media only screen and (min-width:1441px){
+  .iconSize{
+    width: 100px;
+    height: 100px;
+  }
+}
+
+@media only screen and (max-width:1440px){
+  .iconSize{
+    width: 75px;
+    height: 75px;
+  }
+}
+
+@media only screen and (max-width:430px){
+  .iconSize{
+    width: 50px;
+    height: 50px;
+  }
+}
+
+/* Layout */
+@media only screen and (min-width:1441px){
+  .filterDisplayLayout{
+    width: 90%;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+}
+
+@media only screen and (max-width:1440px){
+  .filterDisplayLayout{
+    width: 95%;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media only screen and (max-width:430px){
+  .filterDisplayLayout{
+    width: 100%;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+}
+
+/* PC or Phone or others*/
+@media only screen and (min-width:1001px){
+}
+
+@media only screen and (max-width:1000px){
+  .flexCol{
+    flex-direction: column;
+  }
+}

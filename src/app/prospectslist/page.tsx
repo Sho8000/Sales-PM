@@ -6,6 +6,8 @@ import UpComing from "../(components)/CommonParts/UpComing";
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useUserInfoStore } from "@/store/userInfoStore";
+import SimpleCard from "../(components)/Card/SimpleSmallCard";
+import { getStatusColorFromNote, getStatusColorFromProspect } from "@/lib/findStatusColor";
 
 export default function ProspectsList() {
   const {data: session, status} = useSession();
@@ -48,10 +50,24 @@ export default function ProspectsList() {
       />
       <UpComing text="Upcoming" clickFunction={clickUpcoming}/>
 
-      <h1>All Datas</h1>
-      <h1>{userData?.id}</h1>
-      <h1>{userData?.password}</h1>
-      <h1>{userData?.prospectList?.prospects[0].prospectEmail}</h1>
+      {/* test simple card for prospect */}
+      <div className="flex flex-col gap-[1rem]">
+        {userData?.prospectList?.prospects.map((prospectData,index)=>{
+          const color = getStatusColorFromProspect(prospectData,userData.statusSetting);
+
+          return <SimpleCard key={index} prospectData={prospectData} color={color}/>
+        })}
+      </div>
+
+      {/* test simple card for notes */}
+      <div className="flex flex-col gap-[1rem]">
+        {userData?.prospectList?.prospects[0].notes.map((noteData,index)=>{
+          const color = getStatusColorFromNote(noteData,userData.statusSetting);
+
+          return <SimpleCard key={index} noteData={noteData} color={color}/>
+        })}
+      </div>
+
     </>
   );
 }

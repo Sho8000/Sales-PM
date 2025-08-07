@@ -18,7 +18,7 @@ export default function Navbar() {
   const { data: session } = useSession()
   const pathName = usePathname();
   const [isHbgBtnClicked, setIsHbgBtnClicked] = useState(false);
-  const {changeSettingPageStatus} = useSettingPageContext();
+  const {changeSettingPageStatus,changeSettingMenuStatus} = useSettingPageContext();
 
   const loginHandler = () => {
     router.push("/auth");
@@ -38,6 +38,7 @@ export default function Navbar() {
 
   const SettingIconHandler = () => {
     changeSettingPageStatus(true)
+    changeSettingMenuStatus(true)
   }
 
   const hbgBtnHandler = () => {

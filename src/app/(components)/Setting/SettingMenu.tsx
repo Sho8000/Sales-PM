@@ -1,21 +1,27 @@
 "use client"
 
+import { useSettingPageContext } from "@/app/(context)/SettingOpenContext";
 import SettingBtn from "../Btn/SettingBtn";
 
 export default function SettingMenu() {
+  const {changeSettingMenuStatus,changeSettingStatusPageStatus,changeSettingContentStatus,changeSettingHiddenStatus,changeSettingPasswordStatus} = useSettingPageContext();
 
   const settingStatusBtn = () => {
-    console.log("clicked settingStatus")
+    changeSettingMenuStatus(false);
+    changeSettingStatusPageStatus(true);
   }
 
   const settingContentBtn = () => {
-    console.log("clicked settingContent")
+    changeSettingMenuStatus(false);
+    changeSettingContentStatus(true);
   }
   const settingHiddenBtn = () => {
-    console.log("clicked settingHidden")
+    changeSettingMenuStatus(false);
+    changeSettingHiddenStatus(true);
   }
   const settingPassBtn = () => {
-    console.log("clicked settingPass")
+    changeSettingMenuStatus(false);
+    changeSettingPasswordStatus(true);
   }
 
   return (

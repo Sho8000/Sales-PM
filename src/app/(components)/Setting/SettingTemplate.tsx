@@ -12,10 +12,15 @@ interface SettingProps{
 }
 
 export default function SettingTemplate({title}:SettingProps) {
-  const {isSettingPage,changeSettingPageStatus} = useSettingPageContext();
+  const {isSettingPage,isSettingMenu,isSettingStatusPage,isSettingContent, isSettingHidden,isSettingPassword, changeSettingPageStatus,changeSettingMenuStatus,changeSettingStatusPageStatus,changeSettingContentStatus,changeSettingHiddenStatus,changeSettingPasswordStatus} = useSettingPageContext();
 
   const closeBtnHandler = () => {
     changeSettingPageStatus(false)
+    changeSettingMenuStatus(false)
+    changeSettingStatusPageStatus(false)
+    changeSettingContentStatus(false)
+    changeSettingHiddenStatus(false)
+    changeSettingPasswordStatus(false)
   }
 
   return (
@@ -31,7 +36,21 @@ export default function SettingTemplate({title}:SettingProps) {
             <SectionTitle text={title}/>
 
             {/* each Menu area */}
-            <SettingMenu/>
+            {isSettingMenu &&
+              <SettingMenu/>
+            }
+            {isSettingStatusPage &&
+              <h1>Setting Status</h1>
+            }
+            {isSettingContent &&
+              <h1>Setting Content</h1>
+            }
+            {isSettingHidden &&
+              <h1>Setting Hidden</h1>
+            }
+            {isSettingPassword &&
+              <h1>Setting Password</h1>
+            }
           </div>
         </div>
       }

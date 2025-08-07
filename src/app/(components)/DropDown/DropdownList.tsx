@@ -26,7 +26,7 @@ export default function DropDown({filter,value,onChange}:DropdownProps) {
           <option
             className={`text-sm`}
             value={filter==="Filter"?("All"):("Name")}>
-              {filter==="Filter"?("Filter"):("Name")}
+              {filter==="Filter"?("All"):("Name")}
             </option>
           <option className={`text-sm`} value="Value111">Value1</option>
         </select>

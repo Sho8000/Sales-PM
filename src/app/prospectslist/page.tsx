@@ -21,9 +21,6 @@ export default function ProspectsList() {
             
             setUser(data); // all user's info *except
 
-//            console.log("data",data)
-//            console.log("data, age",data.prospectList.prospects[0].prospectAge)
-
         } catch (error) {
             console.error("Error fetching user's data:", error);
         }
@@ -48,23 +45,6 @@ export default function ProspectsList() {
       />
       <UpComing text="Upcoming" clickFunction={clickUpcoming}/>
       <FilterAndDisplayArea/>
-
-
-
-
-
-
-      {/* test simple card for prospect */}
-
-      {/* test simple card for notes */}
-{/*       <div className="flex flex-col gap-[1rem]">
-        {userData?.prospectList?.prospects[0].notes.map((noteData,index)=>{
-          const color = getStatusColorFromNote(noteData,userData.statusSetting);
-
-          return <SimpleCard key={index} noteData={noteData} color={color}/>
-        })}
-      </div>
- */}
     </>
   );
 }

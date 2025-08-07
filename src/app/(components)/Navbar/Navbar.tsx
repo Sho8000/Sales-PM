@@ -10,12 +10,15 @@ import Image from "next/image";
 import settingIcon from "@/../public/Nav/settings.svg"
 import homeIcon from "@/../public/Nav/homeIcon_80_80.png"
 import { signOut, useSession } from "next-auth/react";
+import { useSettingPageContext } from "@/app/(context)/SettingOpenContext";
+import SettingTemplate from "../Setting/SettingTemplate";
 
 export default function Navbar() {
   const router = useRouter(); 
   const { data: session } = useSession()
   const pathName = usePathname();
   const [isHbgBtnClicked, setIsHbgBtnClicked] = useState(false);
+  const {changeSettingPageStatus} = useSettingPageContext();
 
   const loginHandler = () => {
     router.push("/auth");
@@ -34,7 +37,7 @@ export default function Navbar() {
   }
 
   const SettingIconHandler = () => {
-    console.log("Setting clicked!!")
+    changeSettingPageStatus(true)
   }
 
   const hbgBtnHandler = () => {
@@ -114,6 +117,7 @@ export default function Navbar() {
           <LoginLogoutBtn text="Logout" clickFunction={logoutHandler}/>
         </div>
       }
+      <SettingTemplate title={"Setting"}/>
     </>
   );
 }

@@ -1,0 +1,49 @@
+/* Text responsive */
+@media only screen and (min-width:1441px){
+  .filterTitleFont{
+    font-size: 36px;
+  }
+  .filterPlaceFont{
+    font-size: 32px;
+  }
+}
+
+@media only screen and (max-width:1440px){
+  .filterTitleFont{
+    font-size: 27px;
+  }
+  .filterPlaceFont{
+    font-size: 24px;
+  }
+}
+
+@media only screen and (max-width:430px){
+  .filterTitleFont{
+    font-size: 18px;
+  }
+  .filterPlaceFont{
+    font-size: 16px;
+  }
+}
+
+/* layout */
+@media only screen and (min-width:1441px){
+  .filterContainer{
+    width: fit-content;
+    min-width: 400px;
+  }
+}
+
+@media only screen and (max-width:1440px){
+  .filterContainer{
+    width: fit-content;
+    min-width: 300px;
+  }
+}
+
+@media only screen and (max-width:430px){
+  .filterContainer{
+    width: fit-content;
+    min-width: 300px;
+  }
+}

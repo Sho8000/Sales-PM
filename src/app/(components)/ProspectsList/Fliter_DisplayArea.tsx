@@ -10,10 +10,23 @@ import SimpleCard from "../Card/SimpleSmallCard";
 import Styles from "./prospectsList.module.css"
 import { useState } from "react";
 import SimpleMediumCard from "../Card/SimpleMediumCard";
+import DropDown from "../DropDown/DropdownList";
 
 export default function FilterAndDisplayArea() {
   const [displayStyle,setDisplayStyle] = useState<"listLayout"|"blockLayout">("listLayout")
   const userData = useUserInfoStore((state) => state.user); //use user's all Information
+  const [selectedFilter,setSlectedFilter] = useState("0")
+  const [selectedSort,setSlectedSort] = useState("0")
+
+  const selectedFilterValue = (selectedValue: string) => {
+    setSlectedFilter(selectedValue);
+    console.log("Selected filter", selectedValue);
+  };
+  
+  const selectedSortValue = (selectedValue: string) => {
+    setSlectedSort(selectedValue);
+    console.log("Selected sort", selectedValue);
+  };
 
   const colorPalletClickHandler = () => {
     console.log("ColorPallet")
@@ -30,8 +43,8 @@ export default function FilterAndDisplayArea() {
       {/* Filter and DisplayOption */}
       <div className={`flex justify-between ${Styles.filterDisplayLayout} ${Styles.flexCol} m-auto`}>
         <div className={`flex gap-[1rem] items-center ${Styles.flexCol}`}>
-          <h1>dropdown</h1>
-          <h1>dropdown</h1>
+          <DropDown filter="Filter" value={selectedFilter} onChange={selectedFilterValue}/>
+          <DropDown filter="Sort" value={selectedSort} onChange={selectedSortValue}/>
         </div>
         <div className="flex justify-evenly gap-[2rem]">
           <Image

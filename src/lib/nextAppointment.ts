@@ -1,27 +1,34 @@
-import { Notes } from "./dbInterface";
+import { Notes, Prospects } from "./dbInterface";
 
-export function getNextAppointmentDateFromNotes(notes: Notes[]): Date | null {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0); // normalize to midnight
-
-  const futureAppointments = notes
-    .filter((note) => new Date(note.appointmentDate) >= today)
-    .sort((a, b) =>
-      new Date(a.appointmentDate).getTime() - new Date(b.appointmentDate).getTime()
-    );
-
-  return futureAppointments.length > 0 ? new Date(futureAppointments[0].appointmentDate) : null;
+export interface NextAppointmentWithProspect {
+  prospectName: string;
+  note: Notes;
 }
 
-export function getNextAppointmentDateFromAllData(notes: Notes[]): Date | null {
+export function getNextAppointmentDateFromNotes(notes: Notes[]): Notes | null {
   const today = new Date();
   today.setHours(0, 0, 0, 0); // normalize to midnight
 
-  const futureAppointments = notes
-    .filter((note) => new Date(note.appointmentDate) >= today)
+  return notes
+    .filter(note => new Date(note.appointmentDate) >= today)
     .sort((a, b) =>
       new Date(a.appointmentDate).getTime() - new Date(b.appointmentDate).getTime()
-    );
+    )[0] || null;
+}
 
-  return futureAppointments.length > 0 ? new Date(futureAppointments[0].appointmentDate) : null;
+export function getNextAppointmentDateFromAllData(prospects: Prospects[]): NextAppointmentWithProspect | null {
+  let earliestAppointment: NextAppointmentWithProspect | null = null;
+
+  prospects.forEach(prospect => {
+    const nextNote = getNextAppointmentDateFromNotes(prospect.notes || []);
+
+    if(nextNote && (!earliestAppointment || new Date(nextNote.appointmentDate)< new Date(earliestAppointment.note.appointmentDate))){
+      earliestAppointment = {
+        prospectName: prospect.prospectName,
+        note: nextNote,
+      };
+    }
+  });
+
+  return earliestAppointment
 }

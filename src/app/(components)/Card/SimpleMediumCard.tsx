@@ -11,7 +11,7 @@ interface SimpleMediumCardProps {
 
 export default function SimpleMediumCard({prospectData,color="#000000"}:SimpleMediumCardProps) {
 
-  const nextAppointmentDate = getNextAppointmentDateFromNotes(prospectData.notes)
+  const nextAppointmentDate = getNextAppointmentDateFromNotes(prospectData.notes)?.appointmentDate
 
   return (
     <div className={`relative self-stretch mx-auto rounded-[10px] bg-white ${Styles.mediumCardComponent}`}>

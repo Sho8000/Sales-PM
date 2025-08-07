@@ -23,11 +23,11 @@ export default function UpComing({text,clickFunction}:TitleProps) {
       <h2 className={`w-full text-center ${Styles.forPC}`}>
         {text} :
         {earlistAppointmentInfo?
-          <span className="text-red-500 underline underline-offset-8" onClick={clickFunction}> {new Date(earlistAppointmentInfo.note.appointmentDate).toLocaleString("en-US", {
+          <span className="text-red-500 underline underline-offset-8" onClick={clickFunction}> {earlistAppointmentInfo.prospectName} : {new Date(earlistAppointmentInfo.note.appointmentDate).toLocaleString("en-US", {
             year: "numeric",
             month: "short",
             day: "numeric",
-          })}, {earlistAppointmentInfo.prospectName}</span>
+          })}</span>
           :<span className="text-gray-400"> No Appointment</span>
         }
       </h2>
@@ -36,11 +36,11 @@ export default function UpComing({text,clickFunction}:TitleProps) {
           {text}
         </h2>
         {earlistAppointmentInfo?
-          <h2 className="text-red-500 underline text-center underline-offset-8" onClick={clickFunction}> {new Date(earlistAppointmentInfo.note.appointmentDate).toLocaleString("en-US", {
+          <h2 className="text-red-500 underline text-center underline-offset-8" onClick={clickFunction}> {earlistAppointmentInfo.prospectName} : {new Date(earlistAppointmentInfo.note.appointmentDate).toLocaleString("en-US", {
             year: "numeric",
             month: "short",
             day: "numeric",
-          })}, {earlistAppointmentInfo.prospectName}</h2>
+          })}</h2>
           :<h2 className="font-medium text-center text-gray-400">No Appointment</h2>
         }
       </div>

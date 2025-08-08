@@ -4,8 +4,14 @@ import { useSettingPageContext } from "@/app/(context)/SettingOpenContext";
 import SectionTitle from "../CommonParts/SectionTitle";
 import SettingMenu from "./SettingMenu";
 import CloseBtn from "../Btn/CloseBtn";
+//import { MdDelete } from "react-icons/md";
+//import { FaEdit } from "react-icons/fa";
+//import { IoIosAdd } from "react-icons/io";
+//import { IoMdEye } from "react-icons/io";
+//import { IoMdEyeOff } from "react-icons/io";
 
 import Styles from "./Setting.module.css"
+import SettingStatusAndColor from "./SettingStatusAndColor";
 
 interface SettingProps{
   title:string;
@@ -30,7 +36,7 @@ export default function SettingTemplate({title}:SettingProps) {
           <div className={`absolute top-0 right-0 translate-y-[50%] translate-x-[-10%] z-50`}>
             <CloseBtn clickFunction={closeBtnHandler}/>
           </div>
-          <div className={`relative top-[50%] left-[50%] translate-[-50%] rounded-[10px] py-[1rem] bg-[#fdfdfd]
+          <div className={`relative max-h-[90vh] overflow-y-auto top-[50%] left-[50%] translate-[-50%] rounded-[10px] py-[1rem] bg-[#fdfdfd]
             ${Styles.whiteBox}  
           `}>
             <SectionTitle text={title}/>
@@ -40,7 +46,7 @@ export default function SettingTemplate({title}:SettingProps) {
               <SettingMenu/>
             }
             {isSettingStatusPage &&
-              <h1>Setting Status</h1>
+              <SettingStatusAndColor/>
             }
             {isSettingContent &&
               <h1>Setting Content</h1>

@@ -15,6 +15,7 @@ import SettingStatusAndColor from "./SettingStatusAndColor";
 import { useEffect, useState } from "react";
 import { ContentsSetting, StatusSetting } from "@/lib/dbInterface";
 import { useUserInfoStore } from "@/store/userInfoStore";
+import SettingContents from "./SettingContents";
 
 interface SettingProps{
   title:string;
@@ -78,7 +79,7 @@ export default function SettingTemplate({title}:SettingProps) {
             {isSettingContent &&
               <>
                 {contentsSetting &&
-                  <h1>Setting Content</h1>
+                  <SettingContents contentsData={contentsSetting}/>
                 }
               </>
             }

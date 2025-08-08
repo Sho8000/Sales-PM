@@ -12,6 +12,9 @@ import CloseBtn from "../Btn/CloseBtn";
 
 import Styles from "./Setting.module.css"
 import SettingStatusAndColor from "./SettingStatusAndColor";
+import { useEffect, useState } from "react";
+import { ContentsSetting, StatusSetting } from "@/lib/dbInterface";
+import { useUserInfoStore } from "@/store/userInfoStore";
 
 interface SettingProps{
   title:string;
@@ -19,6 +22,26 @@ interface SettingProps{
 
 export default function SettingTemplate({title}:SettingProps) {
   const {isSettingPage,isSettingMenu,isSettingStatusPage,isSettingContent, isSettingHidden,isSettingPassword, changeSettingPageStatus,changeSettingMenuStatus,changeSettingStatusPageStatus,changeSettingContentStatus,changeSettingHiddenStatus,changeSettingPasswordStatus} = useSettingPageContext();
+
+  const userData = useUserInfoStore((state) => state.user); //use user's all Information
+  const [settingData,setSettingData] = useState<StatusSetting[]|null>(null);
+  const [contentsSetting,setContentsSetting] = useState<ContentsSetting[]|null>(null);
+
+  useEffect(()=>{
+    /* For StatusSetting */
+    if(userData?.statusSetting){
+      const sortedSettings = [...userData.statusSetting].sort((a, b) => a.statusOrder - b.statusOrder);
+      setSettingData(sortedSettings);
+//      setStatusOderData(sortedSettings[sortedSettings.length-1].statusOrder+1)
+    }
+
+    /* For ContentsSetting */
+    if(userData?.contentsSetting){
+      setContentsSetting(userData.contentsSetting)
+    }
+
+    },[userData])
+
 
   const closeBtnHandler = () => {
     changeSettingPageStatus(false)
@@ -46,7 +69,11 @@ export default function SettingTemplate({title}:SettingProps) {
               <SettingMenu/>
             }
             {isSettingStatusPage &&
-              <SettingStatusAndColor/>
+              <>
+                {settingData &&
+                  <SettingStatusAndColor settingData={settingData}/>
+                }
+              </>
             }
             {isSettingContent &&
               <h1>Setting Content</h1>

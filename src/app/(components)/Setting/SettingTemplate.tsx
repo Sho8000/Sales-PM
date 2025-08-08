@@ -43,7 +43,6 @@ export default function SettingTemplate({title}:SettingProps) {
 
     },[userData])
 
-
   const closeBtnHandler = () => {
     changeSettingPageStatus(false)
     changeSettingMenuStatus(false)

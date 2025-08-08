@@ -7,14 +7,15 @@ import { getNextAppointmentDateFromNotes } from "@/lib/nextAppointment";
 interface SimpleMediumCardProps {
   prospectData:Prospects
   color?:string
+  onClick:(prospectInfo:Prospects)=>void;
 }
 
-export default function SimpleMediumCard({prospectData,color="#000000"}:SimpleMediumCardProps) {
+export default function SimpleMediumCard({prospectData,color="#000000",onClick}:SimpleMediumCardProps) {
 
   const nextAppointmentDate = getNextAppointmentDateFromNotes(prospectData.notes)?.appointmentDate
 
   return (
-    <div className={`relative self-stretch mx-auto rounded-[10px] bg-white ${Styles.mediumCardComponent}`}>
+    <div className={`relative self-stretch mx-auto rounded-[10px] bg-white ${Styles.mediumCardComponent}`} onClick={()=>onClick(prospectData)}>
       <div className={`absolute w-full h-[20px] rounded-t-[10px] top-0 left-[0px]`} style={{backgroundColor:color}}></div>
       
       <div className={`w-full flex flex-col justify-between ${Styles.cardFont}`}>

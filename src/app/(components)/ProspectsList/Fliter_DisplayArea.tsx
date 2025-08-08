@@ -11,10 +11,17 @@ import Styles from "./prospectsList.module.css"
 import { useState } from "react";
 import SimpleMediumCard from "../Card/SimpleMediumCard";
 import DropDown from "../DropDown/DropdownList";
+import { useClickedProspectInfoStore } from "@/store/clickedProspectsInfoStore";
+import { Prospects } from "@/lib/dbInterface";
+import { useRouter } from "next/navigation";
 
 export default function FilterAndDisplayArea() {
+  const router = useRouter(); 
   const [displayStyle,setDisplayStyle] = useState<"listLayout"|"blockLayout">("listLayout")
+
   const userData = useUserInfoStore((state) => state.user); //use user's all Information
+  const setClickedProspectData = useClickedProspectInfoStore((state) => state.setProspect);
+
   const [selectedFilter,setSlectedFilter] = useState("0")
   const [selectedSort,setSlectedSort] = useState("0")
 
@@ -36,6 +43,11 @@ export default function FilterAndDisplayArea() {
   }
   const blockLayoutClickHandler = () => {
     setDisplayStyle("blockLayout")
+  }
+
+  const clickedProspectCardHandler = (prospectInfo:Prospects) => {
+    setClickedProspectData(prospectInfo)
+    router.push(`/prospectslist/${prospectInfo.id}`)
   }
 
   return (
@@ -86,9 +98,9 @@ export default function FilterAndDisplayArea() {
             const color = getStatusColorFromProspect(prospectData,userData.statusSetting);
 
             if(displayStyle==="blockLayout"){
-              return <SimpleMediumCard key={index} prospectData={prospectData} color={color}/>
+              return <SimpleMediumCard key={index} prospectData={prospectData} color={color} onClick={clickedProspectCardHandler}/>
             }else{
-              return <SimpleCard key={index} prospectData={prospectData} color={color}/>
+              return <SimpleCard key={index} prospectData={prospectData} color={color} onClickProspect={clickedProspectCardHandler}/>
             }
           })}
         </>

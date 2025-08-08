@@ -12,6 +12,7 @@ import homeIcon from "@/../public/Nav/homeIcon_80_80.png"
 import { signOut, useSession } from "next-auth/react";
 import { useSettingPageContext } from "@/app/(context)/SettingOpenContext";
 import SettingTemplate from "../Setting/SettingTemplate";
+import { useUserInfoStore } from "@/store/userInfoStore";
 
 export default function Navbar() {
   const router = useRouter(); 
@@ -25,6 +26,7 @@ export default function Navbar() {
   }
 
   const logoutHandler = () => {
+    useUserInfoStore.getState().clearUser();
     signOut();
   }
 

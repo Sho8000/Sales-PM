@@ -76,7 +76,11 @@ export default function SettingTemplate({title}:SettingProps) {
               </>
             }
             {isSettingContent &&
-              <h1>Setting Content</h1>
+              <>
+                {contentsSetting &&
+                  <h1>Setting Content</h1>
+                }
+              </>
             }
             {isSettingHidden &&
               <h1>Setting Hidden</h1>

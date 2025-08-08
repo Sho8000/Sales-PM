@@ -98,9 +98,9 @@ export default function FilterAndDisplayArea() {
             const color = getStatusColorFromProspect(prospectData,userData.statusSetting);
 
             if(displayStyle==="blockLayout"){
-              return <SimpleMediumCard key={index} prospectData={prospectData} color={color} onClick={clickedProspectCardHandler}/>
+              return <SimpleMediumCard key={index} prospectData={prospectData} color={color} clickFunction={clickedProspectCardHandler}/>
             }else{
-              return <SimpleCard key={index} prospectData={prospectData} color={color} onClickProspect={clickedProspectCardHandler}/>
+              return <SimpleCard key={index} prospectData={prospectData} color={color} clickFunctionProspect={clickedProspectCardHandler}/>
             }
           })}
         </>

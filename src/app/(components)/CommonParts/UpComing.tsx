@@ -2,10 +2,11 @@ import { getNextAppointmentDateFromAllData, NextAppointmentWithProspect } from "
 import Styles from "./CommonParts.module.css"
 import { useUserInfoStore } from "@/store/userInfoStore";
 import { useEffect, useState } from "react";
+import { Prospects } from "@/lib/dbInterface";
 
 interface TitleProps {
   text:"Upcoming"|"Appointment";
-  clickFunction: ()=>void;
+  clickFunction: (prospectInfo:Prospects)=>void;
 }
 
 export default function UpComing({text,clickFunction}:TitleProps) {
@@ -23,7 +24,7 @@ export default function UpComing({text,clickFunction}:TitleProps) {
       <h2 className={`w-full text-center ${Styles.forPC}`}>
         {text} :
         {earlistAppointmentInfo?
-          <span className="text-red-500 underline underline-offset-8" onClick={clickFunction}> {earlistAppointmentInfo.prospectName} : {new Date(earlistAppointmentInfo.note.appointmentDate).toLocaleString("en-US", {
+          <span className="text-red-500 underline underline-offset-8" onClick={()=>clickFunction(earlistAppointmentInfo.prospect)}> {earlistAppointmentInfo.prospect.prospectName} : {new Date(earlistAppointmentInfo.note.appointmentDate).toLocaleString("en-US", {
             year: "numeric",
             month: "short",
             day: "numeric",
@@ -36,7 +37,7 @@ export default function UpComing({text,clickFunction}:TitleProps) {
           {text}
         </h2>
         {earlistAppointmentInfo?
-          <h2 className="text-red-500 underline text-center underline-offset-8" onClick={clickFunction}> {earlistAppointmentInfo.prospectName} : {new Date(earlistAppointmentInfo.note.appointmentDate).toLocaleString("en-US", {
+          <h2 className="text-red-500 underline text-center underline-offset-8" onClick={()=>clickFunction(earlistAppointmentInfo.prospect)}> {earlistAppointmentInfo.prospect.prospectName} : {new Date(earlistAppointmentInfo.note.appointmentDate).toLocaleString("en-US", {
             year: "numeric",
             month: "short",
             day: "numeric",

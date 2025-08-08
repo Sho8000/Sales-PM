@@ -7,10 +7,15 @@ import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useUserInfoStore } from "@/store/userInfoStore";
 import FilterAndDisplayArea from "../(components)/ProspectsList/Fliter_DisplayArea";
+import { Prospects } from "@/lib/dbInterface";
+import { useClickedProspectInfoStore } from "@/store/clickedProspectsInfoStore";
+import { useRouter } from "next/navigation";
 
 export default function ProspectsList() {
+  const router = useRouter();
   const {data: session, status} = useSession();
   const setUser = useUserInfoStore((state)=>state.setUser);
+  const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
 
   useEffect(()=>{
     if(status==="authenticated" && session?.user?.id){
@@ -34,8 +39,9 @@ export default function ProspectsList() {
     console.log("add New")
   }
 
-  const clickUpcoming = () => {
-    console.log("clicked upcoming!")
+  const clickUpcoming = (prospectInfo:Prospects) => {
+    setClickedProspectData(prospectInfo)
+    router.push(`/prospectslist/${prospectInfo.id}`)
   }
 
   return (

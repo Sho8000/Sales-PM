@@ -1,7 +1,7 @@
 import { Notes, Prospects } from "./dbInterface";
 
 export interface NextAppointmentWithProspect {
-  prospectName: string;
+  prospect: Prospects;
   note: Notes;
 }
 
@@ -24,7 +24,7 @@ export function getNextAppointmentDateFromAllData(prospects: Prospects[]): NextA
 
     if(nextNote && (!earliestAppointment || new Date(nextNote.appointmentDate)< new Date(earliestAppointment.note.appointmentDate))){
       earliestAppointment = {
-        prospectName: prospect.prospectName,
+        prospect: prospect,
         note: nextNote,
       };
     }

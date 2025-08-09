@@ -15,7 +15,7 @@ export default function DropDown({filter,value,onChange}:DropdownProps) {
   return (
     <div className={`flex justify-center items-center gap-[1rem] ${Styles.filterContainer}`}>
       <p className={`w-fit text-center ${Styles.filterTitleFont}`}>{filter} :</p>
-      <div className="m-auto grow px-[1rem] py-[0.3rem] border-1 border-black rounded-md ">
+      <div className="m-auto grow px-[1rem] py-[0.3rem] border-1 border-black rounded-md bg-white">
         <select
           className={`w-full ${Styles.filterPlaceFont}`}
           name="filter"

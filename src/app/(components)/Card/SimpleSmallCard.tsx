@@ -7,10 +7,11 @@ interface SimpleCardProps {
   prospectData?:Prospects
   noteData?:Notes
   color?:string
-  clickFunctionReceiveProspect:(prospectInfo:Prospects)=>void;
+  clickFunctionReceiveProspect?:(prospectInfo:Prospects)=>void;
+  clickFunctionReceiveNote?:(note:Notes)=>void;
 }
 
-export default function SimpleCard({prospectData,noteData,color="#000000",clickFunctionReceiveProspect}:SimpleCardProps) {
+export default function SimpleCard({prospectData,noteData,color="#000000",clickFunctionReceiveProspect,clickFunctionReceiveNote}:SimpleCardProps) {
 
   return (
     <div className={`relative flex items-center w-[90%] m-auto rounded-[10px] bg-white ${Styles.smallCardComponent}`}>
@@ -32,7 +33,13 @@ export default function SimpleCard({prospectData,noteData,color="#000000",clickF
         </div>
       }
       {noteData &&
-        <div className={`flex w-full h-full justify-between items-center ${Styles.cardFont} font-bold`}>
+        <div className={`flex w-full h-full justify-between items-center ${Styles.cardFont} font-bold`}
+        onClick={()=>{
+          if(clickFunctionReceiveNote){
+            clickFunctionReceiveNote(noteData)
+          }
+        }}
+        >
           <h2>{noteData.noteTitle}</h2>
           <h2>{noteData.content}</h2>
         </div>

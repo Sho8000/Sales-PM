@@ -28,7 +28,7 @@
     margin-bottom: 2rem;
   }
   .displayPadding{
-    padding: 2rem;
+    padding: 2rem 4rem;
   }
 }
 
@@ -59,17 +59,26 @@
   .textFont{
     font-size: 40px;
   }
+  .noteTitleFont{
+    font-size: 48px;
+  }
 }
 
 @media only screen and (max-width:1440px){
   .textFont{
     font-size: 30px;
   }
+  .noteTitleFont{
+    font-size: 36px;
+  }
 }
 
 @media only screen and (max-width:430px){
   .textFont{
     font-size: 20px;
+  }
+  .noteTitleFont{
+    font-size: 24px;
   }
 }
 

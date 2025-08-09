@@ -100,7 +100,7 @@ export default function FilterAndDisplayArea() {
             if(displayStyle==="blockLayout"){
               return <SimpleMediumCard key={index} prospectData={prospectData} color={color} clickFunction={clickedProspectCardHandler}/>
             }else{
-              return <SimpleCard key={index} prospectData={prospectData} color={color} clickFunctionProspect={clickedProspectCardHandler}/>
+              return <SimpleCard key={index} prospectData={prospectData} color={color} clickFunctionReceiveProspect={clickedProspectCardHandler}/>
             }
           })}
         </>

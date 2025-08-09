@@ -1,10 +1,14 @@
-/* Text responsive */
+/* Text responsive / Icon */
 @media only screen and (min-width:1441px){
   .textFont{
     font-size: 40px;
   }
   .cardFont{
     font-size: 36px;
+  }
+  .iconSize{
+    width: 60px;
+    height: 60px;
   }
 }
 
@@ -15,6 +19,10 @@
   .cardFont{
     font-size: 27px;
   }
+  .iconSize{
+    width: 45px;
+    height: 45px;
+  }
 }
 
 @media only screen and (max-width:430px){
@@ -23,6 +31,10 @@
   }
   .cardFont{
     font-size: 18px;
+  }
+  .iconSize{
+    width: 25px;
+    height: 25px;
   }
 }
 
@@ -100,3 +112,33 @@
     padding: 20px 1.5rem 10px;
   }
 }
+
+/* Full Info Layout */
+@media only screen and (min-width:1001px){
+  .fullInfoLayout{
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-areas: 
+    "nameTitle name"
+    "sexTitle sex"
+    "ageTitle age"
+    "maritalTitle marital"
+    "businessTitle business"
+    "locationTitle location"
+    "phoneTitle phone"
+    "emailTitle email"
+    "firstContactTitle firstContact"
+    ;
+    row-gap: 1rem;
+    margin: 2rem;
+  }
+}
+
+@media only screen and (max-width:1000px){
+  .fullInfoLayout{
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+  }
+}
+

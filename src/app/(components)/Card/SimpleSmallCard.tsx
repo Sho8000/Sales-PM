@@ -12,14 +12,11 @@ interface SimpleCardProps {
   clickFunctionReceiveProspect?:(prospectInfo:Prospects)=>void;
   clickFunctionReceiveNote?:(note:Notes)=>void;
   fullInfo?:boolean;
-  clikcFunctionEdit?:()=>void;
+  clickFunctionEdit?:()=>void;
+  clickFunctionHide?:()=>void;
 }
 
-export default function SimpleCard({prospectData,noteData,color="#000000",clickFunctionReceiveProspect,clickFunctionReceiveNote,fullInfo=false,clikcFunctionEdit}:SimpleCardProps) {
-
-  const clickHideHandler = () => {
-    console.log("hide clicked")
-  }
+export default function SimpleCard({prospectData,noteData,color="#000000",clickFunctionReceiveProspect,clickFunctionReceiveNote,fullInfo=false,clickFunctionEdit,clickFunctionHide}:SimpleCardProps) {
 
   return (
     <div className={`relative flex items-center w-[90%] m-auto rounded-[10px] bg-white ${Styles.smallCardComponent}`}>
@@ -46,12 +43,17 @@ export default function SimpleCard({prospectData,noteData,color="#000000",clickF
                   <div className={`${Styles.iconSize}`}
                     onClick={(e)=>{
                       e.stopPropagation();
-                      clikcFunctionEdit?.();
+                      clickFunctionEdit?.();
                     }}
                   >
                     <FaEdit size={"100%"} color="gray"/>
                   </div>
-                  <div className={`${Styles.iconSize}`} onClick={clickHideHandler}>
+                  <div className={`${Styles.iconSize}`}
+                    onClick={(e)=>{
+                      e.stopPropagation();
+                      clickFunctionHide?.();
+                    }}
+                  >
                     <IoMdEyeOff size={"100%"} color="gray"/>
                   </div>
                 </div>

@@ -16,6 +16,7 @@ export default function ProspectInfo() {
   const [prospectColor,setProspectColor] = useState("#000000");
   const [isOpenFullPersonalInfo,setIsOpenFullPersonalInfo] = useState(false)
   const [isEditPerspectOpen,setIsEditPerspectOpen] = useState(false)
+  const [isHidePerspectOpen,setIsHidePerspectOpen] = useState(false)
 
   useEffect(()=>{
     if(clickedProspectData && userData){
@@ -24,7 +25,9 @@ export default function ProspectInfo() {
   },[userData,clickedProspectData])
 
   const showPersonalData = () => {
-    if(isEditPerspectOpen){
+    if(isHidePerspectOpen){
+      console.log("hide clicked")
+    } else if(isEditPerspectOpen){
       console.log("edit clicked")
     } else {
       setIsOpenFullPersonalInfo(!isOpenFullPersonalInfo)
@@ -33,6 +36,10 @@ export default function ProspectInfo() {
 
   const clickedEditHandler = () => {
     setIsEditPerspectOpen(!isEditPerspectOpen)
+  }
+
+  const clickedHideHandler = () => {
+    setIsHidePerspectOpen(!isHidePerspectOpen)
   }
 
   return (
@@ -44,7 +51,7 @@ export default function ProspectInfo() {
           />
           <UpComing text="Appointment"/>
           <SimpleCard prospectData={clickedProspectData} color={prospectColor} clickFunctionReceiveProspect={showPersonalData} fullInfo={isOpenFullPersonalInfo}
-          clikcFunctionEdit={clickedEditHandler}/>
+          clickFunctionEdit={clickedEditHandler} clickFunctionHide={clickedHideHandler}/>
           <ProspectDisplay/>
         </>
       }

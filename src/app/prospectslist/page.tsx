@@ -10,12 +10,15 @@ import FilterAndDisplayArea from "../(components)/ProspectsList/Fliter_DisplayAr
 import { Prospects } from "@/lib/dbInterface";
 import { useClickedProspectInfoStore } from "@/store/clickedProspectsInfoStore";
 import { useRouter } from "next/navigation";
+import { useAddNewContext } from "../(context)/AddNewOpenContext";
+import AddNewTemplate from "../(components)/Card/AddNewTemplate";
 
 export default function ProspectsList() {
   const router = useRouter();
   const {data: session, status} = useSession();
   const setUser = useUserInfoStore((state)=>state.setUser);
   const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
+  const {isAddNewPage,changeAddNewPageStatus} = useAddNewContext();
 
   useEffect(()=>{
     if(status==="authenticated" && session?.user?.id){
@@ -36,7 +39,7 @@ export default function ProspectsList() {
   },[session,status,setUser])
 
   const clickAddNewHandler = () => {
-    console.log("add New")
+    changeAddNewPageStatus(true);
   }
 
   const clickUpcoming = (prospectInfo:Prospects) => {
@@ -51,6 +54,10 @@ export default function ProspectsList() {
       />
       <UpComing text="Upcoming" clickFunction={clickUpcoming}/>
       <FilterAndDisplayArea/>
+
+      {isAddNewPage &&
+        <AddNewTemplate text="New Prospect"/>
+      }
     </>
   );
 }

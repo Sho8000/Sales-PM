@@ -8,16 +8,19 @@ import { useUserInfoStore } from "@/store/userInfoStore";
 import { getStatusColorFromNote } from "@/lib/findStatusColor";
 import SimpleCard from "../../Card/SimpleSmallCard";
 import { Notes } from "@/lib/dbInterface";
+import AddNewTemplate from "../../Card/AddNewTemplate";
+import { useAddNewContext } from "@/app/(context)/AddNewOpenContext";
 
 export default function ProspectDisplay() {
     const userData = useUserInfoStore((state) => state.user);
     const clickedProspectData = useClickedProspectInfoStore((state) => state.prospect); //use clicked prospect's Information
+    const {isAddNewPage,changeAddNewPageStatus} = useAddNewContext()
 
     const [selectedFilter,setSlectedFilter] = useState("0")
     const [selectedSort,setSlectedSort] = useState("0")
 
     const addNoteHandler = () => {
-      console.log("clicked add new")
+      changeAddNewPageStatus(true);
     }
 
     const selectedFilterValue = (selectedValue: string) => {
@@ -63,6 +66,10 @@ export default function ProspectDisplay() {
           </>
         }
       </div>
+
+      {isAddNewPage &&
+        <AddNewTemplate text={"New Note"}/>
+      }
     </>
   );
 }

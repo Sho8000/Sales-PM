@@ -1,13 +1,19 @@
 import { useState } from "react";
 import NormalBtn from "../Btn/NormalBtn";
 import Styles from "./Setting.module.css"
+import { useUserInfoStore } from "@/store/userInfoStore";
+import { useSettingPageContext } from "@/app/(context)/SettingOpenContext";
 
 export default function SettingPassword() {
+  const userData = useUserInfoStore((state) => state.user); //use user's all Information
+  const { changeSettingPageStatus,changeSettingMenuStatus,changeSettingStatusPageStatus,changeSettingContentStatus,changeSettingHiddenStatus,changeSettingPasswordStatus} = useSettingPageContext();
+
+
   const [currentPassword,setCurrentPassword] = useState("")
   const [newPassword,setNewPassword] = useState("")
   const [passwordConfirm,setPasswordConfirm] = useState("")
 
-  const clickPassSaveHandler = () => {
+  const clickPassSaveHandler = async () => {
     if(!currentPassword || !newPassword || !passwordConfirm){
       console.log("please input all information!!")
       return
@@ -25,6 +31,41 @@ export default function SettingPassword() {
       setNewPassword("");
       setPasswordConfirm("");
       return
+    }
+
+    try {
+      if(userData?.id){
+        const res = await fetch(`api/user/${userData?.id}`,{
+          method:'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            currentPassword:currentPassword,
+            newPassword:newPassword,
+          }),
+        });
+
+        if (!res.ok){
+          console.log("Error !!!")
+          return;
+        };
+
+        setCurrentPassword("")
+        setNewPassword("")
+        setPasswordConfirm("")
+
+        /* close Settingpage */
+        changeSettingPageStatus(false)
+        changeSettingMenuStatus(false)
+        changeSettingStatusPageStatus(false)
+        changeSettingContentStatus(false)
+        changeSettingHiddenStatus(false)
+        changeSettingPasswordStatus(false)    
+      }
+
+    } catch (error) {
+      console.error("Error fetching change password requests:", error);
     }
   }
 
@@ -47,7 +88,7 @@ export default function SettingPassword() {
             onChange={(e) => setCurrentPassword( e.target.value )}
           />
         </div>
-    
+
         <div className={`w-full bg-gray-300 my-[1rem] ${Styles.devidingBar}`}></div>
 
         <div className={`flex gap-y-[0.5rem] ${Styles.smallLayout}`}>
@@ -79,49 +120,3 @@ export default function SettingPassword() {
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-/* 
-
-<>
-<div className='max-w-3xl m-auto border-1 border-black rounded-md'>
-  <div className='px-[1rem] py-[0.5rem] bg-[#FFCE47] border-dashed border-b-1 border-black rounded-t-md'>
-    <p className='font-bold'>Change the Password</p>
-    {isPassNotFilled.length > 0 && 
-      <p className='text-red-500 pb-[0.5rem] text-sm'>*{isPassNotFilled}</p>
-    }
-  </div>
-  <div className='w-full border-b-1 border-gray-400 border-dashed'>
-    <input className='mx-[1rem] my-[0.5rem] px-[1rem] rounded-sm border-1 border-gray-500 bg-[#EDEDED]' type="password" placeholder='Current Password' value={newInstructorInfo.currentPassword} onChange={(e) => setNewInstructorInfo({ ...newInstructorInfo, currentPassword: e.target.value })}/>
-    {currentPassError && 
-      <p className='mx-[1rem] text-red-500 pb-[0.5rem] text-sm'>*Input correct password</p>
-    }
-  </div>
-  <div className='flex flex-col'>
-    <div>
-      <input className='mx-[1rem] my-[0.5rem] px-[1rem] rounded-sm border-1 border-gray-500 bg-[#EDEDED]' type="password" placeholder='New Password' value={newInstructorInfo.newPassword} onChange={(e) => setNewInstructorInfo({ ...newInstructorInfo, newPassword: e.target.value })}/>
-      <input className='mx-[1rem] my-[0.5rem] px-[1rem] rounded-sm border-1 border-gray-500 bg-[#EDEDED]' type="password" placeholder='New Password Confirmation' minLength={8} value={newInstructorInfo.newPassConfirm} onChange={(e) => setNewInstructorInfo({ ...newInstructorInfo, newPassConfirm: e.target.value })}/>
-    </div>
-    {newPassError && 
-      <p className='mx-[1rem] text-red-500 pb-[0.5rem] text-sm'>*{newPassError}</p>
-    }
-  </div>
-</div>      
-
-<div className='w-[50%] m-auto min-w-[150px]'>
-  <Button
-    className={`${styles.button} mt-[0.5rem]`} onClick={changePasswordHandler}
-  >
-    Click to Change
-  </Button> 
-</div>
-</>
- */

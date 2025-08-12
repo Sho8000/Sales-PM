@@ -44,11 +44,15 @@ export default function SettingContents({contentsData}:SettingContentsProps) {
       {/* Each Items */}
       <div className="w-full flex flex-col gap-[1rem]">
         {contentsData.map((contents,index)=>{
-          return <div key={index} className="flex items-center border-b-1 border-gray-400 gap-[1rem]">
+          return <div key={index} className={`flex border-b-1 border-gray-400 gap-[1rem] ${Styles.smallLayout}`}>
             <h2 className={`${Styles.itemsFont} text-[#808080]`}>Content{index+1} :</h2>
-            <h2 className={`grow ${Styles.itemsFont} grow`}>{contents.contentName}</h2>
-            <div className={`${Styles.iconSize}`}>
-              <MdDelete size={"100%"} color="gray"/>
+            <div className="flex justify-between grow">
+              <h2 className={`grow ${Styles.itemsFont} grow`}>{contents.contentName}</h2>
+              {!isEdit &&
+                <div className={`${Styles.iconSize}`}>
+                  <MdDelete size={"100%"} color="gray"/>
+                </div>
+              }
             </div>
           </div>
         })}

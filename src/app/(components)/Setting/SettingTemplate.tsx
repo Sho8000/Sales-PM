@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { ContentsSetting, StatusSetting } from "@/lib/dbInterface";
 import { useUserInfoStore } from "@/store/userInfoStore";
 import SettingContents from "./SettingContents";
+import SettingPassword from "./SettingPassword";
 
 interface SettingProps{
   title:string;
@@ -86,7 +87,7 @@ export default function SettingTemplate({title}:SettingProps) {
               <h1>Setting Hidden</h1>
             }
             {isSettingPassword &&
-              <h1>Setting Password</h1>
+              <SettingPassword/>
             }
           </div>
         </div>

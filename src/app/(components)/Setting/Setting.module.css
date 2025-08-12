@@ -8,6 +8,9 @@
     font-size: 36px;
     font-weight: 700;
   }
+  .placeholderFont{
+    font-size: 32px;
+  }
   .iconSize{
     width: 50px;
     height: 50px;
@@ -27,6 +30,9 @@
   .itemsFont{
     font-size: 27px;
     font-weight: 700;
+  }
+  .placeholderFont{
+    font-size: 24px;
   }
   .iconSize{
     width: 37px;
@@ -48,6 +54,9 @@
     font-size: 18px;
     font-weight: 700;
   }
+  .placeholderFont{
+    font-size: 16px;
+  }
   .iconSize{
     width: 25px;
     height: 25px;
@@ -65,6 +74,10 @@
     width: 60%;
     max-width: 1200px;
   }
+  .inputLayout{
+    border: 3px solid gray;
+    border-radius: 5px;
+  }
 }
 
 @media only screen and (max-width:1440px){
@@ -72,10 +85,37 @@
     width: 100%;
     max-width: 800px;
   }
+  .inputLayout{
+    border: 2px solid gray;
+    border-radius: 5px;
+  }
 }
 
 @media only screen and (max-width:430px){
   .whiteBox{
     width: 100%;
   }
+  .inputLayout{
+    border: 1px solid gray;
+    border-radius: 5px;
+  }
 }
+
+@media only screen and (min-width:1001px){
+  .smallLayout{
+    align-items: center;
+  }
+  .devidingBar{
+    height: 3px;
+  }
+}
+
+@media only screen and (max-width:1000px){
+  .smallLayout{
+    flex-direction: column;
+  }
+  .devidingBar{
+    height: 2px;
+  }
+}
+

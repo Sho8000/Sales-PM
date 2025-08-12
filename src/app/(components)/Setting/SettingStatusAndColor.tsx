@@ -45,14 +45,16 @@ export default function SettingStatusAndColor({settingData}:SettingStatusAndColo
       {/* Each Items */}
       <div className="w-full flex flex-col gap-[1rem]">
         {settingData.map((settingItems,index)=>{
-          return <div key={index} className="flex items-center border-b-1 border-gray-400 gap-[1rem]">
+          return <div key={index} className={`flex border-b-1 border-gray-400 gap-x-[1rem] ${Styles.smallLayout}`}>
             <h2 className={`${Styles.itemsFont} text-[#808080]`}>Status{index+1} :</h2>
-            <div className="flex items-center grow">
-              <h2 className={`${Styles.itemsFont} grow`}>{settingItems.statusName}</h2>
-              <div className={`rounded-[5px] ${Styles.colorSize}`} style={{backgroundColor:settingItems.statusColor}}></div>
-            </div>
-            <div className={`${Styles.iconSize}`}>
-              <MdDelete size={"100%"} color="gray"/>
+            <div className="flex grow gap-[1rem]">
+              <div className="flex items-center grow">
+                <h2 className={`${Styles.itemsFont} grow`}>{settingItems.statusName}</h2>
+                <div className={`rounded-[5px] ${Styles.colorSize}`} style={{backgroundColor:settingItems.statusColor}}></div>
+              </div>
+              <div className={`${Styles.iconSize}`}>
+                <MdDelete size={"100%"} color="gray"/>
+              </div>
             </div>
           </div>
         })}

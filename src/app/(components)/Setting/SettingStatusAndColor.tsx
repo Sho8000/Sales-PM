@@ -52,9 +52,11 @@ export default function SettingStatusAndColor({settingData}:SettingStatusAndColo
                 <h2 className={`${Styles.itemsFont} grow`}>{settingItems.statusName}</h2>
                 <div className={`rounded-[5px] ${Styles.colorSize}`} style={{backgroundColor:settingItems.statusColor}}></div>
               </div>
-              <div className={`${Styles.iconSize}`}>
-                <MdDelete size={"100%"} color="gray"/>
-              </div>
+              {!isEdit &&
+                <div className={`${Styles.iconSize}`}>
+                  <MdDelete size={"100%"} color="gray"/>
+                </div>
+              }
             </div>
           </div>
         })}

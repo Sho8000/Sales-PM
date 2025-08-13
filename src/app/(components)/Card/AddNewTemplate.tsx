@@ -5,6 +5,7 @@ import CloseBtn from "../Btn/CloseBtn"
 import SectionTitle from "../CommonParts/SectionTitle"
 /* useing CSS in Setting component */
 import Styles from "./../Setting/Setting.module.css"
+import AddNewProspectCard from "./AddNewProspect"
 
 interface AddNewProspectProps {
   text:"New Prospect"|"New Note"|"New Memo"
@@ -30,7 +31,7 @@ export default function AddNewTemplate({text}:AddNewProspectProps) {
         <SectionTitle text={text}/>
 
         {text==="New Prospect" &&
-          <h2>this is New Prospect add page</h2>
+          <AddNewProspectCard/>
         }
         {text==="New Note" &&
           <h2>this is New Note add page</h2>

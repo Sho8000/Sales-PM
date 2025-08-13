@@ -6,6 +6,9 @@
   .cardFont{
     font-size: 36px;
   }
+  .placeholderFont{
+    font-size: 32px;
+  }
   .iconSize{
     width: 60px;
     height: 60px;
@@ -19,6 +22,9 @@
   .cardFont{
     font-size: 27px;
   }
+  .placeholderFont{
+    font-size: 24px;
+  }
   .iconSize{
     width: 45px;
     height: 45px;
@@ -31,6 +37,9 @@
   }
   .cardFont{
     font-size: 18px;
+  }
+  .placeholderFont{
+    font-size: 16px;
   }
   .iconSize{
     width: 25px;
@@ -60,6 +69,10 @@
     box-shadow: -10px 10px 4px rgba(0, 0, 0, 0.25);
     padding: 20px 1.5rem 10px;
   }
+  .inputLayout{
+    border: 3px solid gray;
+    border-radius: 5px;
+  }
 }
 
 @media only screen and (max-width:1440px){
@@ -82,6 +95,10 @@
     border: 2px solid black;
     box-shadow: -7px 7px 4px rgba(0, 0, 0, 0.25);
     padding: 20px 1.5rem 10px;
+  }
+  .inputLayout{
+    border: 2px solid gray;
+    border-radius: 5px;
   }
 }
 
@@ -111,6 +128,10 @@
     box-shadow: -5px 5px 4px rgba(0, 0, 0, 0.25);
     padding: 20px 1.5rem 10px;
   }
+  .inputLayout{
+    border: 1px solid gray;
+    border-radius: 5px;
+  }
 }
 
 /* Full Info Layout */
@@ -123,6 +144,7 @@
     "sexTitle sex"
     "ageTitle age"
     "maritalTitle marital"
+    "childrenTitle children"
     "businessTitle business"
     "locationTitle location"
     "phoneTitle phone"
@@ -131,6 +153,7 @@
     ;
     row-gap: 1rem;
     margin: 2rem;
+    align-items: center;
   }
 }
 
@@ -139,6 +162,12 @@
     display: flex;
     flex-direction: column;
     margin: 1rem;
+  }
+  .marginBtm{
+    margin-bottom: 2rem;
+  }
+  .marginLeft{
+    margin-left: 1rem;
   }
 }
 

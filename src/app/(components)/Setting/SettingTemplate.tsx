@@ -57,7 +57,7 @@ export default function SettingTemplate({title}:SettingProps) {
     <>
       {isSettingPage && 
         <div className="w-[100vw] h-[100vh] bg-black/80 top-0 left-0 z-50 fixed">
-          <div className={`absolute top-0 right-0 translate-y-[50%] translate-x-[-10%] z-50`}>
+          <div className={`absolute top-0 right-0 translate-y-[50%] translate-x-[-30%] z-50`}>
             <CloseBtn clickFunction={closeBtnHandler}/>
           </div>
           <div className={`relative max-h-[90vh] overflow-y-auto top-[50%] left-[50%] translate-[-50%] rounded-[10px] py-[1rem] bg-[#fdfdfd]

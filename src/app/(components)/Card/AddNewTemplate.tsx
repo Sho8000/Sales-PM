@@ -6,6 +6,7 @@ import SectionTitle from "../CommonParts/SectionTitle"
 /* useing CSS in Setting component */
 import Styles from "./../Setting/Setting.module.css"
 import AddNewProspectCard from "./AddNewProspect"
+import AddNewNoteCard from "./AddNewNote"
 
 interface AddNewProspectProps {
   text:"New Prospect"|"New Note"|"New Memo"
@@ -20,7 +21,7 @@ export default function AddNewTemplate({text}:AddNewProspectProps) {
 
   return (
     <div className="w-[100vw] h-[100vh] bg-black/80 top-0 left-0 z-50 fixed">
-      <div className={`absolute top-0 right-0 translate-y-[50%] translate-x-[-10%] z-50`}>
+      <div className={`absolute top-0 right-0 translate-y-[50%] translate-x-[-30%] z-50`}>
         <CloseBtn clickFunction={closeBtnAddNewHandelr}/>
       </div>
       
@@ -34,7 +35,7 @@ export default function AddNewTemplate({text}:AddNewProspectProps) {
           <AddNewProspectCard/>
         }
         {text==="New Note" &&
-          <h2>this is New Note add page</h2>
+          <AddNewNoteCard/>
         }
         {text==="New Memo" &&
           <h2>this is New Memo add page</h2>

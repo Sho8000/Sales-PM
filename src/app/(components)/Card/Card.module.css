@@ -155,10 +155,30 @@
     margin: 2rem;
     align-items: center;
   }
+  .noteInfoLayout{
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-areas: 
+    "noteTitle note"
+    "contentTitle content"
+    "statusTitle status"
+    "appointmentTitle appointment"
+    "subjectTitle subject"
+    "detailTitle detail"
+    ;
+    row-gap: 1rem;
+    margin: 2rem;
+    align-items: center;
+  }
 }
 
 @media only screen and (max-width:1000px){
   .fullInfoLayout{
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+  }
+  .noteInfoLayout{
     display: flex;
     flex-direction: column;
     margin: 1rem;

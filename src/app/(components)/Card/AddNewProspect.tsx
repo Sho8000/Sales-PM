@@ -5,7 +5,6 @@ import Styles from "./Card.module.css"
 import { Prospects } from "@/lib/dbInterface";
 import NormalBtn from "../Btn/NormalBtn";
 
-
 export default function AddNewProspectCard() {
   const [prospectInfo,setProspectInfo] = useState<Prospects>({
     id:"",

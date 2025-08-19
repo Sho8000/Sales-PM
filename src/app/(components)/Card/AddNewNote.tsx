@@ -37,6 +37,7 @@ export default function AddNewNoteCard() {
       <div className={`relative ${Styles.noteInfoLayout} break-all`}>
 
         {/* input Note information */}
+{/* deleted because of the client's request        
         <h2 className={`[grid-area:noteTitle] text-[#808080] ${Styles.cardFont} font-bold`} onClick={()=>{console.log(noteInfo,memoInfo)}}>Title</h2>
         <input
           className={`[grid-area:note] grow pl-[1rem] py-[0.5rem] ${Styles.placeholderFont} ${Styles.inputLayout} ${Styles.marginBtm}`}
@@ -45,6 +46,7 @@ export default function AddNewNoteCard() {
           value={noteInfo.noteTitle}
           onChange={(e) => setNoteInfo({...noteInfo, noteTitle:e.target.value})}
         />
+ */}        
         <h2 className={`[grid-area:contentTitle] text-[#808080] ${Styles.cardFont} font-bold`}>Content</h2>
         <select
           className={`appearance-none relative [grid-area:content] grow pl-[1rem] py-[0.5rem] ${Styles.placeholderFont} ${Styles.inputLayout} ${Styles.marginBtm}
@@ -99,6 +101,7 @@ export default function AddNewNoteCard() {
           value={noteInfo.appointmentDate.toISOString().split("T")[0]}
           onChange={(e)=> setNoteInfo({...noteInfo,appointmentDate:new Date(e.target.value)})}
         />
+{/*     deleted because of the client's request
         <h2 className={`[grid-area:subjectTitle] text-[#808080] ${Styles.cardFont} font-bold`}>Subject</h2>
         <input
           className={`[grid-area:subject] grow pl-[1rem] py-[0.5rem] ${Styles.placeholderFont} ${Styles.inputLayout} ${Styles.marginBtm}`}
@@ -107,11 +110,12 @@ export default function AddNewNoteCard() {
           value={memoInfo.memoSubject}
           onChange={(e) => setMemoInfo({...memoInfo, memoSubject:e.target.value})}
         />
-        <h2 className={`[grid-area:detailTitle] text-[#808080] ${Styles.cardFont} font-bold self-start`}>Detail</h2>
+ */}
+         <h2 className={`[grid-area:detailTitle] text-[#808080] ${Styles.cardFont} font-bold self-start`}>Note</h2>
         <textarea
           className={`[grid-area:detail] grow pl-[1rem] py-[0.5rem] ${Styles.placeholderFont} ${Styles.inputLayout} ${Styles.marginBtm}`}
           rows={5}
-          placeholder='Memo Detail'
+          placeholder='Write detail,,,'
           value={memoInfo.memoDetail}
           onChange={(e) => setMemoInfo({...memoInfo, memoDetail:e.target.value})}
         />

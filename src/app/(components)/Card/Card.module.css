@@ -159,7 +159,7 @@
     display: grid;
     grid-template-columns: auto auto;
     grid-template-areas: 
-    "noteTitle note"
+/*     "noteTitle note" */
     "contentTitle content"
     "statusTitle status"
     "appointmentTitle appointment"

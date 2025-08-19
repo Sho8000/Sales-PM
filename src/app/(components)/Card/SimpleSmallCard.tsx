@@ -95,7 +95,7 @@ export default function SimpleCard({prospectData,noteData,color="#000000",clickF
           }
         }}
         >
-          <h2>{noteData.noteTitle}</h2>
+{/*           <h2>{noteData.noteTitle}</h2> */}
           <h2>{noteData.content}</h2>
         </div>
       }

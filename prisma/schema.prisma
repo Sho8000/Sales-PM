@@ -66,6 +66,7 @@ model Prospects {
   prospectMarital   String   @map("martial")
   children          Int      @map("children")
   prospectBusiness  String   @map("business")
+/*   prospectPosition  String   @map("position") */
   prospectLocation  String   @map("location")
   prospectPhone     String   @map("phone")
   prospectEmail     String   @map("email")
@@ -87,6 +88,7 @@ model Notes {
   content String   @map("notecontent")
   status  String   @map("notestatus")
   appointmentDate DateTime @default(now())
+/*   appointmentDate DateTime? @default(now()) */
   createdAt         DateTime @default(now())
 
   prospectId    String @db.ObjectId

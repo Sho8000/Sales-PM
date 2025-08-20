@@ -54,10 +54,10 @@ export default function UpComing({text,clickFunction}:TitleProps) {
             }
           </>
           :<>
-            {appointmentDate?.appointmentDate?
+            {appointmentDate?
               <span className="text-red-500 underline underline-offset-8"
               >
-                {new Date(appointmentDate.appointmentDate).toLocaleString("en-US", {
+                {new Date(appointmentDate.appointmentDate!).toLocaleString("en-US", {
                   year: "numeric",
                   month: "short",
                   day: "numeric",

@@ -36,7 +36,7 @@ export default function UpComing({text,clickFunction}:TitleProps) {
         {text} :
         {text==="Upcoming" ?
           <>
-            {earlistAppointmentInfo?
+            {earlistAppointmentInfo?.note.appointmentDate?
               <span className="text-red-500 underline underline-offset-8"
               onClick={()=>{
                 if(clickFunction){
@@ -54,7 +54,7 @@ export default function UpComing({text,clickFunction}:TitleProps) {
             }
           </>
           :<>
-            {appointmentDate?
+            {appointmentDate?.appointmentDate?
               <span className="text-red-500 underline underline-offset-8"
               >
                 {new Date(appointmentDate.appointmentDate).toLocaleString("en-US", {
@@ -74,7 +74,7 @@ export default function UpComing({text,clickFunction}:TitleProps) {
         </h2>
         {text==="Upcoming" ?
           <>
-            {earlistAppointmentInfo?
+            {earlistAppointmentInfo?.note.appointmentDate?
               <h2 className="text-red-500 underline text-center underline-offset-8"
               onClick={()=>{
                 if(clickFunction){
@@ -92,7 +92,7 @@ export default function UpComing({text,clickFunction}:TitleProps) {
             }
           </>
           :<>
-            {appointmentDate?
+            {appointmentDate?.appointmentDate?
               <h2 className="text-red-500 underline text-center underline-offset-8"
               >
                 {new Date(appointmentDate.appointmentDate).toLocaleString("en-US", {

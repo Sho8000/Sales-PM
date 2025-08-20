@@ -11,7 +11,7 @@ export interface Notes {
   noteTitle: string;
   content: string;
   status: string;
-  appointmentDate: Date;
+  appointmentDate: Date | null;
   createdAt: Date;
   prospectId: string;
   memos: Memos[];
@@ -25,6 +25,7 @@ export interface Prospects {
   prospectMarital: string;
   children: number;
   prospectBusiness: string;
+  prospectPosition: string;
   prospectLocation: string;
   prospectPhone: string;
   prospectEmail: string;

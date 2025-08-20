@@ -1,98 +1,148 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-const getRandomInt = (min: number, max: number) =>
-  Math.floor(Math.random() * (max - min + 1)) + min;
+const statusSettings = [
+  { statusName: 'Urgent', statusColor: '#FF0000', statusOrder: 1 },
+  { statusName: 'Hopefully', statusColor: '#FFFF00', statusOrder: 2 },
+  { statusName: 'Open', statusColor: '#00FF00', statusOrder: 3 },
+  { statusName: 'Cooled off', statusColor: '#0000FF', statusOrder: 4 },
+  { statusName: 'Not Potential', statusColor: '#FF00EA', statusOrder: 5 },
+];
 
-async function createUserData(index: number) {
-  const user = await prisma.user.create({
-    data: {
-      username: `user${index}`,
-      useremail: `user${index}@example.com`,
-      password: `hashedpassword${index}`,
-    },
-  });
+const contentSettings = [
+  { contentName: 'Mortgage' },
+  { contentName: 'Investment' },
+  { contentName: 'Insurance' },
+];
 
-  await Promise.all(
-    ['New', 'Contacted', 'Interested', 'Negotiating', 'Closed'].map((name, i) =>
-      prisma.statusSetting.create({
-        data: {
-          statusName: name,
-          statusColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
-          statusOrder: i + 1,
-          userId: user.id,
-        },
-      })
-    )
-  );
+const prospectNamesUser1 = [
+  'John Doe1',
+  'Jane Smith1',
+  'Alice Johnson1',
+  'Bob Brown1',
+];
+const prospectNamesUser2 = [
+  'John Doe2',
+  'Jane Smith2',
+  'Alice Johnson2',
+  'Bob Brown2',
+  'Carol White2',
+];
 
-  await Promise.all(
-    ['Email', 'Phone Call', 'Meeting'].map(content =>
-      prisma.contentsSetting.create({
-        data: {
-          contentName: content,
-          userId: user.id,
-        },
-      })
-    )
-  );
+// Helpers to pick random elements/counts
+function randomInt(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
-  const prospectList = await prisma.prospectList.create({
-    data: {
-      userId: user.id,
-    },
-  });
+function randomFromArray<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
 
-  for (let i = 1; i <= 4; i++) {
-    const prospect = await prisma.prospects.create({
-      data: {
-        prospectName: `Prospect ${i} of User ${index}`,
-        prospectSex: Math.random() > 0.5 ? 'Male' : 'Female',
-        prospectAge: getRandomInt(20, 60),
-        prospectMarital: 'Single',
-        children: getRandomInt(0, 3),
-        prospectBusiness: 'Tech',
-        prospectLocation: 'Tokyo',
-        prospectPhone: `080-${getRandomInt(1000, 9999)}-${getRandomInt(1000, 9999)}`,
-        prospectEmail: `prospect${i}_user${index}@example.com`,
-        prospectHidden: false,
-        prospectListId: prospectList.id,
+const noteStatuses = statusSettings.map(s => s.statusName);
+const noteContents = contentSettings.map(c => c.contentName);
+
+async function createRandomMemos() {
+  const memoCount = randomInt(0, 2);
+  const memos = [];
+  for (let i = 0; i < memoCount; i++) {
+    memos.push({
+      memoSubject: `Memo Subject ${i + 1}`,
+      memoDetail: `Details for memo ${i + 1}`,
+    });
+  }
+  return memos;
+}
+
+async function createRandomNotes() {
+  const noteCount = randomInt(1, 3);
+  const notes = [];
+  for (let i = 0; i < noteCount; i++) {
+    const memos = await createRandomMemos();
+    notes.push({
+      noteTitle: `Note Title ${i + 1}`,
+      content: randomFromArray(noteContents),
+      status: randomFromArray(noteStatuses),
+      // appointmentDate is optional, let it default to now()
+      memos: {
+        create: memos,
       },
     });
-
-    const noteCount = getRandomInt(1, 3);
-    for (let j = 1; j <= noteCount; j++) {
-      const note = await prisma.notes.create({
-        data: {
-          noteTitle: `Note ${j} for Prospect ${i}`,
-          content: `Discussed project details for note ${j}`,
-          status: 'Pending',
-          prospectId: prospect.id,
-        },
-      });
-
-      const memoCount = getRandomInt(1, 3);
-      for (let k = 1; k <= memoCount; k++) {
-        await prisma.memos.create({
-          data: {
-            memoSubject: `Memo ${k}`,
-            memoDetail: `Details of memo ${k} for note ${j}`,
-            noteId: note.id,
-          },
-        });
-      }
-    }
   }
+  return notes;
+}
+
+async function createUser({
+  username,
+  useremail,
+  password,
+  prospectNames,
+}: {
+  username: string;
+  useremail: string;
+  password: string;
+  prospectNames: string[];
+}) {
+  const prospectsData = await Promise.all(
+    prospectNames.map(async (name) => ({
+      prospectName: name,
+      prospectSex: 'Male',
+      prospectAge: randomInt(25, 65),
+      prospectMarital: 'Married',
+      children: randomInt(0, 3),
+      prospectBusiness: 'Finance',
+      prospectPosition: 'Manager',
+      prospectLocation: 'New York',
+      prospectPhone: '123-456-7890',
+      prospectEmail: `${name.toLowerCase().replace(/\s/g, '')}@example.com`,
+      prospectHidden: false,
+      notes: {
+        create: await createRandomNotes(),
+      },
+    }))
+  );
+
+  const user = await prisma.user.create({
+    data: {
+      username,
+      useremail,
+      password,
+      statusSetting: {
+        create: statusSettings,
+      },
+      contentsSetting: {
+        create: contentSettings,
+      },
+      prospectList: {
+        create: {
+          prospects: {
+            create: prospectsData,
+          },
+        },
+      },
+    },
+  });
+
+  console.log(`✅ Created ${username} with ${prospectNames.length} prospects`);
 }
 
 async function main() {
-  await createUserData(1);
-  await createUserData(2);
-  console.log('🌱 Seed completed successfully!');
+  await createUser({
+    username: 'User1',
+    useremail: 'test@1',
+    password: '$2b$12$BB9458AizoHOSMp3jMoEH.jLQUPlKwW2m/R7vZryt17bKMFuX4UvK',
+    prospectNames: prospectNamesUser1,
+  });
+
+  await createUser({
+    username: 'User2',
+    useremail: 'test@2',
+    password: '$2b$12$YiO53Z.EvRWRKsSuDX/tz.Z0uZfPtZ4v03I3ItumUVw94sdIMw31C',
+    prospectNames: prospectNamesUser2,
+  });
 }
 
 main()
-  .catch(e => {
+  .catch((e) => {
     console.error(e);
     process.exit(1);
   })

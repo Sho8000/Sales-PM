@@ -98,7 +98,7 @@ export default function AddNewNoteCard() {
         <input
           className={`[grid-area:appointment] grow pl-[1rem] py-[0.5rem] ${Styles.placeholderFont} ${Styles.inputLayout} ${Styles.marginBtm}`}
           type="date"
-          value={noteInfo.appointmentDate.toISOString().split("T")[0]}
+          value={noteInfo.appointmentDate? noteInfo.appointmentDate.toISOString().split("T")[0]:"No Appointment"}
           onChange={(e)=> setNoteInfo({...noteInfo,appointmentDate:new Date(e.target.value)})}
         />
 {/*     deleted because of the client's request

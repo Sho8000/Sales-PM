@@ -4,8 +4,11 @@ import { useState } from "react";
 import Styles from "./Card.module.css"
 import { Prospects } from "@/lib/dbInterface";
 import NormalBtn from "../Btn/NormalBtn";
+import { useUserInfoStore } from "@/store/userInfoStore";
 
 export default function AddNewProspectCard() {
+  const userData = useUserInfoStore((state) => state.user); //use user's all Information
+
   const [prospectInfo,setProspectInfo] = useState<Prospects>({
     id:"",
     prospectName:"",
@@ -14,6 +17,7 @@ export default function AddNewProspectCard() {
     prospectMarital:"Single",
     children:0,
     prospectBusiness:"",
+    prospectPosition:"",
     prospectLocation:"",
     prospectPhone:"",
     prospectEmail:"",
@@ -23,15 +27,54 @@ export default function AddNewProspectCard() {
     prospectListId:"",
     notes:[],
   })
-  const [age,setAge] = useState<number|string>("")
-  const [children,setChildren] = useState<number|string>("")
+  const [age,setAge] = useState<number|"">("")
+  const [children,setChildren] = useState<number|"">("")
 
   const clickProspectInfoSave = async () => {
-    console.log("clicked Save")
+    try{
+      if(
+        prospectInfo.prospectName === ""
+        || age === ""
+        || children === ""
+        || prospectInfo.prospectBusiness === ""
+        || prospectInfo.prospectPosition === ""
+        || prospectInfo.prospectLocation === ""
+        || prospectInfo.prospectPhone === ""
+        || prospectInfo.prospectEmail === ""
+      ){
+        console.log("please add all information")
+        return
+      }
+
+      setProspectInfo({...prospectInfo,prospectAge:age,children:children})
+
+      if(userData?.prospectList?.id){
+        const res = await fetch(`api/prospectList/${userData.prospectList.id}`,{
+          method:'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            prospectInfo:prospectInfo
+          })
+        })
+
+        if (!res.ok){
+          console.log("Error !!!")
+          return;
+        };
+      }
+
+    } catch (error) {
+      console.error("Error fetching post a new prospect requests:", error);
+    }
+
   }
 
   const clickAddNote = async () => {
     console.log("clicked Add Note")
+
+    clickProspectInfoSave();
   }
 
   return (
@@ -80,14 +123,21 @@ export default function AddNewProspectCard() {
           type="number"
           placeholder='Age'
           value={age}
+          onKeyDown={(e) => {
+            if (e.key === "-" || e.key === "e" || e.key === "+" || e.key === "." || e.key === "E") {
+              e.preventDefault();
+            }
+          }}
           onChange={(e) => {
-            const value = e.target.value;
-            setAge(value)
-            setProspectInfo({
-              ...prospectInfo,
-              prospectAge: value === "" ? 0 : Number(value), // fallback to 0 if empty
-            })}
-          }
+            setAge(()=>{
+              if(e.target.value===""){
+                return ""
+              } else{
+                return Number(e.target.value)
+              }
+            })
+          }}
+          onWheel={(e) => e.target instanceof HTMLElement && e.target.blur()}
         />
         <h2 className={`[grid-area:maritalTitle] text-[#808080] ${Styles.cardFont} font-bold`}>Marital Status</h2>
         <div className={`[grid-area:marital] flex gap-x-[2rem] grow py-[0.5rem] ${Styles.placeholderFont} ${Styles.marginBtm} ${Styles.marginLeft}`}>
@@ -122,14 +172,21 @@ export default function AddNewProspectCard() {
           type="number"
           placeholder='how many children?'
           value={children}
+          onKeyDown={(e) => {
+            if (e.key === "-" || e.key === "e" || e.key === "+" || e.key === "." || e.key === "E") {
+              e.preventDefault();
+            }
+          }}
           onChange={(e) => {
-            const value = e.target.value;
-            setChildren(value)
-            setProspectInfo({
-              ...prospectInfo,
-              children: value === "" ? 0 : Number(value), // fallback to 0 if empty
-            })}
-          }
+            setChildren(()=>{
+              if(e.target.value===""){
+                return ""
+              } else{
+                return Number(e.target.value)
+              }
+            })
+          }}
+          onWheel={(e) => e.target instanceof HTMLElement && e.target.blur()}
         />
         <h2 className={`[grid-area:businessTitle] text-[#808080] ${Styles.cardFont} font-bold`}>Business Name</h2>
         <input
@@ -138,6 +195,14 @@ export default function AddNewProspectCard() {
           placeholder='Business Name'
           value={prospectInfo.prospectBusiness}
           onChange={(e) => setProspectInfo({...prospectInfo, prospectBusiness:e.target.value})}
+        />
+        <h2 className={`[grid-area:positionTitle] text-[#808080] ${Styles.cardFont} font-bold`}>Position</h2>
+        <input
+          className={`[grid-area:position] grow pl-[1rem] py-[0.5rem] ${Styles.placeholderFont} ${Styles.inputLayout} ${Styles.marginBtm}`}
+          type="text"
+          placeholder='Position'
+          value={prospectInfo.prospectPosition}
+          onChange={(e) => setProspectInfo({...prospectInfo, prospectPosition:e.target.value})}
         />
         <h2 className={`[grid-area:locationTitle] text-[#808080] ${Styles.cardFont} font-bold`}>Location</h2>
         <input

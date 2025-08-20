@@ -121,6 +121,7 @@ export default function AddNewProspectCard() {
         <input
           className={`[grid-area:age] grow pl-[1rem] py-[0.5rem] ${Styles.placeholderFont} ${Styles.inputLayout} ${Styles.marginBtm}`}
           type="number"
+          min={0}
           placeholder='Age'
           value={age}
           onKeyDown={(e) => {
@@ -170,6 +171,7 @@ export default function AddNewProspectCard() {
         <input
           className={`[grid-area:children] grow pl-[1rem] py-[0.5rem] ${Styles.placeholderFont} ${Styles.inputLayout} ${Styles.marginBtm}`}
           type="number"
+          min={0}
           placeholder='how many children?'
           value={children}
           onKeyDown={(e) => {

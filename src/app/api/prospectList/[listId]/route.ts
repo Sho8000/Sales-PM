@@ -105,3 +105,45 @@ export async function PUT(request: NextRequest, { params }:{params: Promise<{lis
   }
 
 }
+
+export async function DELETE(request: NextRequest, { params }:{params: Promise<{listId: string}>}){
+  const {listId} = await params
+
+  if( !listId ){
+    return NextResponse.json(
+      { status: "error", message: "list ID is required" },
+      { status: 400 }
+    );
+  }
+
+  try{    
+    const prospect = await prisma.prospects.findUnique({
+      where:{
+        id: listId
+      }
+    }) 
+
+    if(!prospect){
+      return NextResponse.json(
+        { status: "error", message: "Prospect ID info has error. Please try again after logout" },
+        { status: 400 }
+      );  
+    }
+
+    const deleteProspec = await prisma.prospects.delete({
+      where:{
+        id: listId
+      },
+    })
+
+    return NextResponse.json({
+      success: true,
+      message: "Prospect updated successfully",
+      data: deleteProspec,
+    });
+
+  } catch (error) {
+    console.error("Error deleting Prospect Info:", error);
+    return NextResponse.json({ success: false, error: "Failed to delete Prospects Info" });
+  }
+}

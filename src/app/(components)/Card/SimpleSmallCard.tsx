@@ -4,6 +4,8 @@ import { Notes, Prospects } from "@/lib/dbInterface";
 import { FaEdit } from "react-icons/fa";
 import { IoMdEyeOff } from "react-icons/io";
 import Styles from "./Card.module.css"
+import NormalBtn from "../Btn/NormalBtn";
+import AlertBtn from "../Btn/AlartBtn";
 
 interface SimpleCardProps {
   prospectData?:Prospects
@@ -14,9 +16,17 @@ interface SimpleCardProps {
   fullInfo?:boolean;
   clickFunctionEdit?:()=>void;
   clickFunctionHide?:()=>void;
+  isEdit?:boolean;
 }
 
-export default function SimpleCard({prospectData,noteData,color="#000000",clickFunctionReceiveProspect,clickFunctionReceiveNote,fullInfo=false,clickFunctionEdit,clickFunctionHide}:SimpleCardProps) {
+export default function SimpleCard({prospectData,noteData,color="#000000",clickFunctionReceiveProspect,clickFunctionReceiveNote,fullInfo=false,clickFunctionEdit,clickFunctionHide,isEdit=false}:SimpleCardProps) {
+
+  const updateProspectInfo = () => {
+    console.log("updateProspectInfo")
+  }
+  const cancelEdit = () => {
+    console.log("cancel Edit")
+  }
 
   return (
     <div className={`relative flex items-center w-[90%] m-auto rounded-[10px] bg-white ${Styles.smallCardComponent}`}>
@@ -57,31 +67,66 @@ export default function SimpleCard({prospectData,noteData,color="#000000",clickF
                     <IoMdEyeOff size={"100%"} color="gray"/>
                   </div>
                 </div>
-
-                <h2 className="[grid-area:nameTitle] text-[#808080]">Name</h2>
-                <h2 className="[grid-area:name]">{prospectData.prospectName}</h2>
-                <h2 className="[grid-area:sexTitle] text-[#808080]">Sex</h2>
-                <h2 className="[grid-area:sex]">{prospectData.prospectSex}</h2>
-                <h2 className="[grid-area:ageTitle] text-[#808080]">Age</h2>
-                <h2 className="[grid-area:age]">{prospectData.prospectAge}</h2>
-                <h2 className="[grid-area:maritalTitle] text-[#808080]">Marital Status</h2>
-                <h2 className="[grid-area:marital]">{prospectData.prospectMarital}</h2>
-                <h2 className="[grid-area:childrenTitle] text-[#808080]">Children</h2>
-                <h2 className="[grid-area:children]">{prospectData.children}</h2>
-                <h2 className="[grid-area:businessTitle] text-[#808080]">Business Name</h2>
-                <h2 className="[grid-area:business]">{prospectData.prospectBusiness}</h2>
-                <h2 className="[grid-area:locationTitle] text-[#808080]">Location</h2>
-                <h2 className="[grid-area:location]">{prospectData.prospectLocation}</h2>
-                <h2 className="[grid-area:phoneTitle] text-[#808080]">Phone</h2>
-                <h2 className="[grid-area:phone]">{prospectData.prospectPhone}</h2>
-                <h2 className="[grid-area:emailTitle] text-[#808080]">Email</h2>
-                <h2 className="[grid-area:email]">{prospectData.prospectEmail}</h2>
-                <h2 className="[grid-area:firstContactTitle] text-[#808080]">First Contact Date</h2>
-                <h2 className="[grid-area:firstContact]">{new Date(prospectData.prospectFirstcontact).toLocaleString("en-US", {
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                })}</h2>
+                
+                {!isEdit?<>
+                  <h2 className="[grid-area:nameTitle] text-[#808080]">Name</h2>
+                  <h2 className="[grid-area:name]">{prospectData.prospectName}</h2>
+                  <h2 className="[grid-area:sexTitle] text-[#808080]">Sex</h2>
+                  <h2 className="[grid-area:sex]">{prospectData.prospectSex}</h2>
+                  <h2 className="[grid-area:ageTitle] text-[#808080]">Age</h2>
+                  <h2 className="[grid-area:age]">{prospectData.prospectAge}</h2>
+                  <h2 className="[grid-area:maritalTitle] text-[#808080]">Marital Status</h2>
+                  <h2 className="[grid-area:marital]">{prospectData.prospectMarital}</h2>
+                  <h2 className="[grid-area:childrenTitle] text-[#808080]">Children</h2>
+                  <h2 className="[grid-area:children]">{prospectData.children}</h2>
+                  <h2 className="[grid-area:businessTitle] text-[#808080]">Business Name</h2>
+                  <h2 className="[grid-area:business]">{prospectData.prospectBusiness}</h2>
+                  <h2 className="[grid-area:positionTitle] text-[#808080]">Position</h2>
+                  <h2 className="[grid-area:position]">{prospectData.prospectPosition}</h2>
+                  <h2 className="[grid-area:locationTitle] text-[#808080]">Location</h2>
+                  <h2 className="[grid-area:location]">{prospectData.prospectLocation}</h2>
+                  <h2 className="[grid-area:phoneTitle] text-[#808080]">Phone</h2>
+                  <h2 className="[grid-area:phone]">{prospectData.prospectPhone}</h2>
+                  <h2 className="[grid-area:emailTitle] text-[#808080]">Email</h2>
+                  <h2 className="[grid-area:email]">{prospectData.prospectEmail}</h2>
+                  <h2 className="[grid-area:firstContactTitle] text-[#808080]">First Contact Date</h2>
+                  <h2 className="[grid-area:firstContact]">{new Date(prospectData.prospectFirstcontact).toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}</h2>
+                </>:<>
+                  <h2 className="[grid-area:nameTitle] text-[#808080]">Name</h2>
+                  <h2 className="[grid-area:name]">edit{prospectData.prospectName}</h2>
+                  <h2 className="[grid-area:sexTitle] text-[#808080]">Sex</h2>
+                  <h2 className="[grid-area:sex]">{prospectData.prospectSex}</h2>
+                  <h2 className="[grid-area:ageTitle] text-[#808080]">Age</h2>
+                  <h2 className="[grid-area:age]">{prospectData.prospectAge}</h2>
+                  <h2 className="[grid-area:maritalTitle] text-[#808080]">Marital Status</h2>
+                  <h2 className="[grid-area:marital]">{prospectData.prospectMarital}</h2>
+                  <h2 className="[grid-area:childrenTitle] text-[#808080]">Children</h2>
+                  <h2 className="[grid-area:children]">{prospectData.children}</h2>
+                  <h2 className="[grid-area:businessTitle] text-[#808080]">Business Name</h2>
+                  <h2 className="[grid-area:business]">{prospectData.prospectBusiness}</h2>
+                  <h2 className="[grid-area:positionTitle] text-[#808080]">Position</h2>
+                  <h2 className="[grid-area:position]">{prospectData.prospectPosition}</h2>
+                  <h2 className="[grid-area:locationTitle] text-[#808080]">Location</h2>
+                  <h2 className="[grid-area:location]">{prospectData.prospectLocation}</h2>
+                  <h2 className="[grid-area:phoneTitle] text-[#808080]">Phone</h2>
+                  <h2 className="[grid-area:phone]">{prospectData.prospectPhone}</h2>
+                  <h2 className="[grid-area:emailTitle] text-[#808080]">Email</h2>
+                  <h2 className="[grid-area:email]">{prospectData.prospectEmail}</h2>
+                  <h2 className="[grid-area:firstContactTitle] text-[#808080]">First Contact Date</h2>
+                  <h2 className="[grid-area:firstContact]">{new Date(prospectData.prospectFirstcontact).toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}</h2>
+                  <div className="[grid-area:save] w-full pt-[1rem] flex justify-around">
+                    <NormalBtn text="Save" clickFunction={updateProspectInfo}/>
+                    <AlertBtn text="Cancel" clickFunction={cancelEdit}/>
+                  </div>
+                </>}
               </div>
             </>
           }

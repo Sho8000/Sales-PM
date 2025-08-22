@@ -5,9 +5,15 @@ import Styles from "./Card.module.css"
 import { Prospects } from "@/lib/dbInterface";
 import NormalBtn from "../Btn/NormalBtn";
 import { useUserInfoStore } from "@/store/userInfoStore";
+import { useClickedProspectInfoStore } from "@/store/clickedProspectsInfoStore";
+import { useAddNewContext } from "@/app/(context)/AddNewOpenContext";
+import { useRouter } from "next/navigation";
 
 export default function AddNewProspectCard() {
   const userData = useUserInfoStore((state) => state.user); //use user's all Information
+  const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
+  const {changeAddNewPageStatus} = useAddNewContext()
+  const router = useRouter(); 
 
   const [prospectInfo,setProspectInfo] = useState<Prospects>({
     id:"",
@@ -30,7 +36,7 @@ export default function AddNewProspectCard() {
   const [age,setAge] = useState<number|"">("")
   const [children,setChildren] = useState<number|"">("")
 
-  const clickProspectInfoSave = async () => {
+  const clickProspectInfoSave = async (): Promise<Prospects | null> => {
     try{
       if(
         prospectInfo.prospectName === ""
@@ -43,10 +49,8 @@ export default function AddNewProspectCard() {
         || prospectInfo.prospectEmail === ""
       ){
         console.log("please add all information")
-        return
+        return null
       }
-
-      setProspectInfo({...prospectInfo,prospectAge:age,children:children})
 
       if(userData?.prospectList?.id){
         const res = await fetch(`api/prospectList/${userData.prospectList.id}`,{
@@ -61,20 +65,30 @@ export default function AddNewProspectCard() {
 
         if (!res.ok){
           console.log("Error !!!")
-          return;
+          return null;
         };
+
+        const {data} = await res.json();
+        return data;
       }
+
+      return null
 
     } catch (error) {
       console.error("Error fetching post a new prospect requests:", error);
+      return null
     }
 
   }
 
   const clickAddNote = async () => {
-    console.log("clicked Add Note")
+    const newProspect = await clickProspectInfoSave();
 
-    clickProspectInfoSave();
+    if(newProspect){
+      setClickedProspectData({...newProspect,notes:[]})
+      changeAddNewPageStatus(true)
+      router.push(`/prospectslist/${newProspect.id}`)
+    }
   }
 
   return (
@@ -134,6 +148,7 @@ export default function AddNewProspectCard() {
               if(e.target.value===""){
                 return ""
               } else{
+                setProspectInfo({...prospectInfo,prospectAge:Number(e.target.value)})
                 return Number(e.target.value)
               }
             })
@@ -184,6 +199,7 @@ export default function AddNewProspectCard() {
               if(e.target.value===""){
                 return ""
               } else{
+                setProspectInfo({...prospectInfo,children:Number(e.target.value)})
                 return Number(e.target.value)
               }
             })

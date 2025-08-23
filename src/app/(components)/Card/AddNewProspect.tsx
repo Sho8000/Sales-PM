@@ -255,7 +255,7 @@ export default function AddNewProspectCard() {
         />
         <h2 className={`[grid-area:firstContactTitle] text-[#808080] ${Styles.cardFont} font-bold`}>First Contact Date</h2>
         <input
-          className={`[grid-area:firstContact] grow pl-[1rem] py-[0.5rem] ${Styles.placeholderFont} ${Styles.inputLayout} ${Styles.marginBtm}`}
+          className={`[grid-area:firstContact] grow px-[1rem] py-[0.5rem] ${Styles.placeholderFont} ${Styles.inputLayout} ${Styles.marginBtm}`}
           type="date"
           value={prospectInfo.prospectFirstcontact.toISOString().split("T")[0]}
           onChange={(e)=> setProspectInfo({...prospectInfo,prospectFirstcontact:new Date(e.target.value)})}

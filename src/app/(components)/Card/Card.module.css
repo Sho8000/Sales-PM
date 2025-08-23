@@ -140,6 +140,7 @@
     display: grid;
     grid-template-columns: auto auto;
     grid-template-areas: 
+    "spacer spacer"
     "nameTitle name"
     "sexTitle sex"
     "ageTitle age"

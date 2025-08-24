@@ -5,7 +5,6 @@ import ListLayout from "@/../public/ProspectsList/listLayout.png"
 import BlockLayout from "@/../public/ProspectsList/blockLayout.png"
 import { useUserInfoStore } from "@/store/userInfoStore";
 import { getStatusColorFromProspect } from "@/lib/findStatusColor";
-import SimpleCard from "../Card/SimpleSmallCard";
 
 import Styles from "./prospectsList.module.css"
 import { useState } from "react";
@@ -14,6 +13,7 @@ import DropDown from "../DropDown/DropdownList";
 import { useClickedProspectInfoStore } from "@/store/clickedProspectsInfoStore";
 import { Prospects } from "@/lib/dbInterface";
 import { useRouter } from "next/navigation";
+import NameCardSmallAndFull from "../Card/NameCardSmallAndFull";
 
 export default function FilterAndDisplayArea() {
   const router = useRouter(); 
@@ -100,7 +100,7 @@ export default function FilterAndDisplayArea() {
             if(displayStyle==="blockLayout"){
               return <SimpleMediumCard key={index} prospectData={prospectData} color={color} clickFunction={clickedProspectCardHandler}/>
             }else{
-              return <SimpleCard key={index} prospectData={prospectData} color={color} clickFunctionReceiveProspect={clickedProspectCardHandler}/>
+              return <NameCardSmallAndFull key={index} prospectData={prospectData} color={color} clickFunctionReceiveProspect={clickedProspectCardHandler}/>
             }
           })}
         </>

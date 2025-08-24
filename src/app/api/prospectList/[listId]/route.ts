@@ -1,6 +1,35 @@
 import prisma from '@/lib/prisma';
 import { NextRequest, NextResponse } from 'next/server';
 
+export async function GET(request: NextRequest, { params }:{params: Promise<{listId: string}>}){
+  const {listId} = await params
+
+  if( !listId ){
+    return NextResponse.json(
+      { status: "error", message: "list ID is required" },
+      { status: 400 }
+    );
+  }
+
+  try{
+    const selectedProspect = await prisma.prospects.findUnique({
+      where:{
+        id: listId
+      },
+    });
+
+    return NextResponse.json({
+      success: true,
+      message: "Prospect got successfully",
+      data: selectedProspect,
+    });
+
+  } catch (error) {
+    console.error("Error getting Prospects Info:", error);
+    return NextResponse.json({ success: false, error: "Failed to get Prospects Info" });
+  }
+}
+
 export async function POST(request: NextRequest, { params }:{params: Promise<{listId: string}>}){
   const {listId} = await params
 

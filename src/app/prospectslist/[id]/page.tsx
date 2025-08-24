@@ -2,10 +2,11 @@
 
 import AlertBtn from "@/app/(components)/Btn/AlartBtn";
 import AlertCard from "@/app/(components)/Card/AlertCard";
-import SimpleCard from "@/app/(components)/Card/SimpleSmallCard";
+import NameCardSmallAndFull from "@/app/(components)/Card/NameCardSmallAndFull";
 import SectionTitle from "@/app/(components)/CommonParts/SectionTitle";
 import UpComing from "@/app/(components)/CommonParts/UpComing";
 import ProspectDisplay from "@/app/(components)/ProspectsList/ID/ProspectDisplay";
+import { useAddNewContext } from "@/app/(context)/AddNewOpenContext";
 import { getStatusColorFromProspect } from "@/lib/findStatusColor";
 import { useClickedProspectInfoStore } from "@/store/clickedProspectsInfoStore";
 import { useUserInfoStore } from "@/store/userInfoStore";
@@ -14,10 +15,10 @@ import { useEffect, useState } from "react";
 export default function ProspectInfo() {
   const userData = useUserInfoStore((state) => state.user);
   const clickedProspectData = useClickedProspectInfoStore((state) => state.prospect); //use clicked prospect's Information
+  const {isEdit,changeIsEditStatus} = useAddNewContext();
 
   const [prospectColor,setProspectColor] = useState("#000000");
   const [isOpenFullPersonalInfo,setIsOpenFullPersonalInfo] = useState(false)
-  const [isEditProspect,setIsEditPerspect] = useState(false)
   const [isShownHideAlert,setIsShownHideAlert] = useState(false)
 
   useEffect(()=>{
@@ -27,7 +28,7 @@ export default function ProspectInfo() {
   },[userData,clickedProspectData])
 
   const showPersonalData = () => {
-    if(!isEditProspect){
+    if(!isEdit){
       setIsOpenFullPersonalInfo(!isOpenFullPersonalInfo)
     } else {
       console.log("edit clicked")
@@ -35,7 +36,7 @@ export default function ProspectInfo() {
   }
 
   const clickedEditHandler = () => {
-    setIsEditPerspect(!isEditProspect)
+    changeIsEditStatus(!isEdit)
   }
 
   const clickedHideHandler = () => {
@@ -57,14 +58,15 @@ export default function ProspectInfo() {
              
           />
           <UpComing text="Appointment"/>
-          <SimpleCard
-            prospectData={clickedProspectData} 
+          <NameCardSmallAndFull
+            prospectData={clickedProspectData}
+            isPersonal={true}
             color={prospectColor} 
             clickFunctionReceiveProspect={showPersonalData}
             fullInfo={isOpenFullPersonalInfo}
             clickFunctionEdit={clickedEditHandler} 
             clickFunctionHide={clickedHideHandler}
-            isEdit={isEditProspect}
+            isEdit={isEdit}
           />
           <ProspectDisplay/>
 

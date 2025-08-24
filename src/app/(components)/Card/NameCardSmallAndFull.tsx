@@ -11,6 +11,7 @@ import { useClickedProspectInfoStore } from "@/store/clickedProspectsInfoStore";
 import { useAddNewContext } from "@/app/(context)/AddNewOpenContext";
 
 interface SimpleCardProps {
+  isPersonal?:boolean
   prospectData?:Prospects
   noteData?:Notes
   color?:string
@@ -22,7 +23,7 @@ interface SimpleCardProps {
   isEdit?:boolean;
 }
 
-export default function SimpleCard({prospectData,noteData,color="#000000",clickFunctionReceiveProspect,clickFunctionReceiveNote,fullInfo=false,clickFunctionEdit,clickFunctionHide,isEdit=false}:SimpleCardProps) {
+export default function NameCardSmallAndFull({isPersonal=false,prospectData,noteData,color="#000000",clickFunctionReceiveProspect,clickFunctionReceiveNote,fullInfo=false,clickFunctionEdit,clickFunctionHide,isEdit=false}:SimpleCardProps) {
   const clickedProspectData = useClickedProspectInfoStore((state)=>state.prospect);
   const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
   const {changeIsEditStatus} = useAddNewContext();
@@ -49,14 +50,23 @@ export default function SimpleCard({prospectData,noteData,color="#000000",clickF
   const [children,setChildren] = useState<number|"">("")
 
   useEffect(()=>{
-    if(clickedProspectData){
-      setProspectInfo({
-        ...clickedProspectData,
-        prospectFirstcontact: new Date(clickedProspectData.prospectFirstcontact),
-      })
-      setAge(clickedProspectData.prospectAge)
-      setChildren(clickedProspectData.children)
-    }
+    const fetchProspectInfo = async () => {
+      try {
+          const res = await fetch(`/api/prospectList/${clickedProspectData?.id}`);
+
+          if (!res.ok) throw new Error("Error fetching prospect info");
+
+          const {data} = await res.json();
+          setProspectInfo({...data,prospectFirstcontact:new Date(data.prospectFirstcontact)})
+          setAge(data.prospectAge)
+          setChildren(data.children)    
+
+      } catch (error) {
+          console.error("Error fetching booking requests:", error);
+      }
+    };
+
+    fetchProspectInfo();
   },[clickedProspectData])
 
   const updateProspectInfo = async () => {
@@ -109,20 +119,37 @@ export default function SimpleCard({prospectData,noteData,color="#000000",clickF
     <div className={`relative flex items-center w-[90%] m-auto rounded-[10px] bg-white ${Styles.smallCardComponent}`}>
       <div className={`absolute w-[20px] h-full rounded-l-[10px] left-[-1px]`} style={{backgroundColor:color}}></div>
       
-      {prospectData &&
+      {/* This is for "/prospectslist" */}
+      {(!isPersonal && prospectData) &&
         <div className={`flex w-full h-full justify-between items-center ${Styles.cardFont} font-bold`} 
         onClick={()=>{
           if(clickFunctionReceiveProspect){
             clickFunctionReceiveProspect(prospectData)
           }}}
         >
+          <div className={`flex justify-between items-center basis-1/2 gap-x-[2rem] ${Styles.smallCardComponentLeft}`}>
+            <h2>{prospectData.prospectName}</h2>
+            <h2>{prospectData.prospectSex==="Male"?"M":"F"}</h2>
+          </div>
+          <h2>{prospectData.prospectBusiness}</h2>
+        </div>
+      }
+
+      {/* This is for "/prospectslist/** " */}
+      {(isPersonal) &&
+        <div className={`flex w-full h-full justify-between items-center ${Styles.cardFont} font-bold`} 
+        onClick={()=>{
+          if(clickFunctionReceiveProspect){
+            clickFunctionReceiveProspect(prospectInfo)
+          }}}
+        >
           {!fullInfo ?
             <>
               <div className={`flex justify-between items-center basis-1/2 gap-x-[2rem] ${Styles.smallCardComponentLeft}`}>
-                <h2>{prospectData.prospectName}</h2>
-                <h2>{prospectData.prospectSex==="Male"?"M":"F"}</h2>
+                <h2>{prospectInfo.prospectName}</h2>
+                <h2>{prospectInfo.prospectSex==="Male"?"M":"F"}</h2>
               </div>
-              <h2>{prospectData.prospectBusiness}</h2>
+              <h2>{prospectInfo.prospectBusiness}</h2>
             </>
             :<>
               <div className={`w-full relative ${Styles.fullInfoLayout} break-all`}>
@@ -147,27 +174,27 @@ export default function SimpleCard({prospectData,noteData,color="#000000",clickF
                 
                 {!isEdit?<>
                   <h2 className="[grid-area:nameTitle] text-[#808080]">Name</h2>
-                  <h2 className="[grid-area:name]">{prospectData.prospectName}</h2>
+                  <h2 className="[grid-area:name]">{prospectInfo.prospectName}</h2>
                   <h2 className="[grid-area:sexTitle] text-[#808080]">Sex</h2>
-                  <h2 className="[grid-area:sex]">{prospectData.prospectSex}</h2>
+                  <h2 className="[grid-area:sex]">{prospectInfo.prospectSex}</h2>
                   <h2 className="[grid-area:ageTitle] text-[#808080]">Age</h2>
-                  <h2 className="[grid-area:age]">{prospectData.prospectAge}</h2>
+                  <h2 className="[grid-area:age]">{prospectInfo.prospectAge}</h2>
                   <h2 className="[grid-area:maritalTitle] text-[#808080]">Marital Status</h2>
-                  <h2 className="[grid-area:marital]">{prospectData.prospectMarital}</h2>
+                  <h2 className="[grid-area:marital]">{prospectInfo.prospectMarital}</h2>
                   <h2 className="[grid-area:childrenTitle] text-[#808080]">Children</h2>
-                  <h2 className="[grid-area:children]">{prospectData.children}</h2>
+                  <h2 className="[grid-area:children]">{prospectInfo.children}</h2>
                   <h2 className="[grid-area:businessTitle] text-[#808080]">Business Name</h2>
-                  <h2 className="[grid-area:business]">{prospectData.prospectBusiness}</h2>
+                  <h2 className="[grid-area:business]">{prospectInfo.prospectBusiness}</h2>
                   <h2 className="[grid-area:positionTitle] text-[#808080]">Position</h2>
-                  <h2 className="[grid-area:position]">{prospectData.prospectPosition}</h2>
+                  <h2 className="[grid-area:position]">{prospectInfo.prospectPosition}</h2>
                   <h2 className="[grid-area:locationTitle] text-[#808080]">Location</h2>
-                  <h2 className="[grid-area:location]">{prospectData.prospectLocation}</h2>
+                  <h2 className="[grid-area:location]">{prospectInfo.prospectLocation}</h2>
                   <h2 className="[grid-area:phoneTitle] text-[#808080]">Phone</h2>
-                  <h2 className="[grid-area:phone]">{prospectData.prospectPhone}</h2>
+                  <h2 className="[grid-area:phone]">{prospectInfo.prospectPhone}</h2>
                   <h2 className="[grid-area:emailTitle] text-[#808080]">Email</h2>
-                  <h2 className="[grid-area:email]">{prospectData.prospectEmail}</h2>
+                  <h2 className="[grid-area:email]">{prospectInfo.prospectEmail}</h2>
                   <h2 className="[grid-area:firstContactTitle] text-[#808080]">First Contact Date</h2>
-                  <h2 className="[grid-area:firstContact]">{new Date(prospectData.prospectFirstcontact).toLocaleString("en-US", {
+                  <h2 className="[grid-area:firstContact]">{new Date(prospectInfo.prospectFirstcontact).toLocaleString("en-US", {
                     year: "numeric",
                     month: "short",
                     day: "numeric",
@@ -344,6 +371,7 @@ export default function SimpleCard({prospectData,noteData,color="#000000",clickF
           }
         </div>
       }
+
       {noteData &&
         <div className={`flex w-full h-full justify-between items-center gap-[2rem  ] ${Styles.cardFont} font-bold`}
         onClick={()=>{

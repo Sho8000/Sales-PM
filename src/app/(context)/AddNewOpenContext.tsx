@@ -4,19 +4,25 @@ import { createContext, useContext, useState } from "react";
 
 type AddNewState = {
   isAddNewPage:boolean;
+  isEdit:boolean;
   changeAddNewPageStatus:(value:boolean)=>void;
+  changeIsEditStatus:(value:boolean)=>void;
 }
 
 const AddNewContext = createContext<AddNewState | undefined>(undefined);
 
 const AddNewContextProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
   const [isAddNewPage,setIsAddNewPage] = useState(false)
+  const [isEdit,setIsEdit] = useState(false)
 
   const changeAddNewPageStatus = (value:boolean)=>{
     setIsAddNewPage(value)
   }
+  const changeIsEditStatus = (value:boolean)=>{
+    setIsEdit(value)
+  }
 
-  const value = {isAddNewPage, changeAddNewPageStatus}
+  const value = {isAddNewPage, isEdit, changeAddNewPageStatus, changeIsEditStatus}
 
   return (
     <AddNewContext.Provider value={value}>

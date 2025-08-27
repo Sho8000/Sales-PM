@@ -46,6 +46,25 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
     prospectListId:"",
     notes:[],
   })
+  const [initialProspectData,setInitialProspectData] = useState<Prospects>({
+    id:"",
+    prospectName:"",
+    prospectSex:"Male",
+    prospectAge:0,
+    prospectMarital:"Single",
+    children:0,
+    prospectBusiness:"",
+    prospectPosition:"",
+    prospectLocation:"",
+    prospectPhone:"",
+    prospectEmail:"",
+    prospectHidden:false,
+    prospectFirstcontact: new Date(),
+    createdAt: new Date(),
+    prospectListId:"",
+    notes:[],
+  })
+
   const [age,setAge] = useState<number|"">("")
   const [children,setChildren] = useState<number|"">("")
 
@@ -59,7 +78,8 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
           const {data} = await res.json();
           setProspectInfo({...data,prospectFirstcontact:new Date(data.prospectFirstcontact)})
           setAge(data.prospectAge)
-          setChildren(data.children)    
+          setChildren(data.children) 
+          setInitialProspectData({...data,prospectFirstcontact:new Date(data.prospectFirstcontact)}) 
 
       } catch (error) {
           console.error("Error fetching booking requests:", error);
@@ -104,6 +124,9 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
         const {data} = await res.json();
         setClickedProspectData({...data,prospectFirstcontact:new Date(data.prospectFirstcontact)})
         setProspectInfo({...data,prospectFirstcontact:new Date(data.prospectFirstcontact)})
+        setInitialProspectData({...data,prospectFirstcontact:new Date(data.prospectFirstcontact)})
+
+        changeIsEditStatus(false)
       }
 
     } catch (error) {
@@ -113,6 +136,9 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
   }
   const cancelEdit = () => {
     changeIsEditStatus(false)
+    if(clickedProspectData){
+      setProspectInfo({...initialProspectData,prospectFirstcontact:new Date(initialProspectData.prospectFirstcontact)})
+    }
   }
 
   return (

@@ -183,6 +183,9 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
                   <div className={`${Styles.iconSize}`}
                     onClick={(e)=>{
                       e.stopPropagation();
+                      setProspectInfo({...initialProspectData,prospectFirstcontact:new Date(initialProspectData.prospectFirstcontact)})
+                      setAge(initialProspectData.prospectAge)
+                      setChildren(initialProspectData.children)
                       clickFunctionEdit?.();
                     }}
                   >
@@ -191,6 +194,7 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
                   <div className={`${Styles.iconSize}`}
                     onClick={(e)=>{
                       e.stopPropagation();
+
                       clickFunctionHide?.();
                     }}
                   >

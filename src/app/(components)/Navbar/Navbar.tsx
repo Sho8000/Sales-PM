@@ -13,6 +13,7 @@ import { signOut, useSession } from "next-auth/react";
 import { useSettingPageContext } from "@/app/(context)/SettingOpenContext";
 import SettingTemplate from "../Setting/SettingTemplate";
 import { useUserInfoStore } from "@/store/userInfoStore";
+import { useAddNewContext } from "@/app/(context)/AddNewOpenContext";
 
 export default function Navbar() {
   const router = useRouter(); 
@@ -20,6 +21,7 @@ export default function Navbar() {
   const pathName = usePathname();
   const [isHbgBtnClicked, setIsHbgBtnClicked] = useState(false);
   const {changeSettingPageStatus,changeSettingMenuStatus} = useSettingPageContext();
+  const {changeIsEditStatus} = useAddNewContext()
 
   const loginHandler = () => {
     router.push("/auth");
@@ -34,6 +36,7 @@ export default function Navbar() {
     if(pathName==="/auth"){
       router.push("/");
     } else{
+      changeIsEditStatus(false)
       router.push("/prospectslist")
     }
   }

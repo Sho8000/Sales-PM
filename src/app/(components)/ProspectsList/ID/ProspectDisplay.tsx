@@ -6,10 +6,10 @@ import { useState } from "react";
 import DropDown from "../../DropDown/DropdownList";
 import { useUserInfoStore } from "@/store/userInfoStore";
 import { getStatusColorFromNote } from "@/lib/findStatusColor";
-import SimpleCard from "../../Card/SimpleSmallCard";
 import { Notes } from "@/lib/dbInterface";
 import AddNewTemplate from "../../Card/AddNewTemplate";
 import { useAddNewContext } from "@/app/(context)/AddNewOpenContext";
+import NameCardSmallAndFull from "../../Card/NameCardSmallAndFull";
 
 export default function ProspectDisplay() {
     const userData = useUserInfoStore((state) => state.user);
@@ -61,7 +61,7 @@ export default function ProspectDisplay() {
           :<>
             {userData?.statusSetting && clickedProspectData?.notes.map((noteData,noteIndex)=>{
               const noteColor = getStatusColorFromNote(noteData,userData?.statusSetting) 
-              return <SimpleCard key={noteIndex} color={noteColor} noteData={noteData} clickFunctionReceiveNote={clickedNoteCardHandler}/>
+              return <NameCardSmallAndFull key={noteIndex} color={noteColor} noteData={noteData} clickFunctionReceiveNote={clickedNoteCardHandler}/>
             })}
           </>
         }

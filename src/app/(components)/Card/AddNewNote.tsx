@@ -6,6 +6,8 @@ import { Notes } from "@prisma/client";
 import Styles from "./Card.module.css"
 import { Memos } from "@/lib/dbInterface";
 import { useUserInfoStore } from "@/store/userInfoStore";
+import { usePathname } from "next/navigation";
+import { useAddNewContext } from "@/app/(context)/AddNewOpenContext";
 
 export default function AddNewNoteCard() {
   const [noteInfo,setNoteInfo] = useState<Notes>({
@@ -26,8 +28,51 @@ export default function AddNewNoteCard() {
   })
 
   const userData = useUserInfoStore((state) => state.user); //use user's all Information
-  
+  const {changeAddNewPageStatus} = useAddNewContext();
+  const pathName = usePathname();
+  const prospectId = pathName.split("/").pop();
+
   const clickNoteSave = async () => {
+    try{
+      if(
+        noteInfo.content === ""
+        || noteInfo.status === ""
+        || memoInfo.memoDetail === ""
+      ){
+        console.log("please add all information")
+        return null
+      }
+
+      if(userData?.prospectList?.id){
+        const res = await fetch(`/api/notes`,{
+          method:"POST",
+          headers:{
+            "content-Type":"application/json",
+          },
+          body: JSON.stringify({
+            noteInfo:{
+              prospectId:prospectId,
+              content:noteInfo.content,
+              status:noteInfo.status,
+              appointmentDate:noteInfo.appointmentDate,
+              memoDetail:memoInfo.memoDetail
+            }
+          })
+        })
+
+        if(!res.ok){
+          console.log("Error !!!")
+          return null
+        }
+
+        changeAddNewPageStatus(false);
+
+      }
+    } catch (error) {
+      console.error("Error fetching post a new note requests:", error);
+      return null
+    }
+
     console.log("clicked Save")
   }
 

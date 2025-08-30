@@ -10,13 +10,11 @@ interface ProspectsState{
 
 export const useClickedProspectInfoStore = create<ProspectsState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       prospect: null,
 
       setProspect: (prospect) => {
-        if (get().prospect?.id !== prospect.id) {
-          set({ prospect });
-        }
+        set({ prospect });
       },
       clearProspect: () => set({ prospect: null })
     }),

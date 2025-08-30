@@ -16,6 +16,13 @@ export async function GET(request: NextRequest, { params }:{params: Promise<{lis
       where:{
         id: listId
       },
+      include:{
+        notes: {
+          include: {
+            memos: true,
+          },
+        },
+      }
     });
 
     return NextResponse.json({

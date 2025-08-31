@@ -122,9 +122,10 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
         };
 
         const {data} = await res.json();
-        setClickedProspectData({...data,prospectFirstcontact:new Date(data.prospectFirstcontact)})
-        setProspectInfo({...data,prospectFirstcontact:new Date(data.prospectFirstcontact)})
-        setInitialProspectData({...data,prospectFirstcontact:new Date(data.prospectFirstcontact)})
+        console.log("check Data",data)
+        setClickedProspectData({...data,prospectFirstcontact:new Date(data.prospectFirstcontact),notes:clickedProspectData.notes})
+        setProspectInfo({...data,prospectFirstcontact:new Date(data.prospectFirstcontact),notes:clickedProspectData.notes})
+        setInitialProspectData({...data,prospectFirstcontact:new Date(data.prospectFirstcontact),notes:clickedProspectData.notes})
 
         changeIsEditStatus(false)
       }

@@ -18,8 +18,6 @@ export async function DELETE(request: NextRequest, { params }:{params: Promise<{
       }
     }) 
 
-    console.log("This is Note", note)
-
     if(!note){
       return NextResponse.json(
         { status: "error", message: "Note ID info has error. Please try again after logout" },

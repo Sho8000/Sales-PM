@@ -3,12 +3,14 @@
 import { Notes, Prospects } from "@/lib/dbInterface";
 import { FaEdit } from "react-icons/fa";
 import { IoMdEyeOff } from "react-icons/io";
+import { MdDelete } from "react-icons/md";
 import Styles from "./Card.module.css"
 import NormalBtn from "../Btn/NormalBtn";
 import AlertBtn from "../Btn/AlartBtn";
 import { useEffect, useState } from "react";
 import { useClickedProspectInfoStore } from "@/store/clickedProspectsInfoStore";
 import { useAddNewContext } from "@/app/(context)/AddNewOpenContext";
+import AlertCard from "./AlertCard";
 
 interface SimpleCardProps {
   isPersonal?:boolean
@@ -26,7 +28,8 @@ interface SimpleCardProps {
 export default function NameCardSmallAndFull({isPersonal=false,prospectData,noteData,color="#000000",clickFunctionReceiveProspect,clickFunctionReceiveNote,fullInfo=false,clickFunctionEdit,clickFunctionHide,isEdit=false}:SimpleCardProps) {
   const clickedProspectData = useClickedProspectInfoStore((state)=>state.prospect);
   const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
-  const {changeIsEditStatus} = useAddNewContext();
+  const {isOpenMemo,changeIsEditStatus} = useAddNewContext();
+  const [noteDelete,setNoteDelete] = useState(false);
   
   const [prospectInfo,setProspectInfo] = useState<Prospects>({
     id:"",
@@ -140,6 +143,11 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
     if(clickedProspectData){
       setProspectInfo({...initialProspectData,prospectFirstcontact:new Date(initialProspectData.prospectFirstcontact)})
     }
+  }
+
+  const deleteNoteHandler = () => {
+    console.log("Deleted note")
+    setNoteDelete(false)
   }
 
   return (
@@ -404,15 +412,64 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
       }
 
       {noteData &&
-        <div className={`flex w-full h-full justify-between items-center gap-[2rem  ] ${Styles.cardFont} font-bold`}
+        <div className={`flex w-full h-full justify-between items-center gap-[2rem] ${Styles.cardFont} font-bold`}
         onClick={()=>{
           if(clickFunctionReceiveNote){
             clickFunctionReceiveNote(noteData)
           }
         }}
         >
-{/*           <h2>{noteData.noteTitle}</h2> */}
-          <h2>{noteData.content}</h2>
+          {!isOpenMemo.includes(noteData.id) ?
+            <>
+              {/* <h2>{noteData.noteTitle}</h2> */}
+              <h2>{noteData.content}</h2>
+              <div className={`${Styles.iconSize}`}
+                onClick={(e)=>{
+                  e.stopPropagation();
+                  setNoteDelete(true);
+                }}
+              >
+                <MdDelete size={"100%"} color="gray"/>
+              </div>
+            </>
+            :<>
+              <div className="w-full">
+                <div>
+                  <div className="w-full flex">
+                    <h2 className="basis-1/2">{noteData.content}</h2>
+                    <h2>{noteData.status}</h2>
+                  </div>
+                  <h2>Appointment : 
+                    <span>
+                      {noteData.appointmentDate ?
+                        <>
+                          {new Date(noteData.appointmentDate).toLocaleString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                          })}
+                        </>:<> -</>
+                      }
+                    </span>
+                  </h2>
+                </div>
+                <h2>hello</h2>
+                <h2>hello</h2>
+                <h2>hello</h2>
+                <h2>hello</h2>
+              </div>
+            </>
+          }
+        </div>
+      }
+
+      {noteDelete &&
+        <div className="fixed z-50">
+          <AlertCard
+            text="Do you want to delete this Note?"
+            button1={<AlertBtn text="Delete" clickFunction={deleteNoteHandler}/>}
+            button2={<AlertBtn text="Cancel" clickFunction={()=>setNoteDelete(false)}/>}
+          />
         </div>
       }
     </div>

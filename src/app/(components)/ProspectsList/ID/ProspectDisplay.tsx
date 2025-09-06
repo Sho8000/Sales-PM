@@ -16,7 +16,7 @@ export default function ProspectDisplay() {
     const clickedProspectData = useClickedProspectInfoStore((state) => state.prospect); //use clicked prospect's Information
     const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
     const [getProspect,setProspect] = useState<Prospects|null>(null)
-    const {isAddNewPage,changeAddNewPageStatus} = useAddNewContext()
+    const {isAddNewPage,changeAddNewPageStatus,changeIsOpenMemoList} = useAddNewContext()
 
     const [selectedFilter,setSlectedFilter] = useState("0")
     const [selectedSort,setSlectedSort] = useState("0")
@@ -53,12 +53,12 @@ export default function ProspectDisplay() {
     };  
 
     const clickedNoteCardHandler = (note:Notes) => {
-      console.log("note Clicked",note)
+      changeIsOpenMemoList(note.id);
     }
 
   return (
     <>
-      <div className={`max-h-[70vh] overflow-y-scroll flex m-auto bg-yellow-50 border-2 border-gray-300 rounded-md pt-[1.5rem] pb-[2rem] mt-[2rem]
+      <div className={`max-h-[70vh] overflow-y-scroll m-auto bg-yellow-50 border-2 border-gray-300 rounded-md pt-[1.5rem] pb-[2rem] mt-[2rem]
         ${Styles.listCardLayout}  
       `}>
         {/* Title and Filter */}
@@ -75,15 +75,17 @@ export default function ProspectDisplay() {
 
 
         {/* Notes */}
-        {(clickedProspectData && getProspect && getProspect.notes.length<=0)?
-          <h2 className={`${Styles.textFont} text-center mt-[1rem]`}>No Note,,,</h2>
-          :<>
-            {userData?.statusSetting && getProspect?.notes.map((noteData,noteIndex)=>{
-              const noteColor = getStatusColorFromNote(noteData,userData?.statusSetting) 
-              return <NameCardSmallAndFull key={noteIndex} color={noteColor} noteData={noteData} clickFunctionReceiveNote={clickedNoteCardHandler}/>
-            })}
-          </>
-        }
+        <div className="flex flex-col gap-[1rem]">
+          {(clickedProspectData && getProspect && getProspect.notes.length<=0)?
+            <h2 className={`${Styles.textFont} text-center mt-[1rem]`}>No Note,,,</h2>
+            :<>
+              {userData?.statusSetting && getProspect?.notes.map((noteData,noteIndex)=>{
+                const noteColor = getStatusColorFromNote(noteData,userData?.statusSetting) 
+                return <NameCardSmallAndFull key={noteIndex} color={noteColor} noteData={noteData} clickFunctionReceiveNote={clickedNoteCardHandler}/>
+              })}
+            </>
+          }
+        </div>
       </div>
 
       {isAddNewPage &&

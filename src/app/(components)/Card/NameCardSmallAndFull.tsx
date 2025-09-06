@@ -29,7 +29,7 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
   const clickedProspectData = useClickedProspectInfoStore((state)=>state.prospect);
   const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
   const {isOpenMemo,changeIsEditStatus} = useAddNewContext();
-  const [noteDelete,setNoteDelete] = useState(false);
+  const [noteDelete,setNoteDelete] = useState<string|null>(null);
   
   const [prospectInfo,setProspectInfo] = useState<Prospects>({
     id:"",
@@ -147,7 +147,7 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
 
   const deleteNoteHandler = () => {
     console.log("Deleted note")
-    setNoteDelete(false)
+    setNoteDelete(null)
   }
 
   return (
@@ -426,7 +426,7 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
               <div className={`${Styles.iconSize}`}
                 onClick={(e)=>{
                   e.stopPropagation();
-                  setNoteDelete(true);
+                  setNoteDelete(noteData.content);
                 }}
               >
                 <MdDelete size={"100%"} color="gray"/>
@@ -466,9 +466,9 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
       {noteDelete &&
         <div className="fixed z-50">
           <AlertCard
-            text="Do you want to delete this Note?"
+            text={`Do you want to delete "${noteDelete}" Note?`}
             button1={<AlertBtn text="Delete" clickFunction={deleteNoteHandler}/>}
-            button2={<AlertBtn text="Cancel" clickFunction={()=>setNoteDelete(false)}/>}
+            button2={<AlertBtn text="Cancel" clickFunction={()=>setNoteDelete(null)}/>}
           />
         </div>
       }

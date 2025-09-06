@@ -29,7 +29,7 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
   const clickedProspectData = useClickedProspectInfoStore((state)=>state.prospect);
   const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
   const {isOpenMemo,changeIsEditStatus} = useAddNewContext();
-  const [noteDelete,setNoteDelete] = useState<string|null>(null);
+  const [noteDelete,setNoteDelete] = useState<Notes|null>(null);
   
   const [prospectInfo,setProspectInfo] = useState<Prospects>({
     id:"",
@@ -145,9 +145,22 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
     }
   }
 
-  const deleteNoteHandler = () => {
-    console.log("Deleted note")
+  const deleteNoteHandler = async () => {
+    if(noteDelete?.id){
+      const res = await fetch(`/api/notes/${noteDelete.id}`,{
+        method:'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+
+      if (!res.ok){
+        console.log("Error !!!")
+        return null;
+      };
+    }
     setNoteDelete(null)
+    window.location.reload();
   }
 
   return (
@@ -426,7 +439,7 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
               <div className={`${Styles.iconSize}`}
                 onClick={(e)=>{
                   e.stopPropagation();
-                  setNoteDelete(noteData.content);
+                  setNoteDelete(noteData);
                 }}
               >
                 <MdDelete size={"100%"} color="gray"/>
@@ -466,7 +479,7 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
       {noteDelete &&
         <div className="fixed z-50">
           <AlertCard
-            text={`Do you want to delete "${noteDelete}" Note?`}
+            text={`Do you want to delete "${noteDelete.content}" Note?`}
             button1={<AlertBtn text="Delete" clickFunction={deleteNoteHandler}/>}
             button2={<AlertBtn text="Cancel" clickFunction={()=>setNoteDelete(null)}/>}
           />

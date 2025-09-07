@@ -16,6 +16,7 @@ export default function ProspectInfo() {
   const userData = useUserInfoStore((state) => state.user);
   const clickedProspectData = useClickedProspectInfoStore((state) => state.prospect); //use clicked prospect's Information
   const {isEdit,changeIsEditStatus} = useAddNewContext();
+    const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
 
   const [prospectColor,setProspectColor] = useState("#000000");
   const [isOpenFullPersonalInfo,setIsOpenFullPersonalInfo] = useState(false)
@@ -23,9 +24,21 @@ export default function ProspectInfo() {
 
   useEffect(()=>{
     if(clickedProspectData && userData){
-      setProspectColor(getStatusColorFromProspect(clickedProspectData,userData.statusSetting))
-    }
-  },[userData,clickedProspectData])
+      const fetchProspectInfo = async () => {
+        try{
+          const res = await fetch(`/api/prospectList/${clickedProspectData.id}`);
+          const {data} = await res.json();
+          setClickedProspectData({...data,prospectFirstcontact:new Date(data.prospectFirstcontact)})
+
+          setProspectColor(getStatusColorFromProspect(clickedProspectData,userData.statusSetting))
+        } catch (error) {
+          console.error("Error fetching prospect's data:", error);
+        }
+      } 
+
+      fetchProspectInfo()
+  }
+  },[userData,clickedProspectData,setClickedProspectData])
 
   const showPersonalData = () => {
     if(!isEdit){

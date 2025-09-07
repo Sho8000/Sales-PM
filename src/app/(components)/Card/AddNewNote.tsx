@@ -66,7 +66,6 @@ export default function AddNewNoteCard() {
         }
 
         changeAddNewPageStatus(false);
-        window.location.reload();
       }
     } catch (error) {
       console.error("Error fetching post a new note requests:", error);

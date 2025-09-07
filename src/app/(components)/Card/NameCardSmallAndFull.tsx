@@ -72,25 +72,13 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
   const [children,setChildren] = useState<number|"">("")
 
   useEffect(()=>{
-    const fetchProspectInfo = async () => {
-      try {
-          const res = await fetch(`/api/prospectList/${clickedProspectData?.id}`);
-
-          if (!res.ok) throw new Error("Error fetching prospect info");
-
-          const {data} = await res.json();
-          setProspectInfo({...data,prospectFirstcontact:new Date(data.prospectFirstcontact)})
-          setAge(data.prospectAge)
-          setChildren(data.children) 
-          setInitialProspectData({...data,prospectFirstcontact:new Date(data.prospectFirstcontact)}) 
-
-      } catch (error) {
-          console.error("Error fetching booking requests:", error);
-      }
-    };
-
-    fetchProspectInfo();
-  },[clickedProspectData])
+    if(prospectData){
+      setProspectInfo({...prospectData,prospectFirstcontact:new Date(prospectData.prospectFirstcontact)})
+      setAge(prospectData.prospectAge)
+      setChildren(prospectData.children) 
+      setInitialProspectData({...prospectData,prospectFirstcontact:new Date(prospectData.prospectFirstcontact)}) 
+    }
+  },[prospectData])
 
   const updateProspectInfo = async () => {
     try{
@@ -160,7 +148,6 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
       };
     }
     setNoteDelete(null)
-    window.location.reload();
   }
 
   return (

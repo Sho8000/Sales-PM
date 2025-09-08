@@ -5,10 +5,15 @@ import { createContext, useContext, useState } from "react";
 type AddNewState = {
   isAddNewPage:boolean;
   isEdit:boolean;
-  isOpenMemo:string[];
+  isOpenMemo:{
+    id:string,
+    isOpen:boolean
+  }[];
+  isNoteEdit:string|null;
   changeAddNewPageStatus:(value:boolean)=>void;
   changeIsEditStatus:(value:boolean)=>void;
   changeIsOpenMemoList:(value:string)=>void;
+  changeIsNoteEditStatus:(value:string|null)=>void;
 }
 
 const AddNewContext = createContext<AddNewState | undefined>(undefined);
@@ -16,7 +21,8 @@ const AddNewContext = createContext<AddNewState | undefined>(undefined);
 const AddNewContextProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
   const [isAddNewPage,setIsAddNewPage] = useState(false)
   const [isEdit,setIsEdit] = useState(false)
-  const [isOpenMemo,setIsOpenMemo] = useState<string[]>([]);
+  const [isOpenMemo,setIsOpenMemo] = useState<AddNewState["isOpenMemo"]>([]);
+  const [isNoteEdit,setIsNoteEdit] = useState<string|null>(null)
 
   const changeAddNewPageStatus = (value:boolean)=>{
     setIsAddNewPage(value)
@@ -25,15 +31,29 @@ const AddNewContextProvider: React.FC<{children: React.ReactNode}> = ({children}
     setIsEdit(value)
   }
   const changeIsOpenMemoList = (value:string)=>{
-    if(!isOpenMemo.includes(value)){
-      setIsOpenMemo(prev => [...prev,value])
-    } else{
-      const index = isOpenMemo.indexOf(value)
-      setIsOpenMemo(current => current.filter(id => id != isOpenMemo[index]))
-    }
+    setIsOpenMemo(prev => {
+      const index = prev.findIndex(memo=>memo.id===value)
+
+      if(index === -1){
+        return [...prev,{id:value,isOpen:true}]
+      } else {
+        if(prev[index].id===isNoteEdit){
+          return prev
+        }
+        const updated = [...prev]
+        updated[index] = {
+          ...updated[index],
+          isOpen:!updated[index].isOpen          
+        }
+        return updated
+      }
+    })
+  }
+  const changeIsNoteEditStatus = (value:string|null)=>{
+    setIsNoteEdit(value)
   }
 
-  const value = {isAddNewPage, isEdit, isOpenMemo, changeAddNewPageStatus, changeIsEditStatus, changeIsOpenMemoList}
+  const value = {isAddNewPage, isEdit, isOpenMemo, isNoteEdit, changeAddNewPageStatus, changeIsEditStatus, changeIsOpenMemoList, changeIsNoteEditStatus}
 
   return (
     <AddNewContext.Provider value={value}>

@@ -4,8 +4,6 @@ import { useSettingPageContext } from "@/app/(context)/SettingOpenContext";
 import SectionTitle from "../CommonParts/SectionTitle";
 import SettingMenu from "./SettingMenu";
 import CloseBtn from "../Btn/CloseBtn";
-//import { MdDelete } from "react-icons/md";
-//import { IoIosAdd } from "react-icons/io";
 //import { IoMdEye } from "react-icons/io";
 //import { FaEdit } from "react-icons/fa";
 //import { IoMdEyeOff } from "react-icons/io";

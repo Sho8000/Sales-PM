@@ -4,6 +4,7 @@ import { Notes, Prospects } from "@/lib/dbInterface";
 import { FaEdit } from "react-icons/fa";
 import { IoMdEyeOff } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
+import { IoIosAdd } from "react-icons/io";
 import Styles from "./Card.module.css"
 import NormalBtn from "../Btn/NormalBtn";
 import AlertBtn from "../Btn/AlartBtn";
@@ -28,7 +29,7 @@ interface SimpleCardProps {
 export default function NameCardSmallAndFull({isPersonal=false,prospectData,noteData,color="#000000",clickFunctionReceiveProspect,clickFunctionReceiveNote,fullInfo=false,clickFunctionEdit,clickFunctionHide,isEdit=false}:SimpleCardProps) {
   const clickedProspectData = useClickedProspectInfoStore((state)=>state.prospect);
   const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
-  const {isOpenMemo,changeIsEditStatus} = useAddNewContext();
+  const {isOpenMemo,isNoteEdit,changeIsEditStatus,changeIsNoteEditStatus} = useAddNewContext();
   const [noteDelete,setNoteDelete] = useState<Notes|null>(null);
   
   const [prospectInfo,setProspectInfo] = useState<Prospects>({
@@ -149,6 +150,28 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
     }
     setNoteDelete(null)
   }
+
+  const editNote = async () => {
+    if(noteData){
+      if(isNoteEdit===noteData.id){
+        changeIsNoteEditStatus(null)
+      } else{
+        changeIsNoteEditStatus(noteData.id)
+      }
+    }
+    console.log("edit Note")
+  }
+  const addMemo = async () => {
+    console.log("add Memo")
+  }
+/* 
+  const editMemo = async () => {
+    console.log("edit Memo")
+  }
+  const deleteMemo = async () => {
+    console.log("delete Memo")
+  }
+ */  
 
   return (
     <div className={`relative flex items-center w-[90%] m-auto rounded-[10px] bg-white ${Styles.smallCardComponent}`}>
@@ -419,7 +442,8 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
           }
         }}
         >
-          {!isOpenMemo.includes(noteData.id) ?
+          {!isOpenMemo.find(memo=>
+            (memo.id===noteData.id) && memo.isOpen) ?
             <>
               {/* <h2>{noteData.noteTitle}</h2> */}
               <h2>{noteData.content}</h2>
@@ -433,9 +457,28 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
               </div>
             </>
             :<>
-              <div className="w-full">
+              <div className="relative w-full py-[1rem]">
+                {/* icons */}
+                <div className="absolute right-0 flex gap-[1rem]">
+                  <div className={`${Styles.iconSize}`}
+                    onClick={(e)=>{
+                      e.stopPropagation();
+                      addMemo();
+                    }}
+                  >
+                    <IoIosAdd size={"100%"} color="gray"/>
+                  </div>
+                  <div className={`${Styles.iconSize}`}
+                    onClick={(e)=>{
+                      e.stopPropagation();
+                      editNote();
+                    }}
+                  >
+                    <FaEdit size={"100%"} color="gray"/>
+                  </div>
+                </div>
                 <div>
-                  <div className="w-full flex">
+                  <div className={`w-full ${Styles.memoLayout}`}>
                     <h2 className="basis-1/2">{noteData.content}</h2>
                     <h2>{noteData.status}</h2>
                   </div>
@@ -453,10 +496,9 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
                     </span>
                   </h2>
                 </div>
-                <h2>hello</h2>
-                <h2>hello</h2>
-                <h2>hello</h2>
-                <h2>hello</h2>
+                <div className="border-t-1 border-black mt-[1rem] pt-[1rem]">
+                  hello memo
+                </div>
               </div>
             </>
           }

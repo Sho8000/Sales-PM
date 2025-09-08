@@ -72,13 +72,13 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
   const [children,setChildren] = useState<number|"">("")
 
   useEffect(()=>{
-    if(prospectData){
+    if(prospectData && prospectInfo.id === ""){
       setProspectInfo({...prospectData,prospectFirstcontact:new Date(prospectData.prospectFirstcontact)})
       setAge(prospectData.prospectAge)
       setChildren(prospectData.children) 
       setInitialProspectData({...prospectData,prospectFirstcontact:new Date(prospectData.prospectFirstcontact)}) 
     }
-  },[prospectData])
+  },[prospectData,prospectInfo.id])
 
   const updateProspectInfo = async () => {
     try{

@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import NormalBtn from "../Btn/NormalBtn";
-import { Notes } from "@prisma/client";
 import Styles from "./Card.module.css"
-import { Memos } from "@/lib/dbInterface";
+import { Memos, Notes } from "@/lib/dbInterface";
 import { useUserInfoStore } from "@/store/userInfoStore";
 import { usePathname } from "next/navigation";
 import { useAddNewContext } from "@/app/(context)/AddNewOpenContext";
@@ -19,6 +18,7 @@ export default function AddNewNoteCard() {
     appointmentDate: new Date(),
     createdAt: new Date(),
     prospectId:"",
+    memos:[]
   })
   const [memoInfo,setMemoInfo] = useState<Memos>({
     id:"",

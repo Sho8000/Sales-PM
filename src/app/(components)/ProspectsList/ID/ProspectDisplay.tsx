@@ -14,7 +14,7 @@ import NameCardSmallAndFull from "../../Card/NameCardSmallAndFull";
 export default function ProspectDisplay() {
     const userData = useUserInfoStore((state) => state.user);
     const clickedProspectData = useClickedProspectInfoStore((state) => state.prospect); //use clicked prospect's Information
-    const {isAddNewPage,changeAddNewPageStatus,changeIsOpenMemoList} = useAddNewContext()
+    const {isAddNewPage,isAddNewMemoPage,changeAddNewPageStatus,changeIsOpenMemoList} = useAddNewContext()
 
     const [selectedFilter,setSlectedFilter] = useState("0")
     const [selectedSort,setSlectedSort] = useState("0")
@@ -71,6 +71,10 @@ export default function ProspectDisplay() {
 
       {isAddNewPage &&
         <AddNewTemplate text={"New Note"}/>
+      }
+
+      {isAddNewMemoPage &&
+        <AddNewTemplate text={"New Memo"}/>
       }
     </>
   );

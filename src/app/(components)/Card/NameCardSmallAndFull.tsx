@@ -1,6 +1,6 @@
 "use client"
 
-import { Notes, Prospects } from "@/lib/dbInterface";
+import { Memos, Notes, Prospects } from "@/lib/dbInterface";
 import { FaEdit } from "react-icons/fa";
 import { IoMdEyeOff } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
@@ -29,8 +29,10 @@ interface SimpleCardProps {
 export default function NameCardSmallAndFull({isPersonal=false,prospectData,noteData,color="#000000",clickFunctionReceiveProspect,clickFunctionReceiveNote,fullInfo=false,clickFunctionEdit,clickFunctionHide,isEdit=false}:SimpleCardProps) {
   const clickedProspectData = useClickedProspectInfoStore((state)=>state.prospect);
   const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
-  const {isOpenMemo,isNoteEdit,changeIsEditStatus,changeIsNoteEditStatus} = useAddNewContext();
+  const reloadClickedProspect = useClickedProspectInfoStore((state) => state.reload);
+  const {isOpenMemo,isNoteEdit,changeAddNewMemoPageStatus,changeIsEditStatus,changeIsNoteEditStatus} = useAddNewContext();
   const [noteDelete,setNoteDelete] = useState<Notes|null>(null);
+  const [memoDelete,setMemoDelete] = useState<Memos|null>(null);
   
   const [prospectInfo,setProspectInfo] = useState<Prospects>({
     id:"",
@@ -119,6 +121,7 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
         setProspectInfo({...data,prospectFirstcontact:new Date(data.prospectFirstcontact),notes:clickedProspectData.notes})
         setInitialProspectData({...data,prospectFirstcontact:new Date(data.prospectFirstcontact),notes:clickedProspectData.notes})
 
+        reloadClickedProspect();
         changeIsEditStatus(false)
       }
 
@@ -148,6 +151,15 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
         return null;
       };
     }
+
+    if(clickedProspectData){
+      const getRes = await fetch(`/api/prospectList/${clickedProspectData.id}`);
+
+      const {data} = await getRes.json();
+      setClickedProspectData({...data,prospectFirstcontact:new Date(data.prospectFirstcontact)});
+    }
+
+    reloadClickedProspect();
     setNoteDelete(null)
   }
 
@@ -161,17 +173,29 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
     }
     console.log("edit Note")
   }
-  const addMemo = async () => {
-    console.log("add Memo")
+  const addMemo = (noteData:Notes) => {
+    changeAddNewMemoPageStatus(noteData);
   }
-/* 
+
   const editMemo = async () => {
     console.log("edit Memo")
   }
-  const deleteMemo = async () => {
-    console.log("delete Memo")
+  
+  const deleteMemo = async (id:string) => {
+    const res = await fetch(`/api/memos/${id}`,{
+      method:'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+
+    if (!res.ok){
+      console.log("Error !!!")
+      return null;
+    };
+    reloadClickedProspect();
   }
- */  
+  
 
   return (
     <div className={`relative flex items-center w-[90%] m-auto rounded-[10px] bg-white ${Styles.smallCardComponent}`}>
@@ -463,7 +487,7 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
                   <div className={`${Styles.iconSize}`}
                     onClick={(e)=>{
                       e.stopPropagation();
-                      addMemo();
+                      addMemo(noteData);
                     }}
                   >
                     <IoIosAdd size={"100%"} color="gray"/>
@@ -477,6 +501,7 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
                     <FaEdit size={"100%"} color="gray"/>
                   </div>
                 </div>
+
                 <div>
                   <div className={`w-full ${Styles.memoLayout}`}>
                     <h2 className="basis-1/2">{noteData.content}</h2>
@@ -496,9 +521,44 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
                     </span>
                   </h2>
                 </div>
-                <div className="border-t-1 border-black mt-[1rem] pt-[1rem]">
-                  hello memo
-                </div>
+
+                {noteData.memos
+                  .slice()
+                  .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                  .map((memo,memoIndex)=>{
+                  return <div key={memoIndex} className="relative border-t-1 border-black mt-[1rem] pt-[1rem]">
+                    {/* Icons */}
+                    <div className="absolute right-0 flex gap-[0.5rem]">
+                      <div className={`${Styles.iconSize}`}
+                        onClick={(e)=>{
+                          e.stopPropagation();
+                          editMemo();
+                        }}
+                      >
+                        <FaEdit size={"100%"} color="gray"/>
+                      </div>
+                      <div className={`${Styles.iconSize}`}
+                        onClick={(e)=>{
+                          e.stopPropagation();
+                          setMemoDelete(memo);
+                        }}
+                      >
+                        <MdDelete size={"100%"} color="gray"/>
+                      </div>
+                    </div>
+
+                    <h2>Note{noteData.memos.length - memoIndex}</h2>
+                    <h2>
+                      {new Date(memo.createdAt).toLocaleString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                      })}
+                    </h2>
+                    <h2 className="font-medium pt-[1rem]">{memo.memoDetail}</h2>
+                  </div>
+                })}
+                
               </div>
             </>
           }
@@ -514,6 +574,19 @@ export default function NameCardSmallAndFull({isPersonal=false,prospectData,note
           />
         </div>
       }
+
+      {memoDelete &&
+        <div className="fixed z-50">
+        <AlertCard
+          text={`Do you want to delete this Memo?`}
+          button1={<AlertBtn text="Delete" clickFunction={()=>{
+            deleteMemo(memoDelete.id);
+            setMemoDelete(null);
+          }}/>}
+          button2={<AlertBtn text="Cancel" clickFunction={()=>setMemoDelete(null)}/>}
+        />
+      </div>
+    }
     </div>
   );
 }

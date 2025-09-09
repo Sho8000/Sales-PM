@@ -7,16 +7,18 @@ import SectionTitle from "../CommonParts/SectionTitle"
 import Styles from "./../Setting/Setting.module.css"
 import AddNewProspectCard from "./AddNewProspect"
 import AddNewNoteCard from "./AddNewNote"
+import AddNewMemoCard from "./AddNewMemo"
 
 interface AddNewProspectProps {
   text:"New Prospect"|"New Note"|"New Memo"
 }
 
 export default function AddNewTemplate({text}:AddNewProspectProps) {
-  const {changeAddNewPageStatus} = useAddNewContext()
+  const {changeAddNewPageStatus,changeAddNewMemoPageStatus} = useAddNewContext()
 
   const closeBtnAddNewHandelr = () => {
     changeAddNewPageStatus(false)
+    changeAddNewMemoPageStatus(null)
   }
 
   return (
@@ -38,7 +40,7 @@ export default function AddNewTemplate({text}:AddNewProspectProps) {
           <AddNewNoteCard/>
         }
         {text==="New Memo" &&
-          <h2>this is New Memo add page</h2>
+          <AddNewMemoCard/>
         }
       </div>
     </div>

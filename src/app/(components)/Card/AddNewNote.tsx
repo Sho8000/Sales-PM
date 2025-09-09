@@ -8,6 +8,7 @@ import { Memos } from "@/lib/dbInterface";
 import { useUserInfoStore } from "@/store/userInfoStore";
 import { usePathname } from "next/navigation";
 import { useAddNewContext } from "@/app/(context)/AddNewOpenContext";
+import { useClickedProspectInfoStore } from "@/store/clickedProspectsInfoStore";
 
 export default function AddNewNoteCard() {
   const [noteInfo,setNoteInfo] = useState<Notes>({
@@ -28,6 +29,8 @@ export default function AddNewNoteCard() {
   })
 
   const userData = useUserInfoStore((state) => state.user); //use user's all Information
+  const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
+  const reloadClickedProspect = useClickedProspectInfoStore((state) => state.reload);
   const {changeAddNewPageStatus} = useAddNewContext();
   const pathName = usePathname();
   const prospectId = pathName.split("/").pop();
@@ -65,6 +68,11 @@ export default function AddNewNoteCard() {
           return null
         }
 
+        const getRes = await fetch(`/api/prospectList/${prospectId}`);
+
+        const {data} = await getRes.json();
+        setClickedProspectData({...data,prospectFirstcontact:new Date(data.prospectFirstcontact)});
+        reloadClickedProspect();
         changeAddNewPageStatus(false);
       }
     } catch (error) {

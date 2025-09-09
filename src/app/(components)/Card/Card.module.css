@@ -173,6 +173,16 @@
     margin: 2rem;
     align-items: center;
   }
+  .memoAddLayout{
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-areas: 
+    "memoDetailTitle memoDetail"
+    ;
+    row-gap: 1rem;
+    margin: 2rem;
+    align-items: center;
+  }
   .memoLayout{
     display: flex;
   }
@@ -185,6 +195,11 @@
     margin: 1rem;
   }
   .noteInfoLayout{
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+  }
+  .memoAddLayout{
     display: flex;
     flex-direction: column;
     margin: 1rem;

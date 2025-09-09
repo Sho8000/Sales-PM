@@ -15,15 +15,16 @@ import { useEffect, useState } from "react";
 export default function ProspectInfo() {
   const userData = useUserInfoStore((state) => state.user);
   const clickedProspectData = useClickedProspectInfoStore((state) => state.prospect); //use clicked prospect's Information
+  const reloadKey = useClickedProspectInfoStore((state) => state.reloadKey);
   const {isEdit,changeIsEditStatus} = useAddNewContext();
-    const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
+  const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
 
   const [prospectColor,setProspectColor] = useState("#000000");
   const [isOpenFullPersonalInfo,setIsOpenFullPersonalInfo] = useState(false)
   const [isShownHideAlert,setIsShownHideAlert] = useState(false)
 
   useEffect(()=>{
-    if(clickedProspectData && userData){
+    if(clickedProspectData?.id && userData){
       const fetchProspectInfo = async () => {
         try{
           const res = await fetch(`/api/prospectList/${clickedProspectData.id}`);
@@ -38,7 +39,7 @@ export default function ProspectInfo() {
 
       fetchProspectInfo()
   }
-  },[userData,clickedProspectData,setClickedProspectData])
+  },[userData,clickedProspectData?.id,reloadKey])
 
   const showPersonalData = () => {
     if(!isEdit){

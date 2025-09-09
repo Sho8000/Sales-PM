@@ -7,13 +7,12 @@ import NormalBtn from "../Btn/NormalBtn";
 import { useUserInfoStore } from "@/store/userInfoStore";
 import { useClickedProspectInfoStore } from "@/store/clickedProspectsInfoStore";
 import { useAddNewContext } from "@/app/(context)/AddNewOpenContext";
-import { useRouter } from "next/navigation";
 
 export default function AddNewProspectCard() {
   const userData = useUserInfoStore((state) => state.user); //use user's all Information
   const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
+  const reloadClickedProspect = useClickedProspectInfoStore((state) => state.reload);
   const {changeAddNewPageStatus} = useAddNewContext()
-  const router = useRouter(); 
 
   const [prospectInfo,setProspectInfo] = useState<Prospects>({
     id:"",
@@ -93,8 +92,9 @@ export default function AddNewProspectCard() {
 
     if(newProspect){
       setClickedProspectData({...newProspect,notes:[]})
+
+      reloadClickedProspect();
       changeAddNewPageStatus(true)
-      router.push(`/prospectslist/${newProspect.id}`)
     }
   }
 

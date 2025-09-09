@@ -1,5 +1,6 @@
 "use client"
 
+import { Notes } from "@/lib/dbInterface";
 import { createContext, useContext, useState } from "react";
 
 type AddNewState = {
@@ -10,10 +11,12 @@ type AddNewState = {
     isOpen:boolean
   }[];
   isNoteEdit:string|null;
+  isAddNewMemoPage:Notes|null;
   changeAddNewPageStatus:(value:boolean)=>void;
   changeIsEditStatus:(value:boolean)=>void;
   changeIsOpenMemoList:(value:string)=>void;
   changeIsNoteEditStatus:(value:string|null)=>void;
+  changeAddNewMemoPageStatus:(value:Notes|null)=>void;
 }
 
 const AddNewContext = createContext<AddNewState | undefined>(undefined);
@@ -23,6 +26,7 @@ const AddNewContextProvider: React.FC<{children: React.ReactNode}> = ({children}
   const [isEdit,setIsEdit] = useState(false)
   const [isOpenMemo,setIsOpenMemo] = useState<AddNewState["isOpenMemo"]>([]);
   const [isNoteEdit,setIsNoteEdit] = useState<string|null>(null)
+  const [isAddNewMemoPage,setIsAddNewMemoPage] = useState<Notes|null>(null)
 
   const changeAddNewPageStatus = (value:boolean)=>{
     setIsAddNewPage(value)
@@ -52,8 +56,11 @@ const AddNewContextProvider: React.FC<{children: React.ReactNode}> = ({children}
   const changeIsNoteEditStatus = (value:string|null)=>{
     setIsNoteEdit(value)
   }
+  const changeAddNewMemoPageStatus = (value:Notes|null)=>{
+    setIsAddNewMemoPage(value)
+  }
 
-  const value = {isAddNewPage, isEdit, isOpenMemo, isNoteEdit, changeAddNewPageStatus, changeIsEditStatus, changeIsOpenMemoList, changeIsNoteEditStatus}
+  const value = {isAddNewPage, isEdit, isOpenMemo, isNoteEdit, isAddNewMemoPage, changeAddNewPageStatus, changeIsEditStatus, changeIsOpenMemoList, changeIsNoteEditStatus, changeAddNewMemoPageStatus}
 
   return (
     <AddNewContext.Provider value={value}>

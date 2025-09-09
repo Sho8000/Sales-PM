@@ -149,7 +149,12 @@ export default function AddNewNoteCard() {
           className={`[grid-area:appointment] grow pl-[1rem] py-[0.5rem] ${Styles.placeholderFont} ${Styles.inputLayout} ${Styles.marginBtm}`}
           type="date"
           value={noteInfo.appointmentDate? noteInfo.appointmentDate.toISOString().split("T")[0]:"No Appointment"}
-          onChange={(e)=> setNoteInfo({...noteInfo,appointmentDate:new Date(e.target.value)})}
+          onChange={(e)=> {
+            const [year, month, day] = e.target.value.split("-").map(Number);
+            const localDate = new Date(year, month - 1, day);
+
+            setNoteInfo({...noteInfo,appointmentDate:localDate})}
+          }
         />
 {/*     deleted because of the client's request
         <h2 className={`[grid-area:subjectTitle] text-[#808080] ${Styles.cardFont} font-bold`}>Subject</h2>

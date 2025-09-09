@@ -258,7 +258,12 @@ export default function AddNewProspectCard() {
           className={`[grid-area:firstContact] grow px-[1rem] py-[0.5rem] ${Styles.placeholderFont} ${Styles.inputLayout} ${Styles.marginBtm}`}
           type="date"
           value={prospectInfo.prospectFirstcontact.toISOString().split("T")[0]}
-          onChange={(e)=> setProspectInfo({...prospectInfo,prospectFirstcontact:new Date(e.target.value)})}
+          onChange={(e)=> {
+            const [year, month, day] = e.target.value.split("-").map(Number);
+            const localDate = new Date(year, month - 1, day);
+
+            setProspectInfo({...prospectInfo,prospectFirstcontact:localDate})}
+          }
         />
       </div>
 

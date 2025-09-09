@@ -10,7 +10,7 @@ import AddNewNoteCard from "./AddNewNote"
 import AddNewMemoCard from "./AddNewMemo"
 
 interface AddNewProspectProps {
-  text:"New Prospect"|"New Note"|"New Memo"
+  text:"New Prospect"|"New Note"|"Add Memo"
 }
 
 export default function AddNewTemplate({text}:AddNewProspectProps) {
@@ -39,7 +39,7 @@ export default function AddNewTemplate({text}:AddNewProspectProps) {
         {text==="New Note" &&
           <AddNewNoteCard/>
         }
-        {text==="New Memo" &&
+        {text==="Add Memo" &&
           <AddNewMemoCard/>
         }
       </div>

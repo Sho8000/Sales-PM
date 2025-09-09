@@ -74,7 +74,7 @@ export default function ProspectDisplay() {
       }
 
       {isAddNewMemoPage &&
-        <AddNewTemplate text={"New Memo"}/>
+        <AddNewTemplate text={"Add Memo"}/>
       }
     </>
   );

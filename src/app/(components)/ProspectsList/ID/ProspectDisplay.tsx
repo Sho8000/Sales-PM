@@ -2,8 +2,6 @@ import { useClickedProspectInfoStore } from "@/store/clickedProspectsInfoStore";
 import Styles from "../prospectsList.module.css"
 import ProspectTitle from "./ProspectTitle";
 import NormalBtn from "../../Btn/NormalBtn";
-import { useState } from "react";
-import DropDown from "../../DropDown/DropdownList";
 import { useUserInfoStore } from "@/store/userInfoStore";
 import { getStatusColorFromNote } from "@/lib/findStatusColor";
 import { Notes } from "@/lib/dbInterface";
@@ -16,22 +14,9 @@ export default function ProspectDisplay() {
     const clickedProspectData = useClickedProspectInfoStore((state) => state.prospect); //use clicked prospect's Information
     const {isAddNewPage,isAddNewMemoPage,changeAddNewPageStatus,changeIsOpenMemoList} = useAddNewContext()
 
-    const [selectedFilter,setSlectedFilter] = useState("0")
-    const [selectedSort,setSlectedSort] = useState("0")
-
     const addNoteHandler = () => {
       changeAddNewPageStatus(true);
     }
-
-    const selectedFilterValue = (selectedValue: string) => {
-      setSlectedFilter(selectedValue);
-      console.log("Selected filter", selectedValue);
-    };
-    
-    const selectedSortValue = (selectedValue: string) => {
-      setSlectedSort(selectedValue);
-      console.log("Selected sort", selectedValue);
-    };  
 
     const clickedNoteCardHandler = (note:Notes) => {
       changeIsOpenMemoList(note.id);
@@ -47,11 +32,12 @@ export default function ProspectDisplay() {
           <ProspectTitle button={
             <NormalBtn text="+Add Note" clickFunction={addNoteHandler} changeToPlus={true}/>}
           />
-
+{/* 
           <div className={`flex gap-[1rem] justify-evenly items-center flex-wrap mt-[2rem]`}>
             <DropDown filter="Filter" value={selectedFilter} onChange={selectedFilterValue}/>
             <DropDown filter="Sort" value={selectedSort} onChange={selectedSortValue}/>
           </div>
+ */}          
         </div>
 
 

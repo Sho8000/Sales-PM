@@ -15,7 +15,7 @@ export default function AddNewNoteCard() {
     noteTitle:"",
     content:"",
     status:"",
-    appointmentDate: new Date(),
+    appointmentDate: null,
     createdAt: new Date(),
     prospectId:"",
     memos:[]
@@ -146,14 +146,20 @@ export default function AddNewNoteCard() {
 
         <h2 className={`[grid-area:appointmentTitle] text-[#808080] ${Styles.cardFont} font-bold`}>Appointment Date</h2>
         <input
-          className={`[grid-area:appointment] grow pl-[1rem] py-[0.5rem] ${Styles.placeholderFont} ${Styles.inputLayout} ${Styles.marginBtm}`}
+          className={`[grid-area:appointment] grow px-[1rem] py-[0.5rem] ${Styles.placeholderFont} ${Styles.inputLayout} ${Styles.marginBtm}`}
           type="date"
-          value={noteInfo.appointmentDate? noteInfo.appointmentDate.toISOString().split("T")[0]:"No Appointment"}
+          value={noteInfo.appointmentDate? noteInfo.appointmentDate.toISOString().split("T")[0]:""}
+          placeholder="No Appointment"
+          onFocus={(e) => e.target.type = 'date'}
           onChange={(e)=> {
-            const [year, month, day] = e.target.value.split("-").map(Number);
-            const localDate = new Date(year, month - 1, day);
-
-            setNoteInfo({...noteInfo,appointmentDate:localDate})}
+            if (e.target.value === "") {
+              setNoteInfo({ ...noteInfo, appointmentDate: null });
+            } else {
+              const [year, month, day] = e.target.value.split("-").map(Number);
+              const localDate = new Date(year, month - 1, day);
+  
+              setNoteInfo({...noteInfo,appointmentDate:localDate})}
+            }
           }
         />
 {/*     deleted because of the client's request

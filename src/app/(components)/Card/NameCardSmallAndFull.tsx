@@ -544,10 +544,14 @@
                       type="date"
                       value={prospectInfo.prospectFirstcontact.toISOString().split("T")[0]}
                       onChange={(e)=> {
-                        const [year, month, day] = e.target.value.split("-").map(Number);
-                        const localDate = new Date(year, month - 1, day);
+                        if (e.target.value === "") {
+                          setProspectInfo({ ...prospectInfo, prospectFirstcontact: new Date() });
+                        } else {
+                          const [year, month, day] = e.target.value.split("-").map(Number);
+                          const localDate = new Date(year, month - 1, day);
 
-                        setProspectInfo({...prospectInfo,prospectFirstcontact:localDate})}
+                          setProspectInfo({...prospectInfo,prospectFirstcontact:localDate})}
+                        }
                       }
                     />
                     <div className="[grid-area:save] w-full pt-[1rem] flex justify-around">
@@ -675,11 +679,15 @@
                         <input
                           className={`pl-[1rem] py-[0.5rem] ${Styles.placeholderFont} ${Styles.inputLayout}`}
                           type="date"
-                          value={noteInput.appointmentDate? noteInput.appointmentDate.toISOString().split("T")[0]:"No Appointment"}
+                          value={noteInput.appointmentDate? noteInput.appointmentDate.toISOString().split("T")[0]:""}
                           onChange={(e)=> {
-                            const [year, month, day] = e.target.value.split("-").map(Number);
-                            const localDate = new Date(year, month - 1, day);
-                            setNoteInput({...noteInput,appointmentDate:localDate})}
+                            if (e.target.value === "") {
+                              setNoteInput({ ...noteInput, appointmentDate: null });
+                            } else {
+                              const [year, month, day] = e.target.value.split("-").map(Number);
+                              const localDate = new Date(year, month - 1, day);
+                              setNoteInput({...noteInput,appointmentDate:localDate})}
+                            }
                           }
                         />
                       </div>

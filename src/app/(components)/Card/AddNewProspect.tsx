@@ -259,10 +259,14 @@ export default function AddNewProspectCard() {
           type="date"
           value={prospectInfo.prospectFirstcontact.toISOString().split("T")[0]}
           onChange={(e)=> {
-            const [year, month, day] = e.target.value.split("-").map(Number);
-            const localDate = new Date(year, month - 1, day);
+            if (e.target.value === "") {
+              setProspectInfo({ ...prospectInfo, prospectFirstcontact: new Date() });
+            } else {
+              const [year, month, day] = e.target.value.split("-").map(Number);
+              const localDate = new Date(year, month - 1, day);
 
-            setProspectInfo({...prospectInfo,prospectFirstcontact:localDate})}
+              setProspectInfo({...prospectInfo,prospectFirstcontact:localDate})}
+            }
           }
         />
       </div>

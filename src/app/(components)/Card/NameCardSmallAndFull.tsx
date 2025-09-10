@@ -32,7 +32,7 @@
     const clickedProspectData = useClickedProspectInfoStore((state)=>state.prospect);
     const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
     const reloadClickedProspect = useClickedProspectInfoStore((state) => state.reload);
-    const {isOpenMemo,isNoteEdit,changeAddNewMemoPageStatus,changeIsEditStatus,changeIsNoteEditStatus} = useAddNewContext();
+    const {isOpenMemo,isNoteEdit,isMemoEdit,changeAddNewMemoPageStatus,changeIsEditStatus,changeIsNoteEditStatus,changeIsMemoEditStatus} = useAddNewContext();
     const [noteDelete,setNoteDelete] = useState<Notes|null>(null);
     const [memoDelete,setMemoDelete] = useState<Memos|null>(null);
     
@@ -74,23 +74,22 @@
     })
 
     const [noteInput,setNoteInput] = useState<Notes>({
-        id:"",
-        noteTitle:"",
-        content:"",
-        status:"",
-        appointmentDate: new Date(),
-        createdAt: new Date(),
-        prospectId:"",
-        memos:[]
-      })
-  /*     const [memoInfo,setMemoInfo] = useState<Memos>({
-        id:"",
-        memoSubject:"",
-        memoDetail:"",
-        createdAt: new Date(),
-        noteId:"",
-      })
-  */  
+      id:"",
+      noteTitle:"",
+      content:"",
+      status:"",
+      appointmentDate: new Date(),
+      createdAt: new Date(),
+      prospectId:"",
+      memos:[]
+    })
+    const [memoInfo,setMemoInfo] = useState<Memos>({
+      id:"",
+      memoSubject:"",
+      memoDetail:"",
+      createdAt: new Date(),
+      noteId:"",
+    })   
 
     const [age,setAge] = useState<number|"">("")
     const [children,setChildren] = useState<number|"">("")
@@ -199,7 +198,6 @@
       }
     }
     const noteEditSave = async() => {
-      console.log(noteInput)
       try{
         const res = await fetch(`/api/notes/${noteInput.id}`,{
           method:'PUT',
@@ -236,8 +234,49 @@
       changeAddNewMemoPageStatus(noteData);
     }
 
-    const editMemo = async () => {
-      console.log("edit Memo")
+    const editMemo = async (memoId:string) => {
+      if(noteData){
+        if(isMemoEdit && isMemoEdit.memoId===memoId){
+          changeIsMemoEditStatus(null)
+        } else {
+          changeIsMemoEditStatus({note:noteData,memoId:memoId})
+
+          const memoData = noteData.memos.find(memo=>memo.id===memoId)
+          setMemoInfo({...memoData!})
+        }
+      }
+    }
+    const editMemoSave = async () => {
+      try{
+        const res = await fetch(`/api/memos/${memoInfo.id}`,{
+          method:'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            memoInfo:memoInfo
+          })
+        })
+
+        if (!res.ok){
+          console.log("Error !!!")
+          return null;
+        };
+
+        if(clickedProspectData){
+          const getRes = await fetch(`/api/prospectList/${clickedProspectData.id}`);
+    
+          const {data} = await getRes.json();
+          setClickedProspectData({...data,prospectFirstcontact:new Date(data.prospectFirstcontact)});
+        }  
+
+        reloadClickedProspect();
+        changeIsMemoEditStatus(null)
+
+      }  catch (error) {
+        console.error("Error fetching update Memo info requests:", error);
+        return null
+      }
     }
     
     const deleteMemo = async (id:string) => {
@@ -660,7 +699,7 @@
                         <div className={`${Styles.iconSize}`}
                           onClick={(e)=>{
                             e.stopPropagation();
-                            editMemo();
+                            editMemo(memo.id);
                           }}
                         >
                           <FaEdit size={"100%"} color="gray"/>
@@ -675,15 +714,41 @@
                         </div>
                       </div>
 
-                      <h2>Note{noteData.memos.length - memoIndex}</h2>
-                      <h2>
-                        {new Date(memo.createdAt).toLocaleString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                        })}
-                      </h2>
-                      <h2 className="font-medium pt-[1rem]">{memo.memoDetail}</h2>
+                      {/* Memo Edit */}
+                      {!isMemoEdit || isMemoEdit.memoId!==memo.id ? 
+                      <>
+                        <h2>Note{noteData.memos.length - memoIndex}</h2>
+                        <h2>
+                          {new Date(memo.createdAt).toLocaleString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                          })}
+                        </h2>
+                        <h2 className="font-medium pt-[1rem]">{memo.memoDetail}</h2>
+                      </>
+                      :<>
+                        <h2>Note{noteData.memos.length - memoIndex}</h2>
+                        <h2>
+                          {new Date(memo.createdAt).toLocaleString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                          })}
+                        </h2>
+                        <div className="text-center">
+                          <textarea
+                            className={`w-[90%] pl-[1rem] py-[0.5rem] mt-[1rem] ${Styles.placeholderFont} ${Styles.inputLayout} ${Styles.marginBtm}`}
+                            rows={5}
+                            placeholder='Write detail,,,'
+                            value={memoInfo.memoDetail}
+                            onChange={(e) => setMemoInfo({...memoInfo, memoDetail:e.target.value})}
+                          />
+                        </div>
+                        <div className="text-center my-[1rem]">
+                          <NormalBtn text="Save" clickFunction={editMemoSave}/>
+                        </div>
+                      </>}
                     </div>
                   })}
                   

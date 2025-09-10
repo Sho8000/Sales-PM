@@ -309,7 +309,8 @@
           >
             <div className={`flex justify-between items-center basis-1/2 gap-x-[2rem] ${Styles.smallCardComponentLeft}`}>
               <h2>{prospectData.prospectName}</h2>
-              <h2>{prospectData.prospectSex==="Male"?"M":"F"}</h2>
+              <h2 className={`${Styles.MorFDisplay}`}>{prospectInfo.prospectSex==="Male"?"M":"F"}</h2>
+              <h2 className={`${Styles.MaleOrFemaleDisplay}`}>{prospectInfo.prospectSex}</h2>
             </div>
             <h2>{prospectData.prospectBusiness}</h2>
           </div>
@@ -327,7 +328,8 @@
               <>
                 <div className={`flex justify-between items-center basis-1/2 gap-x-[2rem] ${Styles.smallCardComponentLeft}`}>
                   <h2>{prospectInfo.prospectName}</h2>
-                  <h2>{prospectInfo.prospectSex==="Male"?"M":"F"}</h2>
+                  <h2 className={`${Styles.MorFDisplay}`}>{prospectInfo.prospectSex==="Male"?"M":"F"}</h2>
+                  <h2 className={`${Styles.MaleOrFemaleDisplay}`}>{prospectInfo.prospectSex}</h2>
                 </div>
                 <h2>{prospectInfo.prospectBusiness}</h2>
               </>

@@ -10,18 +10,40 @@ import { useAddNewContext } from "@/app/(context)/AddNewOpenContext";
 import { getStatusColorFromProspect } from "@/lib/findStatusColor";
 import { useClickedProspectInfoStore } from "@/store/clickedProspectsInfoStore";
 import { useUserInfoStore } from "@/store/userInfoStore";
+import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 export default function ProspectInfo() {
   const userData = useUserInfoStore((state) => state.user);
   const clickedProspectData = useClickedProspectInfoStore((state) => state.prospect); //use clicked prospect's Information
-  const reloadKey = useClickedProspectInfoStore((state) => state.reloadKey);
+  const {data: session, status} = useSession();
+  const setUser = useUserInfoStore((state)=>state.setUser);
+  const userReloadKey = useUserInfoStore((state)=>state.reloadKey);
   const {isEdit,changeIsEditStatus} = useAddNewContext();
   const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
 
   const [prospectColor,setProspectColor] = useState("#000000");
   const [isOpenFullPersonalInfo,setIsOpenFullPersonalInfo] = useState(false)
   const [isShownHideAlert,setIsShownHideAlert] = useState(false)
+
+  useEffect(()=>{
+    if(status==="authenticated" && session?.user?.id){
+      const fetchUserInfo = async () => {
+        try {
+            const res = await fetch(`/api/prospects/${session.user.id}`); // Endpoint user's prospectslist
+            const data = await res.json();
+            
+            setUser(data); // all user's info *except
+
+        } catch (error) {
+            console.error("Error fetching user's data:", error);
+        }
+      };
+
+      fetchUserInfo();
+    }
+  },[session,status,setUser,userReloadKey])
+
 
   useEffect(()=>{
     if(clickedProspectData?.id && userData){
@@ -39,7 +61,7 @@ export default function ProspectInfo() {
 
       fetchProspectInfo()
   }
-  },[userData,clickedProspectData?.id,reloadKey])
+  },[userData,clickedProspectData?.id])
 
   const showPersonalData = () => {
     if(!isEdit){

@@ -24,6 +24,7 @@ export default function SettingTemplate({title}:SettingProps) {
   const {isSettingPage,isSettingMenu,isSettingStatusPage,isSettingContent, isSettingHidden,isSettingPassword, changeSettingPageStatus,changeSettingMenuStatus,changeSettingStatusPageStatus,changeSettingContentStatus,changeSettingHiddenStatus,changeSettingPasswordStatus} = useSettingPageContext();
 
   const userData = useUserInfoStore((state) => state.user); //use user's all Information
+  const userReloadKey = useUserInfoStore((state)=>state.reloadKey);
   const [settingData,setSettingData] = useState<StatusSetting[]|null>(null);
   const [contentsSetting,setContentsSetting] = useState<ContentsSetting[]|null>(null);
 
@@ -32,7 +33,6 @@ export default function SettingTemplate({title}:SettingProps) {
     if(userData?.statusSetting){
       const sortedSettings = [...userData.statusSetting].sort((a, b) => a.statusOrder - b.statusOrder);
       setSettingData(sortedSettings);
-//      setStatusOderData(sortedSettings[sortedSettings.length-1].statusOrder+1)
     }
 
     /* For ContentsSetting */
@@ -40,7 +40,7 @@ export default function SettingTemplate({title}:SettingProps) {
       setContentsSetting(userData.contentsSetting)
     }
 
-    },[userData])
+  },[userData,userReloadKey])
 
   const closeBtnHandler = () => {
     changeSettingPageStatus(false)

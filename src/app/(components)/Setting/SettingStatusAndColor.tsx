@@ -3,9 +3,12 @@
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import Styles from "./Setting.module.css"
+import StylesCard from "../Card/Card.module.css"
 import NormalBtn from "../Btn/NormalBtn";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { StatusSetting } from "@/lib/dbInterface";
+import { SketchPicker } from 'react-color';
+import { useUserInfoStore } from "@/store/userInfoStore";
 
 interface SettingStatusAndColorProps{
   settingData:StatusSetting[]
@@ -13,11 +16,36 @@ interface SettingStatusAndColorProps{
 
 export default function SettingStatusAndColor({settingData}:SettingStatusAndColorProps) {
   const [isEdit,setIsEdit] = useState(false);
-//  const [statusOderData,setStatusOderData] = useState(1);
-  
+  const [statusInput,setStatusInput] = useState<StatusSetting[]>([]);
+  const [activeColorPicker, setActiveColorPicker] = useState<number | null>(null);
+  const pickerRef = useRef<HTMLDivElement | null>(null);
+  const userData = useUserInfoStore((state) => state.user);
+
+  useEffect(()=>{
+    setStatusInput(settingData)
+  },[])
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (pickerRef.current && !pickerRef.current.contains(event.target as Node)) {
+        setActiveColorPicker(null); // close the picker
+      }
+    };
+
+    if (activeColorPicker !== null) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [activeColorPicker]);
+
   const clickEditHandler = () => {
+    if(isEdit){
+      setStatusInput(settingData)
+    }
     setIsEdit(!isEdit)
-    console.log("clicked Edit")
   }
 /* 
   const clickDeleteHandler = () => {
@@ -28,8 +56,36 @@ export default function SettingStatusAndColor({settingData}:SettingStatusAndColo
     console.log("clicked Add New")
   }
 
-  const clickSaveHandler = () => {
-    console.log("clicked Save")
+  const clickSaveHandler = async () => {
+    if(!userData)return
+    try{
+      const res = await fetch(`/api/settings/status/${userData.id}`,{
+        method:'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          statusSettingsInfo:statusInput
+        })
+      })
+
+      if (!res.ok){
+        console.log("Error !!!")
+        return null;
+      };
+
+      setIsEdit(false);
+      
+    }  catch (error) {
+      console.error("Error fetching update Memo info requests:", error);
+      return null
+    }
+
+
+
+
+
+    console.log("clicked Save",statusInput)
   }
 
   return (
@@ -48,15 +104,53 @@ export default function SettingStatusAndColor({settingData}:SettingStatusAndColo
           return <div key={index} className={`flex border-b-1 border-gray-400 gap-x-[1rem] ${Styles.smallLayout}`}>
             <h2 className={`${Styles.itemsFont} text-[#808080]`}>Status{index+1} :</h2>
             <div className="flex grow gap-[1rem]">
-              <div className="flex items-center grow">
-                <h2 className={`${Styles.itemsFont} grow`}>{settingItems.statusName}</h2>
-                <div className={`rounded-[5px] ${Styles.colorSize}`} style={{backgroundColor:settingItems.statusColor}}></div>
-              </div>
-              {!isEdit &&
-                <div className={`${Styles.iconSize}`}>
-                  <MdDelete size={"100%"} color="gray"/>
+              {!isEdit ? <>
+                <div className="flex items-center grow">
+                  <h2 className={`${Styles.itemsFont} grow`}>{settingItems.statusName}</h2>
+                  <div className={`rounded-[5px] ${Styles.colorSize}`} style={{backgroundColor:settingItems.statusColor}}></div>
                 </div>
-              }
+                {index!==0?
+                  <div className={`${Styles.iconSize}`}>
+                    <MdDelete size={"100%"} color="gray"/>
+                  </div>
+                  :<div className={`${Styles.iconSize}`}></div>
+                }
+              </>
+              :<div className="flex items-center grow gap-[1rem] pb-1">
+                <input
+                  className={`${Styles.itemsFont} grow px-[1rem] py-[0.5rem] ${StylesCard.placeholderFont} ${StylesCard.inputLayout}${Styles.placeholderFont} ${Styles.inputLayout}`}
+                  type="text"
+                  placeholder={settingItems.statusName}
+                  value={statusInput[index].statusName}
+                  onChange={(e) => {
+                    const updatedStatus = statusInput.map((item, i) =>
+                      i === index ? { ...item, statusName: e.target.value } : item
+                    );
+                    setStatusInput(updatedStatus)
+                  }}
+                />
+
+                {/* Color Input */}
+                <div
+                  className={`rounded-[5px] ${Styles.colorSize}`}
+                  style={{backgroundColor:statusInput[index].statusColor}}
+                  onClick={() => setActiveColorPicker(index)}
+                ></div>
+                {/* Show color picker */}
+                {activeColorPicker === index && (
+                  <div ref={pickerRef} className="absolute z-50 mt-2 left-1/2 transform -translate-x-1/2">
+                    <SketchPicker
+                      color={statusInput[index].statusColor}
+                      onChangeComplete={(color) => {
+                        const updatedStatus = statusInput.map((item, i) =>
+                          i === index ? { ...item, statusColor: color.hex } : item
+                        );
+                        setStatusInput(updatedStatus);
+                      }}
+                    />
+                  </div>
+                )}
+              </div>}
             </div>
           </div>
         })}

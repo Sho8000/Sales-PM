@@ -79,15 +79,9 @@ export default function SettingStatusAndColor({settingData}:SettingStatusAndColo
       setIsEdit(false);
 
     }  catch (error) {
-      console.error("Error fetching update Memo info requests:", error);
+      console.error("Error fetching update Status info requests:", error);
       return null
     }
-
-
-
-
-
-    console.log("clicked Save",statusInput)
   }
 
   return (

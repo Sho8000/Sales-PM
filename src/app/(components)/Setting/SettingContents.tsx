@@ -3,9 +3,11 @@
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import Styles from "./Setting.module.css"
+import StylesCard from "../Card/Card.module.css"
 import NormalBtn from "../Btn/NormalBtn";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ContentsSetting } from "@/lib/dbInterface";
+import { useUserInfoStore } from "@/store/userInfoStore";
 
 interface SettingContentsProps{
   contentsData:ContentsSetting[]
@@ -13,10 +15,19 @@ interface SettingContentsProps{
 
 export default function SettingContents({contentsData}:SettingContentsProps) {
   const [isEdit,setIsEdit] = useState(false);
+  const [contentsInput,setContentsInput] = useState<ContentsSetting[]>([]);
+  const userData = useUserInfoStore((state) => state.user);
+  const userDataReload = useUserInfoStore((state) => state.reload);
   
+  useEffect(()=>{
+    setContentsInput(contentsData)
+  },[])
+
   const clickEditHandler = () => {
+    if(isEdit){
+      setContentsInput(contentsData)
+    }
     setIsEdit(!isEdit)
-    console.log("clicked Edit")
   }
 /* 
   const clickDeleteHandler = () => {
@@ -27,8 +38,31 @@ export default function SettingContents({contentsData}:SettingContentsProps) {
     console.log("clicked Add New")
   }
 
-  const clickSaveHandler = () => {
-    console.log("clicked Save")
+  const clickSaveHandler = async() => {
+    if(!userData)return
+    try{
+      const res = await fetch(`/api/settings/contents/${userData.id}`,{
+        method:'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contentsSettingsInfo:contentsInput
+        })
+      })
+
+      if (!res.ok){
+        console.log("Error !!!")
+        return null;
+      };
+
+      userDataReload();
+      setIsEdit(false);
+
+    }  catch (error) {
+      console.error("Error fetching update Contents info requests:", error);
+      return null
+    }
   }
 
   return (
@@ -46,14 +80,29 @@ export default function SettingContents({contentsData}:SettingContentsProps) {
         {contentsData.map((contents,index)=>{
           return <div key={index} className={`flex border-b-1 border-gray-400 gap-[1rem] ${Styles.smallLayout}`}>
             <h2 className={`${Styles.itemsFont} text-[#808080]`}>Content{index+1} :</h2>
-            <div className="flex justify-between grow">
+            {!isEdit ?<div className="flex justify-between grow">
               <h2 className={`grow ${Styles.itemsFont} grow`}>{contents.contentName}</h2>
-              {!isEdit &&
+              {index!==0 ?
                 <div className={`${Styles.iconSize}`}>
                   <MdDelete size={"100%"} color="gray"/>
                 </div>
+                :<div className={`${Styles.iconSize}`}></div>
               }
             </div>
+            :<div className="flex justify-between grow">
+              <input
+                className={`${Styles.itemsFont} grow px-[1rem] py-[0.5rem] mb-1 ${StylesCard.placeholderFont} ${StylesCard.inputLayout}${Styles.placeholderFont} ${Styles.inputLayout}`}
+                type="text"
+                placeholder={contents.contentName}
+                value={contentsInput[index].contentName}
+                onChange={(e) => {
+                  const updatedContents = contentsInput.map((item, i) =>
+                    i === index ? { ...item, contentName: e.target.value } : item
+                  );
+                  setContentsInput(updatedContents)
+                }}
+              />
+            </div>}
           </div>
         })}
       </div>

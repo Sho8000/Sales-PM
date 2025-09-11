@@ -29,11 +29,34 @@ export default function SettingContents({contentsData}:SettingContentsProps) {
     }
     setIsEdit(!isEdit)
   }
-/* 
-  const clickDeleteHandler = () => {
-    console.log("clicked Delete")
+
+  const clickDeleteHandler = async(contentId:string) => {
+    if(!userData)return
+    try{
+      const res = await fetch(`/api/settings/contents/${userData.id}`,{
+        method:'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contentId:contentId
+        })
+      })
+
+      if (!res.ok){
+        console.log("Error !!!")
+        return null;
+      };
+
+      userDataReload();
+      setIsEdit(false);
+
+    }  catch (error) {
+      console.error("Error fetching delete Contents info requests:", error);
+      return null
+    }
   }
- */
+
   const clickAddNewHandler = () => {
     console.log("clicked Add New")
   }
@@ -83,7 +106,7 @@ export default function SettingContents({contentsData}:SettingContentsProps) {
             {!isEdit ?<div className="flex justify-between grow">
               <h2 className={`grow ${Styles.itemsFont} grow`}>{contents.contentName}</h2>
               {index!==0 ?
-                <div className={`${Styles.iconSize}`}>
+                <div className={`${Styles.iconSize}`} onClick={()=>clickDeleteHandler(contents.id)}>
                   <MdDelete size={"100%"} color="gray"/>
                 </div>
                 :<div className={`${Styles.iconSize}`}></div>

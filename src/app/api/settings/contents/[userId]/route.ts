@@ -88,3 +88,28 @@ export async function PUT(request: NextRequest, { params }:{params: Promise<{use
   }
 
 }
+
+export async function DELETE(request: NextRequest){
+  try{
+    const body = await request.json()
+    const contentId = body.contentId 
+
+    console.log("Id here",contentId)
+    const deleteContent = await prisma.contentsSetting.delete({
+      where:{
+        id: contentId
+      },
+    })
+
+    return NextResponse.json({
+      success: true,
+      message: "Content deleted successfully",
+      data: deleteContent,
+    });
+
+  } catch (error) {
+    console.error("Error deleting contents Info:", error);
+    return NextResponse.json({ success: false, error: "Failed to delete contents Info" });
+  }
+
+}

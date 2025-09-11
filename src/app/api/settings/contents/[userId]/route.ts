@@ -94,7 +94,6 @@ export async function DELETE(request: NextRequest){
     const body = await request.json()
     const contentId = body.contentId 
 
-    console.log("Id here",contentId)
     const deleteContent = await prisma.contentsSetting.delete({
       where:{
         id: contentId

@@ -48,11 +48,34 @@ export default function SettingStatusAndColor({settingData}:SettingStatusAndColo
     }
     setIsEdit(!isEdit)
   }
-/* 
-  const clickDeleteHandler = () => {
-    console.log("clicked Delete")
+
+  const clickDeleteHandler = async(statusId:string) => {
+    if(!userData)return
+    try{
+      const res = await fetch(`/api/settings/status/${userData.id}`,{
+        method:'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          statusId:statusId
+        })
+      })
+
+      if (!res.ok){
+        console.log("Error !!!")
+        return null;
+      };
+
+      userDataReload();
+      setIsEdit(false);
+
+    }  catch (error) {
+      console.error("Error fetching delete Status info requests:", error);
+      return null
+    }
   }
- */
+
   const clickAddNewHandler = () => {
     console.log("clicked Add New")
   }
@@ -106,7 +129,7 @@ export default function SettingStatusAndColor({settingData}:SettingStatusAndColo
                   <div className={`rounded-[5px] ${Styles.colorSize}`} style={{backgroundColor:settingItems.statusColor}}></div>
                 </div>
                 {index!==0?
-                  <div className={`${Styles.iconSize}`}>
+                  <div className={`${Styles.iconSize}`} onClick={()=>clickDeleteHandler(settingItems.id)}>
                     <MdDelete size={"100%"} color="gray"/>
                   </div>
                   :<div className={`${Styles.iconSize}`}></div>

@@ -90,3 +90,26 @@ export async function PUT(request: NextRequest, { params }:{params: Promise<{use
   }
 
 }
+
+export async function DELETE(request: NextRequest){
+  try{
+    const body = await request.json()
+    const statusId = body.statusId 
+
+    const deleteStatus = await prisma.statusSetting.delete({
+      where:{
+        id: statusId
+      },
+    })
+
+    return NextResponse.json({
+      success: true,
+      message: "Status deleted successfully",
+      data: deleteStatus,
+    });
+
+  } catch (error) {
+    console.error("Error deleting status Info:", error);
+    return NextResponse.json({ success: false, error: "Failed to delete status Info" });
+  }
+}

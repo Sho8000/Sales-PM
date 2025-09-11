@@ -17,6 +17,7 @@ export default function ProspectsList() {
   const router = useRouter();
   const {data: session, status} = useSession();
   const setUser = useUserInfoStore((state)=>state.setUser);
+  const userReloadKey = useUserInfoStore((state)=>state.reloadKey);
   const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
   const {isAddNewPage,changeAddNewPageStatus} = useAddNewContext();
 
@@ -36,7 +37,7 @@ export default function ProspectsList() {
 
       fetchUserInfo();
     }
-  },[session,status,setUser])
+  },[session,status,setUser,userReloadKey])
 
   const clickAddNewHandler = () => {
     changeAddNewPageStatus(true);

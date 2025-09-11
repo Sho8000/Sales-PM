@@ -20,6 +20,7 @@ export default function SettingStatusAndColor({settingData}:SettingStatusAndColo
   const [activeColorPicker, setActiveColorPicker] = useState<number | null>(null);
   const pickerRef = useRef<HTMLDivElement | null>(null);
   const userData = useUserInfoStore((state) => state.user);
+  const userDataReload = useUserInfoStore((state) => state.reload);
 
   useEffect(()=>{
     setStatusInput(settingData)
@@ -74,8 +75,9 @@ export default function SettingStatusAndColor({settingData}:SettingStatusAndColo
         return null;
       };
 
+      userDataReload();
       setIsEdit(false);
-      
+
     }  catch (error) {
       console.error("Error fetching update Memo info requests:", error);
       return null
@@ -141,7 +143,7 @@ export default function SettingStatusAndColor({settingData}:SettingStatusAndColo
                   <div ref={pickerRef} className="absolute z-50 mt-2 left-1/2 transform -translate-x-1/2">
                     <SketchPicker
                       color={statusInput[index].statusColor}
-                      onChangeComplete={(color) => {
+                      onChange={(color) => {
                         const updatedStatus = statusInput.map((item, i) =>
                           i === index ? { ...item, statusColor: color.hex } : item
                         );

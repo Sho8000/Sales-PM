@@ -638,11 +638,14 @@
                           <select 
                             className={`basis-2/3 appearance-none pl-[1rem] py-[0.5rem] ${Styles.placeholderFont} ${Styles.inputLayout}`}
                             name="noteContents"
-                            value={noteInput.content}
+                            value={userData?.contentsSetting?.some(s => s.contentName === noteInput.content)
+                              ? noteInput.content
+                              : "-"}
                             onChange={(e)=>
                               setNoteInput({...noteInput, content:e.target.value})
                             }
                           >
+                            <option disabled value="-">-- Select Content --</option>
                             {userData?.contentsSetting &&
                               <>
                                 {userData.contentsSetting.map((content,contentIndex)=>{
@@ -659,13 +662,16 @@
                           <select 
                             className={`appearance-none pl-[1rem] py-[0.5rem] ${Styles.placeholderFont} ${Styles.inputLayout}`}
                             name="noteStatus"
-                            value={noteInput.status}
+                            value={userData?.statusSetting?.some(s => s.statusName === noteInput.status)
+                              ? noteInput.status
+                              : "-"}
                             onChange={(e)=>
                               setNoteInput({...noteInput, status:e.target.value})
                             }
                           >
                             {userData?.statusSetting &&
                               <>
+                                <option disabled value="-">-- Select Status --</option>
                                 {userData.statusSetting.map((status,statusIndex)=>{
                                   return <option
                                     key={statusIndex}

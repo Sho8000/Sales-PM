@@ -51,9 +51,11 @@ export default function ProspectInfo() {
         try{
           const res = await fetch(`/api/prospectList/${clickedProspectData.id}`);
           const {data} = await res.json();
-          setClickedProspectData({...data,prospectFirstcontact:new Date(data.prospectFirstcontact)})
 
-          setProspectColor(getStatusColorFromProspect(clickedProspectData,userData.statusSetting))
+          const updatedProspectData = {...data,prospectFirstcontact:new Date(data.prospectFirstcontact)}
+
+          setClickedProspectData(updatedProspectData)
+          setProspectColor(getStatusColorFromProspect(updatedProspectData,userData.statusSetting))
         } catch (error) {
           console.error("Error fetching prospect's data:", error);
         }

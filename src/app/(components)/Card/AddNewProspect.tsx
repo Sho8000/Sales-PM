@@ -7,6 +7,7 @@ import NormalBtn from "../Btn/NormalBtn";
 import { useUserInfoStore } from "@/store/userInfoStore";
 import { useClickedProspectInfoStore } from "@/store/clickedProspectsInfoStore";
 import { useAddNewContext } from "@/app/(context)/AddNewOpenContext";
+import { DateTime } from 'luxon';
 
 export default function AddNewProspectCard() {
   const userData = useUserInfoStore((state) => state.user); //use user's all Information
@@ -27,7 +28,7 @@ export default function AddNewProspectCard() {
     prospectPhone:"",
     prospectEmail:"",
     prospectHidden:false,
-    prospectFirstcontact: new Date(),
+    prospectFirstcontact: DateTime.now().setZone('America/Vancouver').startOf('day').toJSDate(),
     createdAt: new Date(),
     prospectListId:"",
     notes:[],

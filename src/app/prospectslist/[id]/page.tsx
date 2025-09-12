@@ -19,6 +19,7 @@ export default function ProspectInfo() {
   const {data: session, status} = useSession();
   const setUser = useUserInfoStore((state)=>state.setUser);
   const userReloadKey = useUserInfoStore((state)=>state.reloadKey);
+  const clickedProspectReloadKey = useClickedProspectInfoStore((state)=>state.reloadKey)
   const {isEdit,changeIsEditStatus} = useAddNewContext();
   const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
 
@@ -44,7 +45,6 @@ export default function ProspectInfo() {
     }
   },[session,status,setUser,userReloadKey])
 
-
   useEffect(()=>{
     if(clickedProspectData?.id && userData){
       const fetchProspectInfo = async () => {
@@ -61,7 +61,7 @@ export default function ProspectInfo() {
 
       fetchProspectInfo()
   }
-  },[userData,clickedProspectData?.id])
+  },[userData,clickedProspectData?.id,clickedProspectReloadKey])
 
   const showPersonalData = () => {
     if(!isEdit){

@@ -31,6 +31,46 @@ export async function GET(request: NextRequest, { params }:{params: Promise<{use
   }
 }
 
+export async function POST(request: NextRequest, { params }:{params: Promise<{userId: string}>}){
+  const {userId} = await params
+
+  if( !userId ){
+    return NextResponse.json(
+      { status: "error", message: "user ID is required" },
+      { status: 400 }
+    );
+  }
+
+  try{
+    const body = await request.json()
+    const {statusName,statusColor} = body.newStatusInfo
+
+    const maxOrderStatus = await prisma.statusSetting.findFirst({
+      where: { userId },
+      orderBy: { statusOrder: "desc" },
+    });
+
+    const newStatus = await prisma.statusSetting.create({
+      data:{
+        statusName:statusName,
+        statusColor:statusColor,
+        statusOrder:maxOrderStatus?maxOrderStatus.statusOrder+1:1,
+        userId:userId
+      }
+    })
+
+    return NextResponse.json({
+      success: true,
+      message: "newStatus saved successfully",
+      data: newStatus,
+    });
+
+  } catch (error) {
+    console.error("Error saving newStatus Info:", error);
+    return NextResponse.json({ success: false, error: "Failed to save newStatus Info" });
+  }
+}
+
 export async function PUT(request: NextRequest, { params }:{params: Promise<{userId: string}>}){
   const {userId} = await params
 

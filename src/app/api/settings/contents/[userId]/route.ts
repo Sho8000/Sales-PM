@@ -31,6 +31,39 @@ export async function GET(request: NextRequest, { params }:{params: Promise<{use
   }
 }
 
+export async function POST(request: NextRequest, { params }:{params: Promise<{userId: string}>}){
+  const {userId} = await params
+
+  if( !userId ){
+    return NextResponse.json(
+      { status: "error", message: "user ID is required" },
+      { status: 400 }
+    );
+  }
+
+  try{
+    const body = await request.json()
+    const {contentName} = body.newContentInfo
+        
+    const newContent = await prisma.contentsSetting.create({
+      data:{
+        contentName:contentName,
+        userId:userId
+      }
+    })
+
+    return NextResponse.json({
+      success: true,
+      message: "newContent saved successfully",
+      data: newContent,
+    });
+
+  } catch (error) {
+    console.error("Error saving newContent Info:", error);
+    return NextResponse.json({ success: false, error: "Failed to save newContent Info" });
+  }
+}
+
 export async function PUT(request: NextRequest, { params }:{params: Promise<{userId: string}>}){
   const {userId} = await params
 

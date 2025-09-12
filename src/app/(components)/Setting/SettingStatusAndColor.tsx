@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { StatusSetting } from "@/lib/dbInterface";
 import { SketchPicker } from 'react-color';
 import { useUserInfoStore } from "@/store/userInfoStore";
+import { useSettingPageContext } from "@/app/(context)/SettingOpenContext";
 
 interface SettingStatusAndColorProps{
   settingData:StatusSetting[]
@@ -17,6 +18,7 @@ interface SettingStatusAndColorProps{
 export default function SettingStatusAndColor({settingData}:SettingStatusAndColorProps) {
   const [isEdit,setIsEdit] = useState(false);
   const [statusInput,setStatusInput] = useState<StatusSetting[]>([]);
+  const {changeStatusDeleteStatus} = useSettingPageContext();
   const [activeColorPicker, setActiveColorPicker] = useState<number | null>(null);
   const pickerRef = useRef<HTMLDivElement | null>(null);
   const userData = useUserInfoStore((state) => state.user);
@@ -47,33 +49,6 @@ export default function SettingStatusAndColor({settingData}:SettingStatusAndColo
       setStatusInput(settingData)
     }
     setIsEdit(!isEdit)
-  }
-
-  const clickDeleteHandler = async(statusId:string) => {
-    if(!userData)return
-    try{
-      const res = await fetch(`/api/settings/status/${userData.id}`,{
-        method:'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          statusId:statusId
-        })
-      })
-
-      if (!res.ok){
-        console.log("Error !!!")
-        return null;
-      };
-
-      userDataReload();
-      setIsEdit(false);
-
-    }  catch (error) {
-      console.error("Error fetching delete Status info requests:", error);
-      return null
-    }
   }
 
   const clickAddNewHandler = () => {
@@ -129,7 +104,7 @@ export default function SettingStatusAndColor({settingData}:SettingStatusAndColo
                   <div className={`rounded-[5px] ${Styles.colorSize}`} style={{backgroundColor:settingItems.statusColor}}></div>
                 </div>
                 {index!==0?
-                  <div className={`${Styles.iconSize}`} onClick={()=>clickDeleteHandler(settingItems.id)}>
+                  <div className={`${Styles.iconSize}`} onClick={()=>changeStatusDeleteStatus(settingItems)}>
                     <MdDelete size={"100%"} color="gray"/>
                   </div>
                   :<div className={`${Styles.iconSize}`}></div>

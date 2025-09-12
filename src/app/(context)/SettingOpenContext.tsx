@@ -1,5 +1,6 @@
 "use client"
 
+import { ContentsSetting, StatusSetting } from "@/lib/dbInterface";
 import { createContext, useContext, useState } from "react";
 
 type SettingPageState = {
@@ -8,12 +9,16 @@ type SettingPageState = {
   isSettingStatusPage:boolean;
   isSettingContent:boolean;
   isSettingHidden:boolean;
+  isStatusDelete:StatusSetting|null;
+  isContentDelete:ContentsSetting|null;
   isSettingPassword:boolean;
   changeSettingPageStatus:(value:boolean)=>void;
   changeSettingMenuStatus:(value:boolean)=>void;
   changeSettingStatusPageStatus:(value:boolean)=>void;
   changeSettingContentStatus:(value:boolean)=>void;
   changeSettingHiddenStatus:(value:boolean)=>void;
+  changeStatusDeleteStatus:(value:StatusSetting|null)=>void;
+  changeContentDeleteStatus:(value:ContentsSetting|null)=>void;
   changeSettingPasswordStatus:(value:boolean)=>void;
 }
 
@@ -25,6 +30,8 @@ const SettingPageContextProvider: React.FC<{children: React.ReactNode}> = ({chil
   const [isSettingStatusPage,setIsSettingStatusPage] = useState(false)
   const [isSettingContent,setIsSettingContent] = useState(false)
   const [isSettingHidden,setIsSettingHidden] = useState(false)
+  const [isStatusDelete,setIsStatusDelete] = useState<StatusSetting|null>(null)
+  const [isContentDelete,setIsContentDelete] = useState<ContentsSetting|null>(null)
   const [isSettingPassword,setIsSettingPassword] = useState(false)
 
   const changeSettingPageStatus = (value:boolean)=>{
@@ -42,11 +49,17 @@ const SettingPageContextProvider: React.FC<{children: React.ReactNode}> = ({chil
   const changeSettingHiddenStatus = (value:boolean)=>{
     setIsSettingHidden(value)
   }
+  const changeStatusDeleteStatus = (value:StatusSetting|null)=>{
+    setIsStatusDelete(value)
+  }
+  const changeContentDeleteStatus = (value:ContentsSetting|null)=>{
+    setIsContentDelete(value)
+  }
   const changeSettingPasswordStatus = (value:boolean)=>{
     setIsSettingPassword(value)
   }
 
-  const value = {isSettingPage, isSettingMenu, isSettingStatusPage, isSettingContent, isSettingHidden, isSettingPassword, changeSettingPageStatus, changeSettingMenuStatus, changeSettingStatusPageStatus, changeSettingContentStatus, changeSettingHiddenStatus, changeSettingPasswordStatus}
+  const value = {isSettingPage, isSettingMenu, isSettingStatusPage, isSettingContent, isSettingHidden, isStatusDelete, isContentDelete, isSettingPassword, changeSettingPageStatus, changeSettingMenuStatus, changeSettingStatusPageStatus, changeSettingContentStatus, changeSettingHiddenStatus, changeStatusDeleteStatus, changeContentDeleteStatus, changeSettingPasswordStatus}
 
   return (
     <SettingPageContext.Provider value={value}>

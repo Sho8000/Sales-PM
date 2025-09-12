@@ -8,6 +8,7 @@ import NormalBtn from "../Btn/NormalBtn";
 import { useEffect, useState } from "react";
 import { ContentsSetting } from "@/lib/dbInterface";
 import { useUserInfoStore } from "@/store/userInfoStore";
+import { useSettingPageContext } from "@/app/(context)/SettingOpenContext";
 
 interface SettingContentsProps{
   contentsData:ContentsSetting[]
@@ -16,6 +17,8 @@ interface SettingContentsProps{
 export default function SettingContents({contentsData}:SettingContentsProps) {
   const [isEdit,setIsEdit] = useState(false);
   const [contentsInput,setContentsInput] = useState<ContentsSetting[]>([]);
+  const {changeContentDeleteStatus} = useSettingPageContext();
+
   const userData = useUserInfoStore((state) => state.user);
   const userDataReload = useUserInfoStore((state) => state.reload);
   
@@ -28,33 +31,6 @@ export default function SettingContents({contentsData}:SettingContentsProps) {
       setContentsInput(contentsData)
     }
     setIsEdit(!isEdit)
-  }
-
-  const clickDeleteHandler = async(contentId:string) => {
-    if(!userData)return
-    try{
-      const res = await fetch(`/api/settings/contents/${userData.id}`,{
-        method:'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          contentId:contentId
-        })
-      })
-
-      if (!res.ok){
-        console.log("Error !!!")
-        return null;
-      };
-
-      userDataReload();
-      setIsEdit(false);
-
-    }  catch (error) {
-      console.error("Error fetching delete Contents info requests:", error);
-      return null
-    }
   }
 
   const clickAddNewHandler = () => {
@@ -106,7 +82,7 @@ export default function SettingContents({contentsData}:SettingContentsProps) {
             {!isEdit ?<div className="flex justify-between grow">
               <h2 className={`grow ${Styles.itemsFont} grow`}>{contents.contentName}</h2>
               {index!==0 ?
-                <div className={`${Styles.iconSize}`} onClick={()=>clickDeleteHandler(contents.id)}>
+                <div className={`${Styles.iconSize}`} onClick={()=>changeContentDeleteStatus(contents)}>
                   <MdDelete size={"100%"} color="gray"/>
                 </div>
                 :<div className={`${Styles.iconSize}`}></div>

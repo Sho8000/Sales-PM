@@ -15,18 +15,21 @@ import { ContentsSetting, StatusSetting } from "@/lib/dbInterface";
 import { useUserInfoStore } from "@/store/userInfoStore";
 import SettingContents from "./SettingContents";
 import SettingPassword from "./SettingPassword";
+import AlertCard from "../Card/AlertCard";
+import AlertBtn from "../Btn/AlartBtn";
 
 interface SettingProps{
   title:string;
 }
 
 export default function SettingTemplate({title}:SettingProps) {
-  const {isSettingPage,isSettingMenu,isSettingStatusPage,isSettingContent, isSettingHidden,isSettingPassword, changeSettingPageStatus,changeSettingMenuStatus,changeSettingStatusPageStatus,changeSettingContentStatus,changeSettingHiddenStatus,changeSettingPasswordStatus} = useSettingPageContext();
+  const {isSettingPage,isSettingMenu,isSettingStatusPage,isSettingContent, isSettingHidden,isStatusDelete,isContentDelete,isSettingPassword, changeSettingPageStatus,changeSettingMenuStatus,changeSettingStatusPageStatus,changeSettingContentStatus,changeSettingHiddenStatus,changeStatusDeleteStatus,changeContentDeleteStatus,changeSettingPasswordStatus} = useSettingPageContext();
 
   const userData = useUserInfoStore((state) => state.user); //use user's all Information
   const userReloadKey = useUserInfoStore((state)=>state.reloadKey);
   const [settingData,setSettingData] = useState<StatusSetting[]|null>(null);
   const [contentsSetting,setContentsSetting] = useState<ContentsSetting[]|null>(null);
+  const userDataReload = useUserInfoStore((state) => state.reload);
 
   useEffect(()=>{
     /* For StatusSetting */
@@ -51,44 +54,122 @@ export default function SettingTemplate({title}:SettingProps) {
     changeSettingPasswordStatus(false)
   }
 
+  const clickStatusDeleteHandler = async(statusId:string) => {
+    if(!userData)return
+    try{
+      const res = await fetch(`/api/settings/status/${userData.id}`,{
+        method:'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          statusId:statusId
+        })
+      })
+
+      if (!res.ok){
+        console.log("Error !!!")
+        return null;
+      };
+
+      userDataReload();
+    }  catch (error) {
+      console.error("Error fetching delete Status info requests:", error);
+      return null
+    }
+  }
+
+  const clickContentDeleteHandler = async(contentId:string) => {
+    if(!userData)return
+    try{
+      const res = await fetch(`/api/settings/contents/${userData.id}`,{
+        method:'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contentId:contentId
+        })
+      })
+
+      if (!res.ok){
+        console.log("Error !!!")
+        return null;
+      };
+
+      userDataReload();
+
+    }  catch (error) {
+      console.error("Error fetching delete Contents info requests:", error);
+      return null
+    }
+  }
+
+
   return (
     <>
       {isSettingPage && 
-        <div className="w-[100vw] h-[100vh] bg-black/80 top-0 left-0 z-50 fixed">
-          <div className={`absolute top-0 right-0 translate-y-[50%] translate-x-[-30%] z-50`}>
-            <CloseBtn clickFunction={closeBtnHandler}/>
-          </div>
-          <div className={`relative max-h-[90vh] overflow-y-auto top-[50%] left-[50%] translate-[-50%] rounded-[10px] py-[1rem] bg-[#fdfdfd]
-            ${Styles.whiteBox}  
-          `}>
-            <SectionTitle text={title}/>
+        <>
+          <div className="w-[100vw] h-[100vh] bg-black/80 top-0 left-0 z-50 fixed">
+            <div className={`absolute top-0 right-0 translate-y-[50%] translate-x-[-30%] z-50`}>
+              <CloseBtn clickFunction={closeBtnHandler}/>
+            </div>
+            <div className={`relative max-h-[90vh] overflow-y-auto top-[50%] left-[50%] translate-[-50%] rounded-[10px] py-[1rem] bg-[#fdfdfd]
+              ${Styles.whiteBox}  
+            `}>
+              <SectionTitle text={title}/>
 
-            {/* each Menu area */}
-            {isSettingMenu &&
-              <SettingMenu/>
-            }
-            {isSettingStatusPage &&
-              <>
-                {settingData &&
-                  <SettingStatusAndColor settingData={settingData}/>
-                }
-              </>
-            }
-            {isSettingContent &&
-              <>
-                {contentsSetting &&
-                  <SettingContents contentsData={contentsSetting}/>
-                }
-              </>
-            }
-            {isSettingHidden &&
-              <h1>Setting Hidden</h1>
-            }
-            {isSettingPassword &&
-              <SettingPassword/>
-            }
+              {/* each Menu area */}
+              {isSettingMenu &&
+                <SettingMenu/>
+              }
+              {isSettingStatusPage &&
+                <>
+                  {settingData &&
+                    <SettingStatusAndColor settingData={settingData}/>
+                  }
+                </>
+              }
+              {isSettingContent &&
+                <>
+                  {contentsSetting &&
+                    <SettingContents contentsData={contentsSetting}/>
+                  }
+                </>
+              }
+              {isSettingHidden &&
+                <h1>Setting Hidden</h1>
+              }
+              {isSettingPassword &&
+                <SettingPassword/>
+              }
+            </div>
           </div>
-        </div>
+
+          {isStatusDelete &&
+          <div className="fixed z-50">
+            <AlertCard
+              text={`Do you want to delete "${isStatusDelete.statusName}"?`}
+              button1={<AlertBtn text="Delete" clickFunction={()=>{
+                clickStatusDeleteHandler(isStatusDelete.id);
+                changeStatusDeleteStatus(null);
+              }}/>}
+              button2={<AlertBtn text="Cancel" clickFunction={()=>changeStatusDeleteStatus(null)}/>}
+            />
+          </div>}
+
+          {isContentDelete &&
+          <div className="fixed z-50">
+            <AlertCard
+              text={`Do you want to delete "${isContentDelete.contentName}"?`}
+              button1={<AlertBtn text="Delete" clickFunction={()=>{
+                clickContentDeleteHandler(isContentDelete.id);
+                changeContentDeleteStatus(null);
+              }}/>}
+              button2={<AlertBtn text="Cancel" clickFunction={()=>changeContentDeleteStatus(null)}/>}
+            />
+          </div>}
+        </>
       }
     </>
   );

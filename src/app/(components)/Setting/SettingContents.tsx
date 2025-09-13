@@ -17,7 +17,7 @@ interface SettingContentsProps{
 export default function SettingContents({contentsData}:SettingContentsProps) {
   const [isEdit,setIsEdit] = useState(false);
   const [contentsInput,setContentsInput] = useState<ContentsSetting[]>([]);
-  const {changeContentDeleteStatus} = useSettingPageContext();
+  const {changeSettingContentNewStatus,changeContentDeleteStatus} = useSettingPageContext();
 
   const userData = useUserInfoStore((state) => state.user);
   const userDataReload = useUserInfoStore((state) => state.reload);
@@ -34,7 +34,7 @@ export default function SettingContents({contentsData}:SettingContentsProps) {
   }
 
   const clickAddNewHandler = () => {
-    console.log("clicked Add New")
+    changeSettingContentNewStatus(true)
   }
 
   const clickSaveHandler = async() => {

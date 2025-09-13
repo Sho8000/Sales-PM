@@ -17,13 +17,14 @@ import SettingContents from "./SettingContents";
 import SettingPassword from "./SettingPassword";
 import AlertCard from "../Card/AlertCard";
 import AlertBtn from "../Btn/AlartBtn";
+import AddNewStatusAndColor from "../Card/AddNewStatus";
 
 interface SettingProps{
   title:string;
 }
 
 export default function SettingTemplate({title}:SettingProps) {
-  const {isSettingPage,isSettingMenu,isSettingStatusPage,isSettingContent, isSettingHidden,isStatusDelete,isContentDelete,isSettingPassword, changeSettingPageStatus,changeSettingMenuStatus,changeSettingStatusPageStatus,changeSettingContentStatus,changeSettingHiddenStatus,changeStatusDeleteStatus,changeContentDeleteStatus,changeSettingPasswordStatus} = useSettingPageContext();
+  const {isSettingPage,isSettingMenu,isSettingStatusPage,isSettingStatusNewPage,isSettingContent,isSettingContentNew,isSettingHidden,isStatusDelete,isContentDelete,isSettingPassword, changeSettingPageStatus,changeSettingMenuStatus,changeSettingStatusPageStatus,changeSettingStatusPageNewStatus,changeSettingContentStatus,changeSettingContentNewStatus,changeSettingHiddenStatus,changeStatusDeleteStatus,changeContentDeleteStatus,changeSettingPasswordStatus} = useSettingPageContext();
 
   const userData = useUserInfoStore((state) => state.user); //use user's all Information
   const userReloadKey = useUserInfoStore((state)=>state.reloadKey);
@@ -52,6 +53,8 @@ export default function SettingTemplate({title}:SettingProps) {
     changeSettingContentStatus(false)
     changeSettingHiddenStatus(false)
     changeSettingPasswordStatus(false)
+    changeSettingStatusPageNewStatus(false)
+    changeSettingContentNewStatus(false)
   }
 
   const clickStatusDeleteHandler = async(statusId:string) => {
@@ -169,6 +172,14 @@ export default function SettingTemplate({title}:SettingProps) {
               button2={<AlertBtn text="Cancel" clickFunction={()=>changeContentDeleteStatus(null)}/>}
             />
           </div>}
+          
+          {isSettingStatusNewPage &&
+            <AddNewStatusAndColor text="New Status&Color"/>
+          }
+
+          {isSettingContentNew &&
+            <AddNewStatusAndColor text="New Content"/>
+          }
         </>
       }
     </>

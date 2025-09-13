@@ -20,6 +20,11 @@
     height: 44px;
     border: 3px solid black;
   }
+  .colorSizeForAddNew{
+    width: 68px;
+    height: 68px;
+    border: 1px solid black;
+  }
 }
 
 @media only screen and (max-width:1440px){
@@ -43,6 +48,11 @@
     height: 33px;
     border: 2px solid black;
   }
+  .colorSizeForAddNew{
+    width: 55px;
+    height: 55px;
+    border: 1px solid black;
+  }
 }
 
 @media only screen and (max-width:430px){
@@ -64,6 +74,11 @@
   .colorSize{
     width: 22px;
     height: 22px;
+    border: 1px solid black;
+  }
+  .colorSizeForAddNew{
+    width: 41px;
+    height: 41px;
     border: 1px solid black;
   }
 }

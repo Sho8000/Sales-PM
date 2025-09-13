@@ -187,6 +187,12 @@
   .memoLayout{
     display: flex;
   }
+  .newContentSetting{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
 }
 
 @media only screen and (max-width:1000px){
@@ -214,6 +220,14 @@
   .memoLayout{
     display: flex;
     flex-direction: column;
+  }
+  .newContentSetting{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .statusSettingMB{
+    margin-bottom: 1rem;
   }
 }
 

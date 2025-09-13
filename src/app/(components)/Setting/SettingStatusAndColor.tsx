@@ -18,7 +18,7 @@ interface SettingStatusAndColorProps{
 export default function SettingStatusAndColor({settingData}:SettingStatusAndColorProps) {
   const [isEdit,setIsEdit] = useState(false);
   const [statusInput,setStatusInput] = useState<StatusSetting[]>([]);
-  const {changeStatusDeleteStatus} = useSettingPageContext();
+  const {changeSettingStatusPageNewStatus,changeStatusDeleteStatus} = useSettingPageContext();
   const [activeColorPicker, setActiveColorPicker] = useState<number | null>(null);
   const pickerRef = useRef<HTMLDivElement | null>(null);
   const userData = useUserInfoStore((state) => state.user);
@@ -52,7 +52,7 @@ export default function SettingStatusAndColor({settingData}:SettingStatusAndColo
   }
 
   const clickAddNewHandler = () => {
-    console.log("clicked Add New")
+    changeSettingStatusPageNewStatus(true)
   }
 
   const clickSaveHandler = async () => {

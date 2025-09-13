@@ -7,7 +7,9 @@ type SettingPageState = {
   isSettingPage:boolean;
   isSettingMenu:boolean;
   isSettingStatusPage:boolean;
+  isSettingStatusNewPage:boolean;
   isSettingContent:boolean;
+  isSettingContentNew:boolean;
   isSettingHidden:boolean;
   isStatusDelete:StatusSetting|null;
   isContentDelete:ContentsSetting|null;
@@ -15,7 +17,9 @@ type SettingPageState = {
   changeSettingPageStatus:(value:boolean)=>void;
   changeSettingMenuStatus:(value:boolean)=>void;
   changeSettingStatusPageStatus:(value:boolean)=>void;
+  changeSettingStatusPageNewStatus:(value:boolean)=>void;
   changeSettingContentStatus:(value:boolean)=>void;
+  changeSettingContentNewStatus:(value:boolean)=>void;
   changeSettingHiddenStatus:(value:boolean)=>void;
   changeStatusDeleteStatus:(value:StatusSetting|null)=>void;
   changeContentDeleteStatus:(value:ContentsSetting|null)=>void;
@@ -28,7 +32,9 @@ const SettingPageContextProvider: React.FC<{children: React.ReactNode}> = ({chil
   const [isSettingPage,setIsSettingPage] = useState(false)
   const [isSettingMenu,setIsSettingMenu] = useState(false)
   const [isSettingStatusPage,setIsSettingStatusPage] = useState(false)
+  const [isSettingStatusNewPage,setIsSettingStatusNewPage] = useState(false)
   const [isSettingContent,setIsSettingContent] = useState(false)
+  const [isSettingContentNew,setIsSettingContentNew] = useState(false)
   const [isSettingHidden,setIsSettingHidden] = useState(false)
   const [isStatusDelete,setIsStatusDelete] = useState<StatusSetting|null>(null)
   const [isContentDelete,setIsContentDelete] = useState<ContentsSetting|null>(null)
@@ -43,8 +49,14 @@ const SettingPageContextProvider: React.FC<{children: React.ReactNode}> = ({chil
   const changeSettingStatusPageStatus = (value:boolean)=>{
     setIsSettingStatusPage(value)
   }
+  const changeSettingStatusPageNewStatus = (value:boolean)=>{
+    setIsSettingStatusNewPage(value)
+  }
   const changeSettingContentStatus = (value:boolean)=>{
     setIsSettingContent(value)
+  }
+  const changeSettingContentNewStatus = (value:boolean)=>{
+    setIsSettingContentNew(value)
   }
   const changeSettingHiddenStatus = (value:boolean)=>{
     setIsSettingHidden(value)
@@ -59,7 +71,7 @@ const SettingPageContextProvider: React.FC<{children: React.ReactNode}> = ({chil
     setIsSettingPassword(value)
   }
 
-  const value = {isSettingPage, isSettingMenu, isSettingStatusPage, isSettingContent, isSettingHidden, isStatusDelete, isContentDelete, isSettingPassword, changeSettingPageStatus, changeSettingMenuStatus, changeSettingStatusPageStatus, changeSettingContentStatus, changeSettingHiddenStatus, changeStatusDeleteStatus, changeContentDeleteStatus, changeSettingPasswordStatus}
+  const value = {isSettingPage, isSettingMenu, isSettingStatusPage, isSettingStatusNewPage, isSettingContent, isSettingContentNew, isSettingHidden, isStatusDelete, isContentDelete, isSettingPassword, changeSettingPageStatus, changeSettingMenuStatus, changeSettingStatusPageStatus, changeSettingStatusPageNewStatus, changeSettingContentStatus, changeSettingContentNewStatus, changeSettingHiddenStatus, changeStatusDeleteStatus, changeContentDeleteStatus, changeSettingPasswordStatus}
 
   return (
     <SettingPageContext.Provider value={value}>

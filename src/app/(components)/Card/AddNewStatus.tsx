@@ -59,7 +59,40 @@ export default function AddNewStatusAndColor({text}:AddNewStatusProps) {
 
   const clickeSave = async () => {
     if(text==="New Status&Color"){
-      console.log(text)
+      try{
+        if(
+          newStatusInfo.statusName === ""
+        ){
+          console.log("please add all information")
+          return null
+        }
+  
+        if(userData?.id){
+          const res = await fetch(`/api/settings/status/${userData.id}`,{
+            method:"POST",
+            headers:{
+              "content-Type":"application/json",
+            },
+            body: JSON.stringify({
+              newStatusInfo:{
+                statusName:newStatusInfo.statusName,
+                statusColor:newStatusInfo.statusColor
+              }
+            })
+          })
+  
+          if(!res.ok){
+            console.log("Error !!!")
+            return null
+          }
+  
+          userDataReload();
+          changeSettingStatusPageNewStatus(false);
+        }
+      } catch (error) {
+        console.error("Error fetching post a new note requests:", error);
+        return null
+      }
     } else if(text==="New Content"){
       try{
         if(
@@ -69,7 +102,7 @@ export default function AddNewStatusAndColor({text}:AddNewStatusProps) {
           return null
         }
   
-        if(userData?.prospectList?.id){
+        if(userData?.id){
           const res = await fetch(`/api/settings/contents/${userData.id}`,{
             method:"POST",
             headers:{

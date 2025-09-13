@@ -10,6 +10,7 @@ import { StatusSetting } from "@/lib/dbInterface";
 import { SketchPicker } from 'react-color';
 import { useUserInfoStore } from "@/store/userInfoStore";
 import { useSettingPageContext } from "@/app/(context)/SettingOpenContext";
+import ModalPortal from "./ModalPortal";
 
 interface SettingStatusAndColorProps{
   settingData:StatusSetting[]
@@ -133,14 +134,16 @@ export default function SettingStatusAndColor({settingData}:SettingStatusAndColo
                 {/* Show color picker */}
                 {activeColorPicker === index && (
                   <div ref={pickerRef} className="absolute z-50 mt-2 left-1/2 transform -translate-x-1/2">
-                    <SketchPicker
-                      color={statusInput[index].statusColor}
-                      onChange={(color) => {
-                        const updatedStatus = statusInput.map((item, i) =>
-                          i === index ? { ...item, statusColor: color.hex } : item
-                        );
-                        setStatusInput(updatedStatus);
-                      }}
+                    <ModalPortal
+                      colorPicker={<SketchPicker
+                        color={statusInput[index].statusColor}
+                        onChange={(color) => {
+                          const updatedStatus = statusInput.map((item, i) =>
+                            i === index ? { ...item, statusColor: color.hex } : item
+                          );
+                          setStatusInput(updatedStatus);
+                        }}
+                      />}
                     />
                   </div>
                 )}

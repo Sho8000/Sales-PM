@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import NormalBtn from "../Btn/NormalBtn";
 import Styles from "./Card.module.css"
 import StylesSetting from "../Setting/Setting.module.css"
@@ -9,6 +9,8 @@ import CloseBtn from "../Btn/CloseBtn";
 import SectionTitle from "../CommonParts/SectionTitle";
 import { useUserInfoStore } from "@/store/userInfoStore";
 import { useSettingPageContext } from "@/app/(context)/SettingOpenContext";
+import ModalPortal from "../Setting/ModalPortal";
+import { SketchPicker } from "react-color";
 
 interface AddNewStatusProps {
   text:"New Status&Color"|"New Content";
@@ -29,7 +31,26 @@ export default function AddNewStatusAndColor({text}:AddNewStatusProps) {
     contentName:"",
     userId:""
   })
-  const [openColorPicker,setOpenColorPicker] = useState("#000000")
+
+  const [openColorPicker,setOpenColorPicker] = useState(false)
+  const [activeColorPicker, setActiveColorPicker] = useState<boolean>(false);
+  const pickerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (pickerRef.current && !pickerRef.current.contains(event.target as Node)) {
+        setActiveColorPicker(false); // close the picker
+      }
+    };
+
+    if (activeColorPicker) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [activeColorPicker]);
 
   const closeBtnHandler = () => {
     changeSettingStatusPageNewStatus(false)
@@ -106,9 +127,26 @@ export default function AddNewStatusAndColor({text}:AddNewStatusProps) {
                 <div
                   className={`rounded-[5px] ${StylesSetting.colorSizeForAddNew}`}
                   style={{backgroundColor:newStatusInfo.statusColor}}
-                  onClick={() => {setOpenColorPicker(newStatusInfo.statusColor)}}
+                  onClick={() => {
+                    setOpenColorPicker(true)
+                    setActiveColorPicker(true)
+                  }}
                 ></div>
-                {openColorPicker}
+                {/* Show color picker */}
+                {(openColorPicker || activeColorPicker) &&
+                  <div ref={pickerRef} className="absolute z-50 mt-2 left-1/2 transform -translate-x-1/2">
+                    <ModalPortal
+                      colorPicker={<SketchPicker
+                        color={newStatusInfo.statusColor}
+                        onChange={(color) => {
+                          setNewStatusInfo({...newStatusInfo,statusColor:color.hex})
+                          setOpenColorPicker(false)
+                        }}
+                      />}
+                    />
+                  </div>
+                }
+
               </div>
             </>}
             {text==="New Content" && <>

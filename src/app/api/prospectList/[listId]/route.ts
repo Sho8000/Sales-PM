@@ -153,18 +153,28 @@ export async function DELETE(request: NextRequest, { params }:{params: Promise<{
   }
 
   try{    
-    const prospect = await prisma.prospects.findUnique({
+    const notes = await prisma.notes.findMany({
       where:{
-        id: listId
-      }
+        prospectId: listId,
+      },
+      select:{id:true}
     }) 
 
-    if(!prospect){
-      return NextResponse.json(
-        { status: "error", message: "Prospect ID info has error. Please try again after logout" },
-        { status: 400 }
-      );  
-    }
+    const noteIds = notes.map(note=>note.id)
+
+    await prisma.memos.deleteMany({
+      where: {
+        noteId: {
+          in: noteIds
+        }
+      }
+    });
+
+    await prisma.notes.deleteMany({
+      where:{
+        prospectId:listId
+      }
+    })
 
     const deleteProspec = await prisma.prospects.delete({
       where:{
@@ -174,7 +184,7 @@ export async function DELETE(request: NextRequest, { params }:{params: Promise<{
 
     return NextResponse.json({
       success: true,
-      message: "Prospect updated successfully",
+      message: "Prospect delete successfully",
       data: deleteProspec,
     });
 

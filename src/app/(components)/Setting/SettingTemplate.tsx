@@ -135,7 +135,31 @@ export default function SettingTemplate({title}:SettingProps) {
     }
   }
   const clickProspectDeleteHandeler = async() => {
-    console.log("delete Prospect")
+    try{
+      if(isProspectDelete?.id){
+        const res = await fetch(`/api/prospectList/${isProspectDelete.id}`,{
+          method:'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            prospectInfo:{...isSettingRemoveHidden,prospectHidden:false}
+          })
+        })
+
+        if (!res.ok){
+          console.log("Error !!!")
+          return null;
+        };
+
+      }
+
+      userDataReload();
+      changeSettingRemoveHiddenStatus(null)
+    } catch (error) {
+      console.error("Error fetching update Prospect info requests:", error);
+      return null
+    }
     changeProspectDeleteStatus(null)
   }
 

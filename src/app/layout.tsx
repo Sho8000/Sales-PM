@@ -5,6 +5,7 @@ import Navbar from "./(components)/Navbar/Navbar";
 import { SessionProviders } from "@/utils/providers";
 import { SettingPageContextProvider } from "./(context)/SettingOpenContext";
 import { AddNewContextProvider } from "./(context)/AddNewOpenContext";
+import { TempolaryUserDataContextProvider } from "./(context)/TempolaryUserData";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,12 +33,14 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SettingPageContextProvider>
-          <AddNewContextProvider>
-            <SessionProviders>
-              <Navbar/>
-              {children}
-            </SessionProviders>
-          </AddNewContextProvider>
+          <TempolaryUserDataContextProvider>
+            <AddNewContextProvider>
+              <SessionProviders>
+                <Navbar/>
+                {children}
+              </SessionProviders>
+            </AddNewContextProvider>
+          </TempolaryUserDataContextProvider>
         </SettingPageContextProvider>
       </body>
     </html>

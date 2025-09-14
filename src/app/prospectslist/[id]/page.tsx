@@ -7,10 +7,12 @@ import SectionTitle from "@/app/(components)/CommonParts/SectionTitle";
 import UpComing from "@/app/(components)/CommonParts/UpComing";
 import ProspectDisplay from "@/app/(components)/ProspectsList/ID/ProspectDisplay";
 import { useAddNewContext } from "@/app/(context)/AddNewOpenContext";
+import { useTempolaryUserDataContext } from "@/app/(context)/TempolaryUserData";
 import { getStatusColorFromProspect } from "@/lib/findStatusColor";
 import { useClickedProspectInfoStore } from "@/store/clickedProspectsInfoStore";
 import { useUserInfoStore } from "@/store/userInfoStore";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function ProspectInfo() {
@@ -21,7 +23,9 @@ export default function ProspectInfo() {
   const userReloadKey = useUserInfoStore((state)=>state.reloadKey);
   const clickedProspectReloadKey = useClickedProspectInfoStore((state)=>state.reloadKey)
   const {isEdit,changeIsEditStatus} = useAddNewContext();
+  const {toHiddenProspect,changeToHiddenProspectState} = useTempolaryUserDataContext();
   const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
+  const router = useRouter(); 
 
   const [prospectColor,setProspectColor] = useState("#000000");
   const [isOpenFullPersonalInfo,setIsOpenFullPersonalInfo] = useState(false)
@@ -68,8 +72,6 @@ export default function ProspectInfo() {
   const showPersonalData = () => {
     if(!isEdit){
       setIsOpenFullPersonalInfo(!isOpenFullPersonalInfo)
-    } else {
-      console.log("edit clicked")
     }
   }
 
@@ -81,8 +83,33 @@ export default function ProspectInfo() {
     setIsShownHideAlert(true)
   }
 
-  const clickToHide = () => {
-    console.log("Hide?")
+  const clickToHide = async () => {
+    try{
+      if(toHiddenProspect?.id){
+        const res = await fetch(`/api/prospectList/${toHiddenProspect.id}`,{
+          method:'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            prospectInfo:{...toHiddenProspect,prospectHidden:true}
+          })
+        })
+
+        if (!res.ok){
+          console.log("Error !!!")
+          return null;
+        };
+
+      }
+
+      changeToHiddenProspectState(null);
+      setIsShownHideAlert(false);
+      router.push("/prospectslist")  
+    } catch (error) {
+      console.error("Error fetching update Prospect info requests:", error);
+      return null
+    }
   }
   const clickToHideCancel = () => {
     setIsShownHideAlert(false)

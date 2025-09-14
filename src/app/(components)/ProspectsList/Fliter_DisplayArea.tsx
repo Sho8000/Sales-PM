@@ -94,7 +94,7 @@ export default function FilterAndDisplayArea() {
       `}>
         {userData?.prospectList?.prospects && userData?.prospectList?.prospects.length <=0 ? <h2 className={`${Styles.textFont} text-center`}>No Data,,,</h2>
         :<>
-          {userData?.prospectList?.prospects.map((prospectData,index)=>{
+          {userData?.prospectList?.prospects.filter((prospct)=>prospct.prospectHidden===false).map((prospectData,index)=>{
             const color = getStatusColorFromProspect(prospectData,userData.statusSetting);
 
             if(displayStyle==="blockLayout"){

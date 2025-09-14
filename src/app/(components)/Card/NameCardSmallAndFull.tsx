@@ -13,6 +13,7 @@
   import { useAddNewContext } from "@/app/(context)/AddNewOpenContext";
   import AlertCard from "./AlertCard";
   import { useUserInfoStore } from "@/store/userInfoStore";
+import { useTempolaryUserDataContext } from "@/app/(context)/TempolaryUserData";
 
   interface SimpleCardProps {
     isPersonal?:boolean
@@ -33,6 +34,7 @@
     const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
     const reloadClickedProspect = useClickedProspectInfoStore((state) => state.reload);
     const {isOpenMemo,isNoteEdit,isMemoEdit,changeAddNewMemoPageStatus,changeIsEditStatus,changeIsNoteEditStatus,changeIsMemoEditStatus} = useAddNewContext();
+    const {changeToHiddenProspectState} = useTempolaryUserDataContext();
     const [noteDelete,setNoteDelete] = useState<Notes|null>(null);
     const [memoDelete,setMemoDelete] = useState<Memos|null>(null);
     
@@ -350,7 +352,7 @@
                     <div className={`${Styles.iconSize}`}
                       onClick={(e)=>{
                         e.stopPropagation();
-
+                        changeToHiddenProspectState(initialProspectData)
                         clickFunctionHide?.();
                       }}
                     >

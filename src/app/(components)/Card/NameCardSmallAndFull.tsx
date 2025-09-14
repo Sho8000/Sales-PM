@@ -1,19 +1,21 @@
-  "use client"
+"use client"
 
-  import { Memos, Notes, Prospects } from "@/lib/dbInterface";
-  import { FaEdit } from "react-icons/fa";
-  import { IoMdEyeOff } from "react-icons/io";
-  import { MdDelete } from "react-icons/md";
-  import { IoIosAdd } from "react-icons/io";
-  import Styles from "./Card.module.css"
-  import NormalBtn from "../Btn/NormalBtn";
-  import AlertBtn from "../Btn/AlartBtn";
-  import { useEffect, useState } from "react";
-  import { useClickedProspectInfoStore } from "@/store/clickedProspectsInfoStore";
-  import { useAddNewContext } from "@/app/(context)/AddNewOpenContext";
-  import AlertCard from "./AlertCard";
-  import { useUserInfoStore } from "@/store/userInfoStore";
+import { Memos, Notes, Prospects } from "@/lib/dbInterface";
+import { FaEdit } from "react-icons/fa";
+import { IoMdEye } from "react-icons/io";
+import { IoMdEyeOff } from "react-icons/io";
+import { MdDelete } from "react-icons/md";
+import { IoIosAdd } from "react-icons/io";
+import Styles from "./Card.module.css"
+import NormalBtn from "../Btn/NormalBtn";
+import AlertBtn from "../Btn/AlartBtn";
+import { useEffect, useState } from "react";
+import { useClickedProspectInfoStore } from "@/store/clickedProspectsInfoStore";
+import { useAddNewContext } from "@/app/(context)/AddNewOpenContext";
+import AlertCard from "./AlertCard";
+import { useUserInfoStore } from "@/store/userInfoStore";
 import { useTempolaryUserDataContext } from "@/app/(context)/TempolaryUserData";
+import { useSettingPageContext } from "@/app/(context)/SettingOpenContext";
 
   interface SimpleCardProps {
     isPersonal?:boolean
@@ -34,6 +36,7 @@ import { useTempolaryUserDataContext } from "@/app/(context)/TempolaryUserData";
     const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
     const reloadClickedProspect = useClickedProspectInfoStore((state) => state.reload);
     const {isOpenMemo,isNoteEdit,isMemoEdit,changeAddNewMemoPageStatus,changeIsEditStatus,changeIsNoteEditStatus,changeIsMemoEditStatus} = useAddNewContext();
+    const {changeSettingRemoveHiddenStatus,changeProspectDeleteStatus} = useSettingPageContext();
     const {changeToHiddenProspectState} = useTempolaryUserDataContext();
     const [noteDelete,setNoteDelete] = useState<Notes|null>(null);
     const [memoDelete,setMemoDelete] = useState<Memos|null>(null);
@@ -314,7 +317,30 @@ import { useTempolaryUserDataContext } from "@/app/(context)/TempolaryUserData";
               <h2 className={`${Styles.MorFDisplay}`}>{prospectInfo.prospectSex==="Male"?"M":"F"}</h2>
               <h2 className={`${Styles.MaleOrFemaleDisplay}`}>{prospectInfo.prospectSex}</h2>
             </div>
-            <h2>{prospectData.prospectBusiness}</h2>
+            {!prospectData.prospectHidden?
+              <h2>{prospectData.prospectBusiness}</h2>
+              :<>
+                <div className="flex gap-[1rem]">
+                  <div className={`${Styles.iconSize}`}
+                    onClick={(e)=>{
+                      e.stopPropagation();
+                      changeSettingRemoveHiddenStatus(prospectData);
+                      clickFunctionEdit?.();
+                    }}
+                  >
+                    <IoMdEye size={"100%"} color="gray"/>
+                  </div>
+                  <div className={`${Styles.iconSize}`}
+                    onClick={(e)=>{
+                      e.stopPropagation();
+                      changeProspectDeleteStatus(prospectData)
+                      clickFunctionHide?.();
+                    }}
+                  >
+                    <MdDelete size={"100%"} color="gray"/>
+                  </div>
+                </div>
+              </>}
           </div>
         }
 

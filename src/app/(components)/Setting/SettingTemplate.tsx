@@ -4,9 +4,6 @@ import { useSettingPageContext } from "@/app/(context)/SettingOpenContext";
 import SectionTitle from "../CommonParts/SectionTitle";
 import SettingMenu from "./SettingMenu";
 import CloseBtn from "../Btn/CloseBtn";
-//import { IoMdEye } from "react-icons/io";
-//import { FaEdit } from "react-icons/fa";
-//import { IoMdEyeOff } from "react-icons/io";
 
 import Styles from "./Setting.module.css"
 import SettingStatusAndColor from "./SettingStatusAndColor";
@@ -18,13 +15,14 @@ import SettingPassword from "./SettingPassword";
 import AlertCard from "../Card/AlertCard";
 import AlertBtn from "../Btn/AlartBtn";
 import AddNewStatusAndColor from "../Card/AddNewStatus";
+import SettingHidden from "./SettingHidden";
 
 interface SettingProps{
   title:string;
 }
 
 export default function SettingTemplate({title}:SettingProps) {
-  const {isSettingPage,isSettingMenu,isSettingStatusPage,isSettingStatusNewPage,isSettingContent,isSettingContentNew,isSettingHidden,isStatusDelete,isContentDelete,isSettingPassword, changeSettingPageStatus,changeSettingMenuStatus,changeSettingStatusPageStatus,changeSettingStatusPageNewStatus,changeSettingContentStatus,changeSettingContentNewStatus,changeSettingHiddenStatus,changeStatusDeleteStatus,changeContentDeleteStatus,changeSettingPasswordStatus} = useSettingPageContext();
+  const {isSettingPage,isSettingMenu,isSettingStatusPage,isSettingStatusNewPage,isSettingContent,isSettingContentNew,isSettingHidden,isSettingRemoveHidden,isProspectDelete,isStatusDelete,isContentDelete,isSettingPassword, changeSettingPageStatus,changeSettingMenuStatus,changeSettingStatusPageStatus,changeSettingStatusPageNewStatus,changeSettingContentStatus,changeSettingContentNewStatus,changeSettingHiddenStatus,changeSettingRemoveHiddenStatus,changeProspectDeleteStatus,changeStatusDeleteStatus,changeContentDeleteStatus,changeSettingPasswordStatus} = useSettingPageContext();
 
   const userData = useUserInfoStore((state) => state.user); //use user's all Information
   const userReloadKey = useUserInfoStore((state)=>state.reloadKey);
@@ -55,6 +53,7 @@ export default function SettingTemplate({title}:SettingProps) {
     changeSettingPasswordStatus(false)
     changeSettingStatusPageNewStatus(false)
     changeSettingContentNewStatus(false)
+    changeSettingHiddenStatus(false)
   }
 
   const clickStatusDeleteHandler = async(statusId:string) => {
@@ -108,6 +107,38 @@ export default function SettingTemplate({title}:SettingProps) {
     }
   }
 
+  const clickRemoveFromHiddenHandler = async() => {
+    try{
+      if(isSettingRemoveHidden?.id){
+        const res = await fetch(`/api/prospectList/${isSettingRemoveHidden.id}`,{
+          method:'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            prospectInfo:{...isSettingRemoveHidden,prospectHidden:false}
+          })
+        })
+
+        if (!res.ok){
+          console.log("Error !!!")
+          return null;
+        };
+
+      }
+
+      userDataReload();
+      changeSettingRemoveHiddenStatus(null)
+    } catch (error) {
+      console.error("Error fetching update Prospect info requests:", error);
+      return null
+    }
+  }
+  const clickProspectDeleteHandeler = async() => {
+    console.log("delete Prospect")
+    changeProspectDeleteStatus(null)
+  }
+
 
   return (
     <>
@@ -141,7 +172,7 @@ export default function SettingTemplate({title}:SettingProps) {
                 </>
               }
               {isSettingHidden &&
-                <h1>Setting Hidden</h1>
+                <SettingHidden/>
               }
               {isSettingPassword &&
                 <SettingPassword/>
@@ -171,7 +202,8 @@ export default function SettingTemplate({title}:SettingProps) {
               }}/>}
               button2={<AlertBtn text="Cancel" clickFunction={()=>changeContentDeleteStatus(null)}/>}
             />
-          </div>}
+          </div>
+          }
           
           {isSettingStatusNewPage &&
             <AddNewStatusAndColor text="New Status&Color"/>
@@ -179,6 +211,33 @@ export default function SettingTemplate({title}:SettingProps) {
 
           {isSettingContentNew &&
             <AddNewStatusAndColor text="New Content"/>
+          }
+
+          {isSettingRemoveHidden &&
+            <div className="fixed z-50">
+              <AlertCard
+                text={`Do you want to move "${isSettingRemoveHidden.prospectName}" to your prospect list?`}
+                button1={<AlertBtn text="OK"
+                  oppositColor={true}
+                  clickFunction={
+                  clickRemoveFromHiddenHandler
+                }/>}
+                button2={<AlertBtn text="Cancel" oppositColor={true} clickFunction={()=>changeSettingRemoveHiddenStatus(null)}/>}
+              />
+            </div>
+          }
+
+          {isProspectDelete &&
+            <div className="fixed z-50">
+              <AlertCard
+                text={`Do you want to delete "${isProspectDelete.prospectName}" information from this App?`}
+                button1={<AlertBtn text="Delete"
+                  clickFunction={
+                  clickProspectDeleteHandeler
+                }/>}
+                button2={<AlertBtn text="Cancel" clickFunction={()=>changeProspectDeleteStatus(null)}/>}
+              />
+            </div>
           }
         </>
       }

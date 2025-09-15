@@ -140,7 +140,7 @@ export default function SettingStatusAndColor({settingData}:SettingStatusAndColo
                 {activeColorPicker === index && (
                   <div ref={pickerRef} className="absolute z-50 mt-2 left-1/2 transform -translate-x-1/2">
                     <ModalPortal
-                      colorPicker={<SketchPicker
+                      showTopItem={<SketchPicker
                         color={statusInput[index].statusColor}
                         onChange={(color) => {
                           const updatedStatus = statusInput.map((item, i) =>

@@ -6,6 +6,7 @@ import { SessionProviders } from "@/utils/providers";
 import { SettingPageContextProvider } from "./(context)/SettingOpenContext";
 import { AddNewContextProvider } from "./(context)/AddNewOpenContext";
 import { TempolaryUserDataContextProvider } from "./(context)/TempolaryUserData";
+import { MissingErrorFlagContextProvider } from "./(context)/MissingErrorFlagContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,10 +36,12 @@ export default function RootLayout({
         <SettingPageContextProvider>
           <TempolaryUserDataContextProvider>
             <AddNewContextProvider>
-              <SessionProviders>
-                <Navbar/>
-                {children}
-              </SessionProviders>
+              <MissingErrorFlagContextProvider>
+                <SessionProviders>
+                  <Navbar/>
+                  {children}
+                </SessionProviders>
+              </MissingErrorFlagContextProvider>
             </AddNewContextProvider>
           </TempolaryUserDataContextProvider>
         </SettingPageContextProvider>

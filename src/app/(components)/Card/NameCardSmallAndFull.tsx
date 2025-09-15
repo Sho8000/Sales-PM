@@ -16,6 +16,7 @@ import AlertCard from "./AlertCard";
 import { useUserInfoStore } from "@/store/userInfoStore";
 import { useTempolaryUserDataContext } from "@/app/(context)/TempolaryUserData";
 import { useSettingPageContext } from "@/app/(context)/SettingOpenContext";
+import { useMissingErrorFlagContext } from "@/app/(context)/MissingErrorFlagContext";
 
   interface SimpleCardProps {
     isPersonal?:boolean
@@ -38,6 +39,7 @@ import { useSettingPageContext } from "@/app/(context)/SettingOpenContext";
     const {isOpenMemo,isNoteEdit,isMemoEdit,changeAddNewMemoPageStatus,changeIsEditStatus,changeIsNoteEditStatus,changeIsMemoEditStatus} = useAddNewContext();
     const {changeSettingRemoveHiddenStatus,changeProspectDeleteStatus} = useSettingPageContext();
     const {changeToHiddenProspectState} = useTempolaryUserDataContext();
+    const {changeIsMissingStatus} = useMissingErrorFlagContext();
     const [noteDelete,setNoteDelete] = useState<Notes|null>(null);
     const [memoDelete,setMemoDelete] = useState<Memos|null>(null);
     
@@ -120,7 +122,7 @@ import { useSettingPageContext } from "@/app/(context)/SettingOpenContext";
           || prospectInfo.prospectPhone === ""
           || prospectInfo.prospectEmail === ""
         ){
-          console.log("please add all information")
+          changeIsMissingStatus("Please add All Information!!")
           return null
         }
 

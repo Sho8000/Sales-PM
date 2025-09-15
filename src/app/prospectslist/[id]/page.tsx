@@ -2,11 +2,13 @@
 
 import AlertBtn from "@/app/(components)/Btn/AlartBtn";
 import AlertCard from "@/app/(components)/Card/AlertCard";
+import AlertInputAllInfoCard from "@/app/(components)/Card/AlertInputAllInfo";
 import NameCardSmallAndFull from "@/app/(components)/Card/NameCardSmallAndFull";
 import SectionTitle from "@/app/(components)/CommonParts/SectionTitle";
 import UpComing from "@/app/(components)/CommonParts/UpComing";
 import ProspectDisplay from "@/app/(components)/ProspectsList/ID/ProspectDisplay";
 import { useAddNewContext } from "@/app/(context)/AddNewOpenContext";
+import { useMissingErrorFlagContext } from "@/app/(context)/MissingErrorFlagContext";
 import { useTempolaryUserDataContext } from "@/app/(context)/TempolaryUserData";
 import { getStatusColorFromProspect } from "@/lib/findStatusColor";
 import { useClickedProspectInfoStore } from "@/store/clickedProspectsInfoStore";
@@ -24,6 +26,7 @@ export default function ProspectInfo() {
   const clickedProspectReloadKey = useClickedProspectInfoStore((state)=>state.reloadKey)
   const {isEdit,changeIsEditStatus} = useAddNewContext();
   const {toHiddenProspect,changeToHiddenProspectState} = useTempolaryUserDataContext();
+  const {isMissing} = useMissingErrorFlagContext();
   const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
   const router = useRouter(); 
 
@@ -141,6 +144,10 @@ export default function ProspectInfo() {
               button1={<AlertBtn text="OK" clickFunction={clickToHide}/>}
               button2={<AlertBtn text="Cancel" clickFunction={clickToHideCancel}/>}
             />
+          }
+
+          {isMissing &&
+            <AlertInputAllInfoCard/>
           }
           
         </>

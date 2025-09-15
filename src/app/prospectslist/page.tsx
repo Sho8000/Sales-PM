@@ -12,6 +12,8 @@ import { useClickedProspectInfoStore } from "@/store/clickedProspectsInfoStore";
 import { useRouter } from "next/navigation";
 import { useAddNewContext } from "../(context)/AddNewOpenContext";
 import AddNewTemplate from "../(components)/Card/AddNewTemplate";
+import AlertInputAllInfoCard from "../(components)/Card/AlertInputAllInfo";
+import { useMissingErrorFlagContext } from "../(context)/MissingErrorFlagContext";
 
 export default function ProspectsList() {
   const router = useRouter();
@@ -20,6 +22,7 @@ export default function ProspectsList() {
   const userReloadKey = useUserInfoStore((state)=>state.reloadKey);
   const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
   const {isAddNewPage,changeAddNewPageStatus} = useAddNewContext();
+  const {isMissing} = useMissingErrorFlagContext();
 
   useEffect(()=>{
     if(status==="authenticated" && session?.user?.id){
@@ -59,6 +62,11 @@ export default function ProspectsList() {
       {isAddNewPage &&
         <AddNewTemplate text="New Prospect"/>
       }
+
+      {isMissing &&
+        <AlertInputAllInfoCard/>
+      }
+
     </>
   );
 }

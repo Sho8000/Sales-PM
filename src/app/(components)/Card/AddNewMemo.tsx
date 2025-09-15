@@ -6,6 +6,7 @@ import Styles from "./Card.module.css"
 import { Memos } from "@/lib/dbInterface";
 import { useAddNewContext } from "@/app/(context)/AddNewOpenContext";
 import { useClickedProspectInfoStore } from "@/store/clickedProspectsInfoStore";
+import { useMissingErrorFlagContext } from "@/app/(context)/MissingErrorFlagContext";
 
 export default function AddNewMemoCard() {
   const [memoInfo,setMemoInfo] = useState<Memos>({
@@ -17,13 +18,14 @@ export default function AddNewMemoCard() {
   })
 
   const {isAddNewMemoPage,changeAddNewMemoPageStatus} = useAddNewContext();
+  const {changeIsMissingStatus} = useMissingErrorFlagContext();
   const reloadClickedProspect = useClickedProspectInfoStore((state) => state.reload);
 
   const clickMemoSave = async () => {
     if(isAddNewMemoPage){
       try{
         if(memoInfo.memoDetail === ""){
-          console.log("please add memoDetail")
+          changeIsMissingStatus("Please add All Information!!")
           return null
         }
 

@@ -4,10 +4,10 @@ import ReactDOM from 'react-dom';
 import { ReactNode } from 'react';
 
 interface ColorPickerProps {
-  colorPicker: ReactNode;
+  showTopItem: ReactNode;
 }
 
-export default function ModalPortal({colorPicker}:ColorPickerProps) {
+export default function ModalPortal({showTopItem}:ColorPickerProps) {
   return ReactDOM.createPortal(
     <div style={{
       position: 'fixed',
@@ -16,7 +16,7 @@ export default function ModalPortal({colorPicker}:ColorPickerProps) {
       transform: 'translate(-50%, -50%)',
       zIndex: 9999
     }}>
-      {colorPicker}
+      {showTopItem}
     </div>,
     document.body
   );

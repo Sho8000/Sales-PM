@@ -9,12 +9,14 @@ import { useClickedProspectInfoStore } from "@/store/clickedProspectsInfoStore";
 import { useAddNewContext } from "@/app/(context)/AddNewOpenContext";
 import { DateTime } from 'luxon';
 import { useRouter } from "next/navigation";
+import { useMissingErrorFlagContext } from "@/app/(context)/MissingErrorFlagContext";
 
 export default function AddNewProspectCard() {
   const userData = useUserInfoStore((state) => state.user); //use user's all Information
   const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
   const reloadClickedProspect = useClickedProspectInfoStore((state) => state.reload);
   const {changeAddNewPageStatus} = useAddNewContext()
+  const {changeIsMissingStatus} = useMissingErrorFlagContext();
   const router = useRouter(); 
 
   const [prospectInfo,setProspectInfo] = useState<Prospects>({
@@ -50,7 +52,7 @@ export default function AddNewProspectCard() {
         || prospectInfo.prospectPhone === ""
         || prospectInfo.prospectEmail === ""
       ){
-        console.log("please add all information")
+        changeIsMissingStatus("Please add All Information!!")
         return null
       }
 

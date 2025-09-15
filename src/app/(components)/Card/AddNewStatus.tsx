@@ -11,6 +11,7 @@ import { useUserInfoStore } from "@/store/userInfoStore";
 import { useSettingPageContext } from "@/app/(context)/SettingOpenContext";
 import ModalPortal from "../Setting/ModalPortal";
 import { SketchPicker } from "react-color";
+import { useMissingErrorFlagContext } from "@/app/(context)/MissingErrorFlagContext";
 
 interface AddNewStatusProps {
   text:"New Status&Color"|"New Content";
@@ -19,6 +20,7 @@ export default function AddNewStatusAndColor({text}:AddNewStatusProps) {
   const userData = useUserInfoStore((state) => state.user); //use user's all Information
   const userDataReload = useUserInfoStore((state) => state.reload);
   const {changeSettingStatusPageNewStatus,changeSettingContentNewStatus} = useSettingPageContext();
+  const {changeIsMissingStatus} = useMissingErrorFlagContext();
   const [newStatusInfo,setNewStatusInfo] = useState<StatusSetting>({
     id:"",
     statusName:"",
@@ -63,7 +65,7 @@ export default function AddNewStatusAndColor({text}:AddNewStatusProps) {
         if(
           newStatusInfo.statusName === ""
         ){
-          console.log("please add all information")
+          changeIsMissingStatus("Please add All Information!!")
           return null
         }
   
@@ -98,7 +100,7 @@ export default function AddNewStatusAndColor({text}:AddNewStatusProps) {
         if(
           newContentInfo.contentName === ""
         ){
-          console.log("please add all information")
+          changeIsMissingStatus("Please add All Information!!")
           return null
         }
   
@@ -169,7 +171,7 @@ export default function AddNewStatusAndColor({text}:AddNewStatusProps) {
                 {(openColorPicker || activeColorPicker) &&
                   <div ref={pickerRef} className="absolute z-50 mt-2 left-1/2 transform -translate-x-1/2">
                     <ModalPortal
-                      colorPicker={<SketchPicker
+                      showTopItem={<SketchPicker
                         color={newStatusInfo.statusColor}
                         onChange={(color) => {
                           setNewStatusInfo({...newStatusInfo,statusColor:color.hex})

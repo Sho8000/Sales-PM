@@ -8,6 +8,7 @@ import { useUserInfoStore } from "@/store/userInfoStore";
 import { usePathname } from "next/navigation";
 import { useAddNewContext } from "@/app/(context)/AddNewOpenContext";
 import { useClickedProspectInfoStore } from "@/store/clickedProspectsInfoStore";
+import { useMissingErrorFlagContext } from "@/app/(context)/MissingErrorFlagContext";
 
 export default function AddNewNoteCard() {
   const [noteInfo,setNoteInfo] = useState<Notes>({
@@ -32,6 +33,7 @@ export default function AddNewNoteCard() {
   const setClickedProspectData = useClickedProspectInfoStore((state)=>state.setProspect);
   const reloadClickedProspect = useClickedProspectInfoStore((state) => state.reload);
   const {changeAddNewPageStatus} = useAddNewContext();
+  const {changeIsMissingStatus} = useMissingErrorFlagContext();
   const pathName = usePathname();
   const prospectId = pathName.split("/").pop();
 
@@ -42,7 +44,7 @@ export default function AddNewNoteCard() {
         || noteInfo.status === ""
         || memoInfo.memoDetail === ""
       ){
-        console.log("please add all information")
+        changeIsMissingStatus("Please add All Information!!")
         return null
       }
 

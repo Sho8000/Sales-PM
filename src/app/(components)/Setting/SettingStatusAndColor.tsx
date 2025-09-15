@@ -88,13 +88,18 @@ export default function SettingStatusAndColor({settingData}:SettingStatusAndColo
       {/* Title & Edit */}
       <div className="flex justify-between items-center mb-[2rem]">
         <h2 className={`${Styles.settingTitleFont}`}>Status & Color</h2>
-        <div className={`${Styles.iconSize}`}>
-          <FaEdit size={"100%"} color="gray" onClick={clickEditHandler}/>
-        </div>
+        {settingData.length!==0 &&
+          <div className={`${Styles.iconSize}`}>
+            <FaEdit size={"100%"} color="gray" onClick={clickEditHandler}/>
+          </div>
+        }
       </div>
 
       {/* Each Items */}
       <div className="w-full flex flex-col gap-[1rem]">
+        {settingData.length===0 &&
+          <h2 className={`${StylesCard.textFont} text-gray-400`}>Please add Status & Color what you want!</h2>
+        }
         {settingData.map((settingItems,index)=>{
           return <div key={index} className={`flex border-b-1 border-gray-400 gap-x-[1rem] ${Styles.smallLayout}`}>
             <h2 className={`${Styles.itemsFont} text-[#808080]`}>Status{index+1} :</h2>

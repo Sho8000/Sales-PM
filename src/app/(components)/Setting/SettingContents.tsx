@@ -69,13 +69,18 @@ export default function SettingContents({contentsData}:SettingContentsProps) {
       {/* Title & Edit */}
       <div className="flex justify-between items-center mb-[2rem]">
         <h2 className={`${Styles.settingTitleFont}`}>Content</h2>
-        <div className={`${Styles.iconSize}`}>
-          <FaEdit size={"100%"} color="gray" onClick={clickEditHandler}/>
-        </div>
+        {contentsData.length!==0 &&
+          <div className={`${Styles.iconSize}`}>
+            <FaEdit size={"100%"} color="gray" onClick={clickEditHandler}/>
+          </div>
+        }
       </div>
 
       {/* Each Items */}
       <div className="w-full flex flex-col gap-[1rem]">
+        {contentsData.length===0 &&
+          <h2 className={`${StylesCard.textFont} text-gray-400`}>Please add Contents what you want!</h2>
+        }
         {contentsData.map((contents,index)=>{
           return <div key={index} className={`flex border-b-1 border-gray-400 gap-[1rem] ${Styles.smallLayout}`}>
             <h2 className={`${Styles.itemsFont} text-[#808080]`}>Content{index+1} :</h2>

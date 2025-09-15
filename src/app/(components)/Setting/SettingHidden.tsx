@@ -1,6 +1,7 @@
 "use client"
 
 import Styles from "./Setting.module.css"
+import StylesCards from "../Card/Card.module.css"
 import { useUserInfoStore } from "@/store/userInfoStore";
 import NameCardSmallAndFull from "../Card/NameCardSmallAndFull";
 import { getStatusColorFromProspect } from "@/lib/findStatusColor";
@@ -15,11 +16,17 @@ export default function SettingHidden() {
       </div>
 
       <div className="flex flex-col gap-[1rem]">
-        {userData?.prospectList?.prospects.filter((prospct)=>prospct.prospectHidden===true).map((prospectData,index)=>{
-          const color = getStatusColorFromProspect(prospectData,userData.statusSetting);
+        {userData?.prospectList?.prospects.filter((prospct)=>prospct.prospectHidden===true).length===0 ?<>
+          <h2 className={`${StylesCards.textFont} text-gray-400`}>No Hidden List,,,</h2>
+        </>
+        :<>
+          {userData?.prospectList?.prospects.filter((prospct)=>prospct.prospectHidden===true).map((prospectData,index)=>{
+            const color = getStatusColorFromProspect(prospectData,userData.statusSetting);
 
-            return <NameCardSmallAndFull key={index} prospectData={prospectData} color={color} clickFunctionReceiveProspect={()=>{}}/>
-        })}
+              return <NameCardSmallAndFull key={index} prospectData={prospectData} color={color} clickFunctionReceiveProspect={()=>{}}/>
+          })}
+        </>
+        }
       </div>
     </div>
   );

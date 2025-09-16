@@ -10,6 +10,9 @@ import { useAddNewContext } from "@/app/(context)/AddNewOpenContext";
 import { DateTime } from 'luxon';
 import { useRouter } from "next/navigation";
 import { useMissingErrorFlagContext } from "@/app/(context)/MissingErrorFlagContext";
+import ModalPortal from "../Setting/ModalPortal";
+import AlertCard from "./AlertCard";
+import AlertBtn from "../Btn/AlartBtn";
 
 export default function AddNewProspectCard() {
   const userData = useUserInfoStore((state) => state.user); //use user's all Information
@@ -39,6 +42,7 @@ export default function AddNewProspectCard() {
   })
   const [age,setAge] = useState<number|"">("")
   const [children,setChildren] = useState<number|"">("")
+  const [addedNewAlert,setAddedNewAlert] = useState(false)
 
   const prospectInfoSave = async (): Promise<Prospects | null> => {
     try{
@@ -85,11 +89,12 @@ export default function AddNewProspectCard() {
   }
 
   const clickSave = async () => {
-    const newProspect = await prospectInfoSave();
-
-    if(newProspect){
-      window.location.reload()
-    }
+    await prospectInfoSave();
+    setAddedNewAlert(true);
+  }
+  const clickOKAfterSave = () => {
+    setAddedNewAlert(false);
+    window.location.reload()
   }
 
   const clickAddNote = async () => {
@@ -281,6 +286,24 @@ export default function AddNewProspectCard() {
         <NormalBtn text="Save" clickFunction={clickSave}/>
         <NormalBtn text="+Add New" clickFunction={clickAddNote}/>
       </div>
+
+      {addedNewAlert &&
+        <ModalPortal showTopItem={
+            <AlertCard
+              text="New Prospect was added!"
+              button1={
+                <AlertBtn
+                  text="OK"
+                  oppositColor={true}
+                  clickFunction={()=>{
+                    clickOKAfterSave()
+                  }}/>
+              }
+            />
+          }
+        />
+      }
+
     </>
   );
 }

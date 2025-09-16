@@ -55,13 +55,13 @@ export default function Navbar() {
       <nav className={`flex justify-between items-center w-full bg-black text-white ${Styles.navArea} ${Styles.navTitleFont}`}>
         {/* Nav Left */}
         <div>
-          {(pathName==="/" || pathName==="/auth")?
+          {(pathName==="/" || pathName==="/auth" || pathName==="/signupsalespm")?
             <h1 className="font-bold">Sales-PM</h1>
             :<h1>Hi, <span className="font-bold">{session?.user?.username}</span></h1>
           }
         </div>
         {/* Nav Right */}
-        {pathName!=="/auth" ?
+        {!(pathName==="/auth" || pathName==="/signupsalespm") ?
           <>
             {pathName==="/"?
               <LoginLogoutBtn text="Login" clickFunction={loginHandler}/>

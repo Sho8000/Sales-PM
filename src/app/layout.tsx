@@ -7,6 +7,8 @@ import { SettingPageContextProvider } from "./(context)/SettingOpenContext";
 import { AddNewContextProvider } from "./(context)/AddNewOpenContext";
 import { TempolaryUserDataContextProvider } from "./(context)/TempolaryUserData";
 import { MissingErrorFlagContextProvider } from "./(context)/MissingErrorFlagContext";
+import { FilterContextProvider } from "./(context)/ChosenFilter";
+import { SortContextProvider } from "./(context)/ChosenSort";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,16 +36,20 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SettingPageContextProvider>
-          <TempolaryUserDataContextProvider>
-            <AddNewContextProvider>
-              <MissingErrorFlagContextProvider>
-                <SessionProviders>
-                  <Navbar/>
-                  {children}
-                </SessionProviders>
-              </MissingErrorFlagContextProvider>
-            </AddNewContextProvider>
-          </TempolaryUserDataContextProvider>
+          <FilterContextProvider>
+            <SortContextProvider>
+              <TempolaryUserDataContextProvider>
+                <AddNewContextProvider>
+                  <MissingErrorFlagContextProvider>
+                    <SessionProviders>
+                      <Navbar/>
+                      {children}
+                    </SessionProviders>
+                  </MissingErrorFlagContextProvider>
+                </AddNewContextProvider>
+              </TempolaryUserDataContextProvider>
+            </SortContextProvider>
+          </FilterContextProvider>
         </SettingPageContextProvider>
       </body>
     </html>

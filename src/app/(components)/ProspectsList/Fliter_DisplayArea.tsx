@@ -14,6 +14,8 @@ import { useClickedProspectInfoStore } from "@/store/clickedProspectsInfoStore";
 import { Prospects } from "@/lib/dbInterface";
 import { useRouter } from "next/navigation";
 import NameCardSmallAndFull from "../Card/NameCardSmallAndFull";
+import { useFilterContext } from "@/app/(context)/ChosenFilter";
+import { useSortContext } from "@/app/(context)/ChosenSort";
 
 export default function FilterAndDisplayArea() {
   const router = useRouter(); 
@@ -21,18 +23,15 @@ export default function FilterAndDisplayArea() {
 
   const userData = useUserInfoStore((state) => state.user); //use user's all Information
   const setClickedProspectData = useClickedProspectInfoStore((state) => state.setProspect);
-
-  const [selectedFilter,setSlectedFilter] = useState("0")
-  const [selectedSort,setSlectedSort] = useState("0")
+  const {chosenFilter,changeChosenFilterStatus} = useFilterContext();
+  const {chosenSort,changeChosenSortStatus} = useSortContext();
 
   const selectedFilterValue = (selectedValue: string) => {
-    setSlectedFilter(selectedValue);
-    console.log("Selected filter", selectedValue);
+    changeChosenFilterStatus(selectedValue);
   };
   
   const selectedSortValue = (selectedValue: string) => {
-    setSlectedSort(selectedValue);
-    console.log("Selected sort", selectedValue);
+    changeChosenSortStatus(selectedValue);
   };
 
   const colorPalletClickHandler = () => {
@@ -55,8 +54,8 @@ export default function FilterAndDisplayArea() {
       {/* Filter and DisplayOption */}
       <div className={`flex justify-between ${Styles.filterDisplayLayout} ${Styles.flexCol} m-auto`}>
         <div className={`flex gap-[1rem] items-center ${Styles.flexCol}`}>
-          <DropDown filter="Filter" value={selectedFilter} onChange={selectedFilterValue}/>
-          <DropDown filter="Sort" value={selectedSort} onChange={selectedSortValue}/>
+          <DropDown filter="Filter" value={chosenFilter} onChange={selectedFilterValue}/>
+          <DropDown filter="Sort" value={chosenSort} onChange={selectedSortValue}/>
         </div>
         <div className="flex justify-evenly gap-[2rem]">
           <Image
@@ -94,7 +93,49 @@ export default function FilterAndDisplayArea() {
       `}>
         {userData?.prospectList?.prospects && userData?.prospectList?.prospects.length <=0 ? <h2 className={`${Styles.textFont} text-center`}>No Data,,,</h2>
         :<>
-          {userData?.prospectList?.prospects.filter((prospct)=>prospct.prospectHidden===false).map((prospectData,index)=>{
+          {userData?.prospectList?.prospects.filter((prospect)=>{
+            const contentsSet = new Set(userData.contentsSetting.map(ct=>ct.contentName))
+
+            switch (chosenFilter) {
+              case "All":
+                return prospect.prospectHidden===false
+            
+              case "Others":
+                return ((prospect.prospectHidden===false) && (prospect.notes.some(note=>!contentsSet.has(note.content))))
+
+              default:
+                return ((prospect.prospectHidden===false) && (prospect.notes.some(note=>note.content===chosenFilter)))
+            }
+            
+          }).sort((a,b)=>{
+            const statusOrderMap = Object.fromEntries(userData.statusSetting.map(st=>[st.statusName,st.statusOrder]))
+
+            const getProspectStatusOrder = (prospect:Prospects):number => {
+              if(!prospect.notes || prospect.notes.length===0) return Infinity
+
+              const orders = prospect.notes.map(note=>statusOrderMap[note.status]).filter(order => typeof order === "number")
+              return orders.length>0?Math.min(...orders):Infinity
+            }
+
+            switch (chosenSort) {
+
+              case "prospectName":
+                return a.prospectName.localeCompare(b.prospectName);;
+              case "prospectBusiness":
+                return a.prospectBusiness.localeCompare(b.prospectBusiness);
+              case "statusName":
+                const aOrder = getProspectStatusOrder(a)
+                const bOrder = getProspectStatusOrder(b)
+                return aOrder-bOrder;
+              case "oldest":
+                return b.id.localeCompare(a.id);
+
+              default:
+                return 5;
+            }
+          }
+
+          ).map((prospectData,index)=>{
             const color = getStatusColorFromProspect(prospectData,userData.statusSetting);
 
             if(displayStyle==="blockLayout"){

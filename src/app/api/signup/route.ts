@@ -20,7 +20,10 @@ export async function POST(request: NextRequest){
       data: {
         username:username,
         useremail:useremail,
-        password:hashedPassword
+        password:hashedPassword,
+        prospectList:{
+          create:{}
+        }
       },
     });
 

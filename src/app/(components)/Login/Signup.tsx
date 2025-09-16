@@ -5,6 +5,7 @@ import AlertCard from "../Card/AlertCard";
 import AlertBtn from "../Btn/AlartBtn";
 import Styles from "./login.module.css"
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function SignUp() {
   const [signUp, setSignUp] = useState({
@@ -46,7 +47,16 @@ export default function SignUp() {
         adminEmail:""
       })
 
-      router.push("/auth")
+      const result = await signIn("credentials",{
+        useremail:signUp.useremail,
+        password:signUp.password,
+        redirect:false,
+      })
+      if (result?.ok === false) {
+        setIsShowIncorrectAlert(true)
+      }
+
+      router.push("/prospectslist")
 
     } catch (error) {
       console.error("Error fetching post new user info requests:", error);

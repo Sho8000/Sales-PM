@@ -9,6 +9,9 @@
   .placeholderFont{
     font-size: 32px;
   }
+  .colorListFont{
+    font-size: 24px;
+  }
   .iconSize{
     width: 60px;
     height: 60px;
@@ -25,6 +28,9 @@
   .placeholderFont{
     font-size: 24px;
   }
+  .colorListFont{
+    font-size: 18px;
+  }
   .iconSize{
     width: 45px;
     height: 45px;
@@ -40,6 +46,9 @@
   }
   .placeholderFont{
     font-size: 16px;
+  }
+  .colorListFont{
+    font-size: 12px;
   }
   .iconSize{
     width: 25px;
@@ -73,6 +82,10 @@
     border: 3px solid gray;
     border-radius: 5px;
   }
+  .colorListBar{
+    width: 50px;
+    height: 10px;
+  }
 }
 
 @media only screen and (max-width:1440px){
@@ -99,6 +112,10 @@
   .inputLayout{
     border: 2px solid gray;
     border-radius: 5px;
+  }
+  .colorListBar{
+    width: 37px;
+    height: 9px;
   }
 }
 
@@ -132,6 +149,10 @@
   .inputLayout{
     border: 1px solid gray;
     border-radius: 5px;
+  }
+  .colorListBar{
+    width: 25px;
+    height: 8px;
   }
 }
 

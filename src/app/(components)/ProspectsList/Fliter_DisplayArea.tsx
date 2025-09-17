@@ -16,10 +16,12 @@ import { useRouter } from "next/navigation";
 import NameCardSmallAndFull from "../Card/NameCardSmallAndFull";
 import { useFilterContext } from "@/app/(context)/ChosenFilter";
 import { useSortContext } from "@/app/(context)/ChosenSort";
+import ColorList from "../Card/ColorList";
 
 export default function FilterAndDisplayArea() {
   const router = useRouter(); 
   const [displayStyle,setDisplayStyle] = useState<"listLayout"|"blockLayout">("listLayout")
+  const [isColorList,setIsColorList] = useState(false)
 
   const userData = useUserInfoStore((state) => state.user); //use user's all Information
   const setClickedProspectData = useClickedProspectInfoStore((state) => state.setProspect);
@@ -35,7 +37,7 @@ export default function FilterAndDisplayArea() {
   };
 
   const colorPalletClickHandler = () => {
-    console.log("ColorPallet")
+    setIsColorList(!isColorList)
   }
   const listLayoutClickHandler = () => {
     setDisplayStyle("listLayout")
@@ -58,14 +60,21 @@ export default function FilterAndDisplayArea() {
           <DropDown filter="Sort" value={chosenSort} onChange={selectedSortValue}/>
         </div>
         <div className="flex justify-evenly gap-[2rem]">
-          <Image
-            className={`${Styles.iconSize}`}
-            onClick={colorPalletClickHandler}
-            src={ColorPallet}
-            alt="colorPallet"
-            height={100}
-            width={100}
-          />
+          <div className="relative">
+            <Image
+              className={`${Styles.iconSize}`}
+              onClick={colorPalletClickHandler}
+              src={ColorPallet}
+              alt="colorPallet"
+              height={100}
+              width={100}
+            />
+            {isColorList &&
+              <div className={`absolute z-50 ${Styles.colorListLocation}`}>
+                <ColorList/>
+              </div>
+            }
+          </div>
           <Image
             className={`${Styles.iconSize}`}
             onClick={listLayoutClickHandler}

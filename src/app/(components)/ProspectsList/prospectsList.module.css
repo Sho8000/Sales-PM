@@ -30,6 +30,10 @@
   .displayPadding{
     padding: 2rem 4rem;
   }
+  .colorListLocation{
+    top: 0;
+    right: 110%;
+  }
 }
 
 @media only screen and (max-width:1440px){
@@ -40,6 +44,10 @@
   }
   .displayPadding{
     padding: 1.5rem;
+  }
+  .colorListLocation{
+    top: 0;
+    right: 110%;
   }
 }
 
@@ -87,6 +95,10 @@
 @media only screen and (max-width:1000px){
   .flexCol{
     flex-direction: column;
+  }
+  .colorListLocation{
+    top: 0;
+    left: 110%;
   }
 }
 

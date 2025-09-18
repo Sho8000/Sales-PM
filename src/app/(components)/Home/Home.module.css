@@ -1,0 +1,89 @@
+/* Font / icon */
+@media only screen and (min-width:1441px){
+  .homeTitleFont{
+    font-size: 80px;
+  }
+  .subTitleFont{
+    font-size: 30px;
+  }
+  .sectionTitleFont{
+    font-size: 48px;
+  }
+  .sentenceFont{
+    font-size: 40px;
+  }
+}
+
+@media only screen and (max-width:1440px){
+  .homeTitleFont{
+    font-size: 60px;
+  }
+  .subTitleFont{
+    font-size: 22px;
+  }
+  .sectionTitleFont{
+    font-size: 36px;
+  }
+  .sentenceFont{
+    font-size: 30px;
+  }
+}
+
+@media only screen and (max-width:430px){
+  .homeTitleFont{
+    font-size: 40px;
+  }
+  .subTitleFont{
+    font-size: 15px;
+  }
+  .sectionTitleFont{
+    font-size: 24px;
+  }
+  .sentenceFont{
+    font-size: 20px;
+  }
+}
+
+/* Layout */
+@media only screen and (min-width:1441px){
+  .subComponent{
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width:1440px){
+  .subComponent{
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width:430px){
+  .subComponent{
+    width: 90%;
+  }
+}
+
+/* Phone or PC */
+@media only screen and (min-width:1001px){
+  .forPhone{
+    display: none;
+  }
+  .homeSectionContainer{
+    width: 90%;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    margin: auto;
+  }
+}
+
+@media only screen and (max-width:1000px){
+  .forPC{
+    display: none;
+  }
+  .homeSectionContainer{
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+}

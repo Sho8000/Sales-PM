@@ -9,6 +9,7 @@ import { TempolaryUserDataContextProvider } from "./(context)/TempolaryUserData"
 import { MissingErrorFlagContextProvider } from "./(context)/MissingErrorFlagContext";
 import { FilterContextProvider } from "./(context)/ChosenFilter";
 import { SortContextProvider } from "./(context)/ChosenSort";
+import Footer from "./(components)/Footer/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,6 +45,7 @@ export default function RootLayout({
                     <SessionProviders>
                       <Navbar/>
                       {children}
+                      <Footer/>
                     </SessionProviders>
                   </MissingErrorFlagContextProvider>
                 </AddNewContextProvider>

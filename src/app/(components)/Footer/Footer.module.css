@@ -1,0 +1,63 @@
+/* Font / icon */
+@media only screen and (min-width:1441px){
+  .footerFont{
+    font-size: 28px;
+  }
+  .linkFont{
+    font-size: 24px;
+  }
+}
+
+@media only screen and (max-width:1440px){
+  .footerFont{
+    font-size: 21px;
+  }
+  .linkFont{
+    font-size: 18px;
+  }
+}
+
+@media only screen and (max-width:430px){
+  .footerFont{
+    font-size: 14px;
+  }
+  .linkFont{
+    font-size: 12px;
+  }
+}
+
+/* Layout */
+@media only screen and (min-width:1441px){
+  .footerContainer{
+    min-height: 150px;
+  }
+  .logoSize{
+    width: 130px;
+    height: 130px;
+  }
+}
+
+@media only screen and (max-width:1440px){
+  .footerContainer{
+    min-height: 100px;
+  }
+  .logoSize{
+    width: 100px;
+    height: 100px;
+  }
+  .sentenceLayout{
+    padding: 1rem 0;
+  }
+}
+
+@media only screen and (max-width:430px){
+  .footerContainer{
+    flex-direction: column;
+    min-height: 50px;
+    padding: 1rem 0;
+  }
+  .logoSize{
+    width: 100px;
+    height: 100px;
+  }
+}

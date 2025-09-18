@@ -29,7 +29,7 @@ export default function Home() {
       <section
         className="pt-[3rem] pb-[1rem] mb-[1rem]"
       >
-        <HomeSectionTemplate titleText="Note Management" imageL={true} message={`You can create multiple notes under the prospect's information. In adition, you can memo what you talked with your clients under that notes, so you can track those history. If a prospect brings up a new topic, simply add a note under a separate content.`} imagePC={noteImgPC} imagePhone={noteImgPhone}/>
+        <HomeSectionTemplate titleText="Note Management" imageL={true} message={`You can create multiple notes under the prospect's information. In adition, you can memo what you talked with your clients under that notes, so you can track those histories. If there is a new topic to add on, simply add a note under the separate content.`} imagePC={noteImgPC} imagePhone={noteImgPhone}/>
       </section>
     </>
   );
